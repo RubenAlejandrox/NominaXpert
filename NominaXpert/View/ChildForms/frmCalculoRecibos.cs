@@ -1,4 +1,5 @@
 ﻿using FontAwesome.Sharp;
+using NominaXpert.Controller;
 using NominaXpert.Utilities;
 using NominaXpert.View.UsersControl;
 using System;
@@ -20,6 +21,7 @@ namespace NominaXpert.View.Forms
             InitializeComponent();
             Formas.InitializePanel(panelBar); // Inicializa el borde izquierdo en el panel
             CargarUserControlInicial();
+            ConfigurarPermisos();
         }
 
 
@@ -49,6 +51,12 @@ namespace NominaXpert.View.Forms
             UC_NominaEditar uce = new UC_NominaEditar();
             Utilities.Formas.ActivateButton(sender, Formas.RGBColors.ChangeColor);
             addUsersControl(uce);
+        }
+        private void ConfigurarPermisos()
+        {
+            var controller = new UsuariosController();
+            btnCalculoNomina.Enabled = controller.TienePermiso("NOM_ADD");
+            btnEstatusNomina.Enabled = controller.TienePermiso("NOM_EDIT");
         }
     }
 }

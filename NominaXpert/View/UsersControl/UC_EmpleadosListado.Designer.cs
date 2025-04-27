@@ -87,6 +87,7 @@
             lblTotaldeRegistros.Size = new Size(163, 23);
             lblTotaldeRegistros.TabIndex = 7;
             lblTotaldeRegistros.Text = "Total de Registros: ";
+            lblTotaldeRegistros.Click += lblTotaldeRegistros_Click;
             // 
             // label2
             // 
@@ -271,6 +272,7 @@
             dataGridView1.RowTemplate.Height = 30;
             dataGridView1.Size = new Size(1205, 484);
             dataGridView1.TabIndex = 0;
+            dataGridView1.CellContentClick += dataGridView1_CellContentClick;
             // 
             // Id_Empleado
             // 

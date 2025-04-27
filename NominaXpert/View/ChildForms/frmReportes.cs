@@ -1,4 +1,5 @@
 ﻿using NominaXpert.Business;
+using NominaXpert.Controller;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,6 +17,7 @@ namespace NominaXpert.View.Forms
         public frmReportes()
         {
             InitializeComponent();
+            ConfigurarPermisos();
         }
 
         private void frmReportes_Load(object sender, EventArgs e)
@@ -145,6 +147,18 @@ namespace NominaXpert.View.Forms
                 timer.Dispose(); // Liberar recursos del Timer
             };
             timer.Start();
+        }
+        private void ConfigurarPermisos()
+        {
+            var controller = new UsuariosController();
+            btnCancelarNomina.Enabled = controller.TienePermiso("NOM_EDIT");
+            btnDatalleNomina.Enabled = controller.TienePermiso("NOM_VIEW");
+            btnExportarPDF.Enabled = controller.TienePermiso("NOM_HIST");
+            iconVerNomina.Enabled = controller.TienePermiso("NOM_HIST");
+        }
+        private void btnDatalleNomina_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

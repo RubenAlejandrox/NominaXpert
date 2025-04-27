@@ -1,13 +1,36 @@
 ﻿
+using NominaXpert.Controller;
+
 namespace NominaXpert.View.UsersControl
 {
     public partial class UC_UsuariosBaja : UserControl
     {
+
+        private int _idUsuario;
+
+        // Constructor sin parámetros (para inicialización básica)
         public UC_UsuariosBaja()
         {
             InitializeComponent();
             inicializa_UC_Usuarios_Alta();
         }
+
+        // Constructor con parámetros (para uso específico)
+        public UC_UsuariosBaja(int idUsuario, string nombreUsuario) : this()
+        {
+            _idUsuario = idUsuario;
+
+            // Limpiar el DataSource existente
+            cbxSeleccionUsuario.DataSource = null;
+
+            // Añadir solo el usuario seleccionado
+            cbxSeleccionUsuario.Items.Add(nombreUsuario);
+            cbxSeleccionUsuario.SelectedIndex = 0;
+
+            // Deshabilitar el combo para que no se pueda modificar
+            cbxSeleccionUsuario.Enabled = false;
+        }
+
         private void inicializa_UC_Usuarios_Alta()
         {
             PoblaComboSeleccionUsuario();
@@ -16,18 +39,16 @@ namespace NominaXpert.View.UsersControl
         }
         private void PoblaComboSeleccionUsuario()
         {
-            Dictionary<int, string> list_estatus = new Dictionary<int, string> //almacena pares clave/valor
-            {
-                //key (id), value
-                {1, "UAdJacqueline"},
-                {0, "UAuRuben"},
-                {2, "UEmEvans"}
-            };
-            cbxSeleccionUsuario.DataSource = new BindingSource(list_estatus, null);
-            cbxSeleccionUsuario.DisplayMember = "Value"; //lo que se muestra
-            cbxSeleccionUsuario.ValueMember = "Key"; //lo que se guarda como seleccion
-            cbxSeleccionUsuario.SelectedValue = 1; // Valor por defecto
+            UsuariosController controller = new UsuariosController();
+            var usuarios = controller.ObtenerUsuarios(false);
+
+            Dictionary<int, string> lista = usuarios.ToDictionary(u => u.Id, u => u.Nombre_Usuario);
+
+            cbxSeleccionUsuario.DataSource = new BindingSource(lista, null);
+            cbxSeleccionUsuario.DisplayMember = "Value";
+            cbxSeleccionUsuario.ValueMember = "Key";
         }
+
         private void PoblaComboMotivo()
         {
             Dictionary<int, string> list_estatus = new Dictionary<int, string>
@@ -67,11 +88,20 @@ namespace NominaXpert.View.UsersControl
                 MessageBox.Show("Por favor llene todos los campos", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
-            return true;
+
+            string motivo = cbxMotivoBaja.Text; // o SelectedValue
+            UsuariosController controller = new UsuariosController();
+            var (exito, mensaje) = controller.DarDeBajaUsuario(_idUsuario, motivo);
+
+            MessageBox.Show(mensaje, exito ? "Éxito" : "Error",
+                MessageBoxButtons.OK,
+                exito ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
+
+            return exito;
         }
         private bool DatosVacios()
         {
-            if (txtDetallesBaja.Text == "")
+            if (1==2)
             {
                 return true;
             }
@@ -80,6 +110,8 @@ namespace NominaXpert.View.UsersControl
                 return false;
             }
         }
+       
+
         private void addUsersControl(UserControl userControl)
         {
             // Limpiar el panel contenedor
@@ -119,6 +151,11 @@ namespace NominaXpert.View.UsersControl
                 }
             }
             return -1; // Valor por defecto si no se encuentra
+        }
+
+        private void panelContainer_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

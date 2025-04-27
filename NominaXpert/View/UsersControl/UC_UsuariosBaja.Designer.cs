@@ -32,7 +32,7 @@
             btnSearch = new Button();
             txtSearchEmpleado = new TextBox();
             iconPIcture = new FontAwesome.Sharp.IconPictureBox();
-            dtpFechaBaja = new Utilities.NominaDatePicker();
+            dtpFechaBaja = new NominaXpert.Utilities.NominaDatePicker();
             ibtnCancelar = new FontAwesome.Sharp.IconButton();
             panel1 = new Panel();
             lblTituloBaja = new Label();
@@ -70,6 +70,7 @@
             panelContainer.Name = "panelContainer";
             panelContainer.Size = new Size(1262, 705);
             panelContainer.TabIndex = 0;
+            panelContainer.Paint += panelContainer_Paint;
             // 
             // btnSearch
             // 

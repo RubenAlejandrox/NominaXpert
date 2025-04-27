@@ -138,7 +138,7 @@ namespace NominaXpert.Controller
                         return (false, $"RFC {usuario.DatosPersonales.Rfc} ya está registrado para otra persona");
                     }
                 }
-                _logger.Info($"Actualizando estudiante con ID: {usuario.Id}, Nombre: {usuario.DatosPersonales.NombreCompleto}");
+                _logger.Info($"Actualizando estudiante con ID: {usuario.Id}, Nombre: {usuario.DatosPersonales.NombreCompleto}, Persona ID: {usuario.DatosPersonales.Id}");
 
                 bool actualizado = _usuariosData.ActualizarUsuario(usuario);
                 return actualizado
@@ -173,6 +173,32 @@ namespace NominaXpert.Controller
             return UsuarioSesion.Permisos?.Any(p => p.Codigo == codigoPermiso && p.Estatus) ?? false;
         }
 
+        public (bool exito, string mensaje) DarDeBajaUsuario(int idUsuario, string motivo)
+        {
+            if (idUsuario <= 0)
+                return (false, "ID de usuario inválido.");
 
+            try
+            {
+                bool exito = _usuariosData.DarDeBajaUsuario(idUsuario, motivo);
+
+                if (exito)
+                {
+                    // Verificar si realmente se dio de baja o ya estaba inactivo
+                    var usuario = _usuariosData.ObtenerUsuarioPorId(idUsuario);
+                    if (usuario != null && !usuario.Estatus)
+                    {
+                        return (true, "El usuario y su persona asociada están dados de baja");
+                    }
+                    return (true, "Operación completada correctamente");
+                }
+                return (false, "No se pudo completar la baja. Verifique los datos.");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error en DarDeBajaUsuario");
+                return (false, "Error al procesar la solicitud de baja: " + ex.Message);
+            }
+        }
     }
 }

@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             panel1 = new Panel();
             label2 = new Label();
             label1 = new Label();
@@ -52,15 +54,11 @@
             btnCancelarNomina = new FontAwesome.Sharp.IconButton();
             label6 = new Label();
             label5 = new Label();
-            DTPFechaFinNomina = new Utilities.NominaDatePicker();
-            DTPFechaInicioNomina = new Utilities.NominaDatePicker();
+            DTPFechaFinNomina = new NominaXpert.Utilities.NominaDatePicker();
+            DTPFechaInicioNomina = new NominaXpert.Utilities.NominaDatePicker();
             gBoxHistorial = new GroupBox();
             dataGridView1 = new DataGridView();
-            toolTip1 = new ToolTip(components);
-            Selección = new DataGridViewCheckBoxColumn();
-            Selección.HeaderText = "Seleccionar";
-            Selección.Name = "Seleccionar";
-            Selección.Width = 60;
+            chkSeleccion = new DataGridViewCheckBoxColumn();
             Id_Nomina = new DataGridViewTextBoxColumn();
             Id_empleado = new DataGridViewTextBoxColumn();
             Empleado = new DataGridViewTextBoxColumn();
@@ -68,6 +66,8 @@
             FechaInicio = new DataGridViewTextBoxColumn();
             FechaFin = new DataGridViewTextBoxColumn();
             Estado_Pago = new DataGridViewTextBoxColumn();
+            toolTip1 = new ToolTip(components);
+            Selección = new DataGridViewCheckBoxColumn();
             panel1.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             panel2.SuspendLayout();
@@ -345,6 +345,7 @@
             btnDatalleNomina.TextAlign = ContentAlignment.MiddleRight;
             btnDatalleNomina.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnDatalleNomina.UseVisualStyleBackColor = false;
+            btnDatalleNomina.Click += btnDatalleNomina_Click;
             // 
             // btnCancelarNomina
             // 
@@ -431,51 +432,91 @@
             // dataGridView1
             // 
             dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(6, 26);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(1226, 420);
-            dataGridView1.TabIndex = 0;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.BorderStyle = BorderStyle.None;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(30, 30, 30);
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = Color.Cyan;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { chkSeleccion, Id_Nomina, Id_empleado, Empleado, Id_auditoria, FechaInicio, FechaFin, Estado_Pago });
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = Color.Teal;
+            dataGridViewCellStyle2.SelectionForeColor = Color.White;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
             dataGridView1.EnableHeadersVisualStyles = false;
             dataGridView1.GridColor = Color.DarkCyan;
-            dataGridView1.RowTemplate.Height = 30;
-
-            // Hacer el grid de solo lectura por defecto
+            dataGridView1.Location = new Point(6, 26);
+            dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
-
-            // Estilo para cabeceras
-            dataGridView1.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(30, 30, 30);
-            dataGridView1.ColumnHeadersDefaultCellStyle.ForeColor = Color.Cyan;
-            dataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-
-            // Estilo para celdas normales
-            dataGridView1.DefaultCellStyle.BackColor = Color.FromArgb(45, 45, 48);
-            dataGridView1.DefaultCellStyle.ForeColor = Color.White;
-            dataGridView1.DefaultCellStyle.SelectionBackColor = Color.Teal;
-            dataGridView1.DefaultCellStyle.SelectionForeColor = Color.White;
-
-            // Crear columna de selección con checkbox editable
-            DataGridViewCheckBoxColumn chkSeleccion = new DataGridViewCheckBoxColumn();
+            dataGridView1.RowHeadersWidth = 51;
+            dataGridView1.RowTemplate.Height = 30;
+            dataGridView1.Size = new Size(1226, 420);
+            dataGridView1.TabIndex = 0;
+            // 
+            // chkSeleccion
+            // 
             chkSeleccion.HeaderText = "Seleccionar";
-            chkSeleccion.Name = "Seleccionar";
-            chkSeleccion.Width = 60;
-            chkSeleccion.ReadOnly = false; // Esta columna sí es editable
-
-            // Agregar columnas
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[]
-            {
-                chkSeleccion,
-                Id_Nomina,
-                Id_empleado,
-                Empleado,
-                Id_auditoria,
-                FechaInicio,
-                FechaFin,
-                Estado_Pago
-            });
+            chkSeleccion.MinimumWidth = 6;
+            chkSeleccion.Name = "chkSeleccion";
+            chkSeleccion.ReadOnly = true;
+            // 
+            // Id_Nomina
+            // 
+            Id_Nomina.HeaderText = "No. de Nómina";
+            Id_Nomina.MinimumWidth = 6;
+            Id_Nomina.Name = "Id_Nomina";
+            Id_Nomina.ReadOnly = true;
+            // 
+            // Id_empleado
+            // 
+            Id_empleado.HeaderText = "Id_empleado";
+            Id_empleado.MinimumWidth = 6;
+            Id_empleado.Name = "Id_empleado";
+            Id_empleado.ReadOnly = true;
+            // 
+            // Empleado
+            // 
+            Empleado.HeaderText = "Nombre empleado";
+            Empleado.MinimumWidth = 6;
+            Empleado.Name = "Empleado";
+            Empleado.ReadOnly = true;
+            // 
+            // Id_auditoria
+            // 
+            Id_auditoria.HeaderText = "Id_auditoria";
+            Id_auditoria.MinimumWidth = 6;
+            Id_auditoria.Name = "Id_auditoria";
+            Id_auditoria.ReadOnly = true;
+            // 
+            // FechaInicio
+            // 
+            FechaInicio.HeaderText = "Fecha de Inicio";
+            FechaInicio.MinimumWidth = 6;
+            FechaInicio.Name = "FechaInicio";
+            FechaInicio.ReadOnly = true;
+            // 
+            // FechaFin
+            // 
+            FechaFin.HeaderText = "Fecha de Fin";
+            FechaFin.MinimumWidth = 6;
+            FechaFin.Name = "FechaFin";
+            FechaFin.ReadOnly = true;
+            // 
+            // Estado_Pago
+            // 
+            Estado_Pago.HeaderText = "Estado de Pago";
+            Estado_Pago.MinimumWidth = 6;
+            Estado_Pago.Name = "Estado_Pago";
+            Estado_Pago.ReadOnly = true;
             // 
             // Selección
             // 
@@ -483,55 +524,6 @@
             Selección.MinimumWidth = 6;
             Selección.Name = "Selección";
             Selección.Width = 125;
-            // 
-            // Id_Nomina
-            // 
-            Id_Nomina.HeaderText = "No. de Nómina";
-            Id_Nomina.MinimumWidth = 6;
-            Id_Nomina.Name = "Id_Nomina";
-            Id_Nomina.Width = 125;
-            // 
-            // Id_empleado
-            // 
-            Id_empleado.HeaderText = "Id_empleado";
-            Id_empleado.MinimumWidth = 6;
-            Id_empleado.Name = "Id_empleado";
-            Id_empleado.Width = 125;
-            // 
-            // Empleado
-            // 
-            Empleado.HeaderText = "Nombre empleado";
-            Empleado.MinimumWidth = 6;
-            Empleado.Name = "Empleado";
-            Empleado.Width = 125;
-            // 
-            // Id_auditoria
-            // 
-            Id_auditoria.HeaderText = "Id_auditoria";
-            Id_auditoria.MinimumWidth = 6;
-            Id_auditoria.Name = "Id_auditoria";
-            Id_auditoria.Width = 125;
-            // 
-            // FechaInicio
-            // 
-            FechaInicio.HeaderText = "Fecha de Inicio";
-            FechaInicio.MinimumWidth = 6;
-            FechaInicio.Name = "FechaInicio";
-            FechaInicio.Width = 125;
-            // 
-            // FechaFin
-            // 
-            FechaFin.HeaderText = "Fecha de Fin";
-            FechaFin.MinimumWidth = 6;
-            FechaFin.Name = "FechaFin";
-            FechaFin.Width = 125;
-            // 
-            // Estado_Pago
-            // 
-            Estado_Pago.HeaderText = "Estado de Pago";
-            Estado_Pago.MinimumWidth = 6;
-            Estado_Pago.Name = "Estado_Pago";
-            Estado_Pago.Width = 125;
             // 
             // frmReportes
             // 
@@ -600,5 +592,6 @@
         private DataGridViewTextBoxColumn FechaInicio;
         private DataGridViewTextBoxColumn FechaFin;
         private DataGridViewTextBoxColumn Estado_Pago;
+        private DataGridViewCheckBoxColumn chkSeleccion;
     }
 }

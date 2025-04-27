@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             panelContenedor = new Panel();
+            btnRefrescar = new FontAwesome.Sharp.IconButton();
             dgvListadoUsuario = new DataGridView();
             button1 = new Button();
             txtSearchEmpleado = new TextBox();
@@ -37,6 +38,7 @@
             ibtnEditar = new FontAwesome.Sharp.IconButton();
             ibtnBajaUsuario = new FontAwesome.Sharp.IconButton();
             lblTituloListado = new Label();
+            lblRegistroUsuarios = new Label();
             panelContenedor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvListadoUsuario).BeginInit();
             ((System.ComponentModel.ISupportInitialize)iconPIcture).BeginInit();
@@ -45,6 +47,8 @@
             // 
             // panelContenedor
             // 
+            panelContenedor.Controls.Add(lblRegistroUsuarios);
+            panelContenedor.Controls.Add(btnRefrescar);
             panelContenedor.Controls.Add(dgvListadoUsuario);
             panelContenedor.Controls.Add(button1);
             panelContenedor.Controls.Add(txtSearchEmpleado);
@@ -55,6 +59,25 @@
             panelContenedor.Size = new Size(1262, 705);
             panelContenedor.TabIndex = 0;
             // 
+            // btnRefrescar
+            // 
+            btnRefrescar.BackColor = Color.FromArgb(37, 41, 47);
+            btnRefrescar.FlatStyle = FlatStyle.Flat;
+            btnRefrescar.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnRefrescar.ForeColor = Color.FromArgb(12, 215, 253);
+            btnRefrescar.IconChar = FontAwesome.Sharp.IconChar.Rebel;
+            btnRefrescar.IconColor = Color.FromArgb(12, 215, 253);
+            btnRefrescar.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            btnRefrescar.IconSize = 24;
+            btnRefrescar.Location = new Point(1024, 569);
+            btnRefrescar.Name = "btnRefrescar";
+            btnRefrescar.Size = new Size(125, 41);
+            btnRefrescar.TabIndex = 95;
+            btnRefrescar.Text = "Refrescar";
+            btnRefrescar.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnRefrescar.UseVisualStyleBackColor = false;
+            btnRefrescar.Click += btnRefrescar_Click;
+            // 
             // dgvListadoUsuario
             // 
             dgvListadoUsuario.BackgroundColor = Color.FromArgb(37, 41, 47);
@@ -62,7 +85,7 @@
             dgvListadoUsuario.Location = new Point(107, 190);
             dgvListadoUsuario.Name = "dgvListadoUsuario";
             dgvListadoUsuario.RowHeadersWidth = 51;
-            dgvListadoUsuario.Size = new Size(1042, 463);
+            dgvListadoUsuario.Size = new Size(1042, 314);
             dgvListadoUsuario.TabIndex = 16;
             // 
             // button1
@@ -165,6 +188,16 @@
             lblTituloListado.TabIndex = 9;
             lblTituloListado.Text = "Listado de Usuarios";
             // 
+            // lblRegistroUsuarios
+            // 
+            lblRegistroUsuarios.AutoSize = true;
+            lblRegistroUsuarios.Location = new Point(973, 126);
+            lblRegistroUsuarios.Name = "lblRegistroUsuarios";
+            lblRegistroUsuarios.Size = new Size(158, 20);
+            lblRegistroUsuarios.TabIndex = 96;
+            lblRegistroUsuarios.Text = "Registros de Usuarios: ";
+            lblRegistroUsuarios.Click += lblRegistroUsuarios_Click;
+            // 
             // UC_UsuariosListado
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -194,5 +227,7 @@
         private Button button1;
         private TextBox txtSearchEmpleado;
         private FontAwesome.Sharp.IconPictureBox iconPIcture;
+        private FontAwesome.Sharp.IconButton btnRefrescar;
+        private Label lblRegistroUsuarios;
     }
 }

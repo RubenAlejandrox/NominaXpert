@@ -1,4 +1,5 @@
 ﻿using FontAwesome.Sharp;
+using NominaXpert.Controller;
 using NominaXpert.Utilities;
 using NominaXpert.View.UsersControl;
 using System;
@@ -20,6 +21,7 @@ namespace NominaXpert.View.Forms
             InitializeComponent();
             Formas.InitializePanel(panelBar); // Inicializa el borde izquierdo en el panel
             CargarUserControlInicial();
+            ConfigurarPermisos();
         }
         
 
@@ -67,6 +69,12 @@ namespace NominaXpert.View.Forms
             UC_EmpleadosCarga uc = new UC_EmpleadosCarga();
             Utilities.Formas.ActivateButton(sender, Formas.RGBColors.ChangeColor);
             addUsersControl(uc);
+        }
+        private void ConfigurarPermisos()
+        {
+            var controller = new UsuariosController();
+            btnListadoBar.Enabled = controller.TienePermiso("EMP_VIEW");
+            btnCargaBar.Enabled = controller.TienePermiso("EMP_VIEW");
         }
     }
 }

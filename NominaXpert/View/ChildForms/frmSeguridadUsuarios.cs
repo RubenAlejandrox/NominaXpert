@@ -108,12 +108,6 @@ namespace NominaXpert.View.Forms
             addUsersControl(new UC_RolesAlta());
         }
 
-        private void ibtnEdicionRol_Click(object sender, EventArgs e)
-        {
-            ActivateButton(sender, Color.FromArgb(12, 215, 253));
-            addUsersControl(new UC_RolesEditar());
-        }
-
         private void ibtnBajaRoles_Click(object sender, EventArgs e)
         {
             ActivateButton(sender, Color.FromArgb(12, 215, 253));
@@ -129,11 +123,8 @@ namespace NominaXpert.View.Forms
 
             btnAltaBar.Enabled = controller.TienePermiso("USR_ADD");
             btnListadoBar.Enabled = controller.TienePermiso("USR_VIEW");
-            //btnBajaBar.Enabled = controller.TienePermiso("USR_EDIT");
             btnRolesPermisosBar.Enabled = controller.TienePermiso("ROL_VIEW");
-
             ibtnAltaRol.Enabled = controller.TienePermiso("ROL_ADD");
-            ibtnEdicionRol.Enabled = controller.TienePermiso("ROL_EDIT");
             ibtnBajaRoles.Enabled = controller.TienePermiso("ROL_EDIT");
         }
     }

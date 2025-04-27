@@ -30,7 +30,6 @@
         {
             panelBar = new Panel();
             ibtnBajaRoles = new FontAwesome.Sharp.IconButton();
-            ibtnEdicionRol = new FontAwesome.Sharp.IconButton();
             ibtnAltaRol = new FontAwesome.Sharp.IconButton();
             btnRolesPermisosBar = new FontAwesome.Sharp.IconButton();
             btnAltaBar = new FontAwesome.Sharp.IconButton();
@@ -42,7 +41,6 @@
             // panelBar
             // 
             panelBar.Controls.Add(ibtnBajaRoles);
-            panelBar.Controls.Add(ibtnEdicionRol);
             panelBar.Controls.Add(ibtnAltaRol);
             panelBar.Controls.Add(btnRolesPermisosBar);
             panelBar.Controls.Add(btnAltaBar);
@@ -65,7 +63,7 @@
             ibtnBajaRoles.IconColor = Color.FromArgb(12, 215, 253);
             ibtnBajaRoles.IconFont = FontAwesome.Sharp.IconFont.Auto;
             ibtnBajaRoles.IconSize = 32;
-            ibtnBajaRoles.Location = new Point(970, 0);
+            ibtnBajaRoles.Location = new Point(784, 4);
             ibtnBajaRoles.Name = "ibtnBajaRoles";
             ibtnBajaRoles.Padding = new Padding(10, 0, 20, 0);
             ibtnBajaRoles.Size = new Size(159, 61);
@@ -75,29 +73,6 @@
             ibtnBajaRoles.TextImageRelation = TextImageRelation.ImageBeforeText;
             ibtnBajaRoles.UseVisualStyleBackColor = false;
             ibtnBajaRoles.Click += ibtnBajaRoles_Click;
-            // 
-            // ibtnEdicionRol
-            // 
-            ibtnEdicionRol.BackColor = Color.FromArgb(48, 51, 59);
-            ibtnEdicionRol.Cursor = Cursors.Hand;
-            ibtnEdicionRol.FlatAppearance.BorderSize = 0;
-            ibtnEdicionRol.FlatStyle = FlatStyle.Flat;
-            ibtnEdicionRol.Font = new Font("Corbel", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            ibtnEdicionRol.ForeColor = Color.White;
-            ibtnEdicionRol.IconChar = FontAwesome.Sharp.IconChar.FilePen;
-            ibtnEdicionRol.IconColor = Color.FromArgb(12, 215, 253);
-            ibtnEdicionRol.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            ibtnEdicionRol.IconSize = 32;
-            ibtnEdicionRol.Location = new Point(784, 4);
-            ibtnEdicionRol.Name = "ibtnEdicionRol";
-            ibtnEdicionRol.Padding = new Padding(10, 0, 20, 0);
-            ibtnEdicionRol.Size = new Size(180, 61);
-            ibtnEdicionRol.TabIndex = 13;
-            ibtnEdicionRol.Text = "Edición Roles";
-            ibtnEdicionRol.TextAlign = ContentAlignment.MiddleLeft;
-            ibtnEdicionRol.TextImageRelation = TextImageRelation.ImageBeforeText;
-            ibtnEdicionRol.UseVisualStyleBackColor = false;
-            ibtnEdicionRol.Click += ibtnEdicionRol_Click;
             // 
             // ibtnAltaRol
             // 
@@ -221,7 +196,6 @@
         private FontAwesome.Sharp.IconButton btnAltaBar;
         private FontAwesome.Sharp.IconButton btnListadoBar;
         private FontAwesome.Sharp.IconButton ibtnBajaRoles;
-        private FontAwesome.Sharp.IconButton ibtnEdicionRol;
         private FontAwesome.Sharp.IconButton ibtnAltaRol;
     }
 }

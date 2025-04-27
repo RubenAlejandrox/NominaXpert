@@ -305,5 +305,6 @@ namespace NominaXpert.Data
                 _dbAccess.Disconnect();
             }
         }
+
     }
 }

@@ -39,9 +39,18 @@ namespace NominaXpert.View.UsersControl
 
         private void ibtnBajaUsuario_Click(object sender, EventArgs e)
         {
+            if (dgvListadoUsuario.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Selecciona un usuario para dar de baja", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
 
-            UC_UsuariosBaja ucBaja = new UC_UsuariosBaja();
+            int idUsuario = Convert.ToInt32(dgvListadoUsuario.SelectedRows[0].Cells["id"].Value);
+            string nombreUsuario = dgvListadoUsuario.SelectedRows[0].Cells["nombre_usuario"].Value.ToString();
+
+            UC_UsuariosBaja ucBaja = new UC_UsuariosBaja(idUsuario, nombreUsuario);
             addUsersControl(ucBaja);
+
 
         }
         private void btnEditar_Click_2(object sender, EventArgs e)
@@ -119,6 +128,7 @@ namespace NominaXpert.View.UsersControl
 
                 dgvListadoUsuario.DataSource = dt;
                 ConfigurarDataGridView();
+
             }
             catch (Exception ex)
             {
@@ -182,9 +192,15 @@ namespace NominaXpert.View.UsersControl
 
             // Selección completa de fila
             dgvListadoUsuario.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            lblRegistroUsuarios.Text = $"Total de Registros: {dgvListadoUsuario.Rows.Count}";
+
+        }
+        private void btnRefrescar_Click(object sender, EventArgs e)
+        {
+            CargarUsuarios();
         }
 
-        private void iconPIcture_Click(object sender, EventArgs e)
+        private void lblRegistroUsuarios_Click(object sender, EventArgs e)
         {
 
         }

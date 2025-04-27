@@ -205,7 +205,7 @@ namespace NominaXpert.Data
 
 
 
-        
+
         public Usuario ObtenerPorCredenciales(string correo, string contrasena)
         {
             try
@@ -351,14 +351,14 @@ namespace NominaXpert.Data
             try
             {
                 string query = @"
-        SELECT u.id, u.id_persona, u.nombre_usuario, u.contraseña, u.estatus AS estatus_usuario,
-               r.id AS id_rol, r.nombre AS nombre_rol, r.descripcion AS descripcion_rol,
-               p.nombre_completo, p.correo, p.telefono, p.direccion, p.rfc, p.curp,
-               p.fecha_nacimiento, p.estatus AS estatus_persona
-        FROM seguridad.usuarios u
-        INNER JOIN seguridad.personas p ON u.id_persona = p.id
-        INNER JOIN seguridad.roles r ON u.id_rol = r.id
-        WHERE u.id = @Id";
+                    SELECT u.id, u.id_persona, u.nombre_usuario, u.contraseña, u.estatus AS estatus_usuario,
+                           r.id AS id_rol, r.nombre AS nombre_rol, r.descripcion AS descripcion_rol,
+                           p.nombre_completo, p.correo, p.telefono, p.direccion, p.rfc, p.curp,
+                           p.fecha_nacimiento, p.estatus AS estatus_persona
+                    FROM seguridad.usuarios u
+                    INNER JOIN seguridad.personas p ON u.id_persona = p.id
+                    INNER JOIN seguridad.roles r ON u.id_rol = r.id
+                    WHERE u.id = @Id";
 
                 NpgsqlParameter paramId = _dbAccess.CreateParameter("@Id", id);
 
@@ -374,7 +374,7 @@ namespace NominaXpert.Data
                 DataRow row = resultado.Rows[0];
 
                 Persona persona = new Persona(
-                    id: Convert.ToInt32(id),
+                    id: Convert.ToInt32(row["id_persona"]),
                     nombreCompleto: row["nombre_completo"].ToString() ?? "",
                     correo: row["correo"].ToString() ?? "",
                     telefono: row["telefono"].ToString() ?? "",
@@ -384,7 +384,6 @@ namespace NominaXpert.Data
                     direccion: row["direccion"].ToString() ?? "",
                     estatus: Convert.ToBoolean(row["estatus_persona"])
                 );
-
 
                 Usuario usuario = new Usuario(
                     idPersona: Convert.ToInt32(row["id_persona"]),
@@ -410,6 +409,131 @@ namespace NominaXpert.Data
                 _dbAccess.Disconnect();
             }
         }
+        public int ObtenerIdPersonaPorUsuario(int idUsuario)
+        {
+            try
+            {
+                string query = "SELECT id_persona FROM seguridad.usuarios WHERE id = @IdUsuario";
 
+                // Crea el parámetro
+                var paramIdUsuario = _dbAccess.CreateParameter("@IdUsuario", idUsuario);
+
+                _dbAccess.Connect(); // Se conecta usando tu PostgresSQLDataAccess
+                object result = _dbAccess.ExecuteScalar(query, paramIdUsuario);
+
+                if (result != null && result != DBNull.Value)
+                {
+                    return Convert.ToInt32(result);
+                }
+
+                return 0; // No encontrado
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Error al obtener ID de persona para el usuario con ID {idUsuario}");
+                return 0;
+            }
+            finally
+            {
+                _dbAccess.Disconnect(); // Siempre desconectar al final
+            }
+        }
+
+        public bool DarDeBajaUsuario(int idUsuario, string motivo)
+        {
+            _logger.Info($"Iniciando proceso de baja para usuario ID: {idUsuario}");
+
+            try
+            {
+                _dbAccess.Connect();
+
+                // 1. Obtener información del usuario (con parámetro fresco)
+                string queryUsuario = "SELECT id_persona, estatus FROM seguridad.usuarios WHERE id = @IdUsuario";
+                var paramUsuario1 = _dbAccess.CreateParameter("@IdUsuario", idUsuario);
+
+                DataTable dtUsuario = _dbAccess.ExecuteQuery(queryUsuario, paramUsuario1);
+
+                if (dtUsuario.Rows.Count == 0)
+                {
+                    _logger.Warn($"Usuario ID {idUsuario} no encontrado");
+                    return false;
+                }
+
+                int idPersona = Convert.ToInt32(dtUsuario.Rows[0]["id_persona"]);
+                bool usuarioActivo = Convert.ToBoolean(dtUsuario.Rows[0]["estatus"]);
+
+                // 2. Obtener estado de la persona (con parámetro fresco)
+                string queryPersona = "SELECT estatus FROM seguridad.personas WHERE id = @IdPersona";
+                var paramPersona1 = _dbAccess.CreateParameter("@IdPersona", idPersona);
+
+                DataTable dtPersona = _dbAccess.ExecuteQuery(queryPersona, paramPersona1);
+
+                if (dtPersona.Rows.Count == 0)
+                {
+                    _logger.Warn($"Persona ID {idPersona} no encontrada");
+                    return false;
+                }
+
+                bool personaActiva = Convert.ToBoolean(dtPersona.Rows[0]["estatus"]);
+
+                _logger.Info($"Estado actual - Usuario {idUsuario}: {(usuarioActivo ? "ACTIVO" : "INACTIVO")}, Persona {idPersona}: {(personaActiva ? "ACTIVA" : "INACTIVA")}");
+
+                bool cambiosRealizados = false;
+
+                // 3. Eliminar permisos (con parámetro completamente nuevo)
+                if (usuarioActivo)
+                {
+                    string deletePermisos = "DELETE FROM seguridad.permisos_rol WHERE id_rol IN (SELECT id_rol FROM seguridad.usuarios WHERE id = @IdUsuarioPermisos)";
+                    var paramUsuarioPermisos = _dbAccess.CreateParameter("@IdUsuarioPermisos", idUsuario);
+                    int permisosEliminados = _dbAccess.ExecuteNonQuery(deletePermisos, paramUsuarioPermisos);
+                    _logger.Info($"Permisos eliminados: {permisosEliminados}");
+                }
+
+                // 4. Baja de usuario (con parámetro completamente nuevo)
+                if (usuarioActivo)
+                {
+                    string updateUsuario = "UPDATE seguridad.usuarios SET estatus = FALSE WHERE id = @IdUsuarioUpdate";
+                    var paramUsuarioUpdate = _dbAccess.CreateParameter("@IdUsuarioUpdate", idUsuario);
+                    int filasUsuario = _dbAccess.ExecuteNonQuery(updateUsuario, paramUsuarioUpdate);
+
+                    if (filasUsuario > 0)
+                    {
+                        cambiosRealizados = true;
+                        _logger.Info($"Usuario ID {idUsuario} dado de baja");
+                    }
+                }
+
+                // 5. Baja de persona (con parámetro completamente nuevo)
+                if (personaActiva)
+                {
+                    string updatePersona = "UPDATE seguridad.personas SET estatus = FALSE WHERE id = @IdPersonaUpdate";
+                    var paramPersonaUpdate = _dbAccess.CreateParameter("@IdPersonaUpdate", idPersona);
+                    int filasPersona = _dbAccess.ExecuteNonQuery(updatePersona, paramPersonaUpdate);
+
+                    if (filasPersona > 0)
+                    {
+                        cambiosRealizados = true;
+                        _logger.Info($"Persona ID {idPersona} dada de baja");
+                    }
+                }
+
+                if (!usuarioActivo && !personaActiva)
+                {
+                    _logger.Info($"Usuario {idUsuario} y persona {idPersona} ya estaban inactivos");
+                    return true;
+                }
+
+                return cambiosRealizados;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Error al dar de baja usuario ID: {idUsuario}");
+                return false;
+            }
+            finally
+            {
+                _dbAccess.Disconnect();
+            }
+        }
     }
 }

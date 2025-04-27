@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Xml;
 using FontAwesome.Sharp; // Librería para los iconos
 using NominaXpert.Business;
+using NominaXpert.Controller;
 namespace NominaXpert.View
 {
     public partial class MDI_Nomina : Form
@@ -35,6 +36,7 @@ namespace NominaXpert.View
             this.ControlBox = false;
             this.DoubleBuffered = true;
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
+            ConfigurarPermisos();
         }
 
         //Structs
@@ -233,49 +235,14 @@ namespace NominaXpert.View
             }
         }
 
-        //private void ConfigurarPermisos()
-        //{
-        //    string rol = UsuarioNegocios.Rol;
-
-        //    if (rol == "Administrador")
-        //    {
-        //        btnEmpleado.Enabled = true;
-        //        btnSeguridad.Enabled = true;
-        //        btnDashboard.Enabled = false;
-        //        btnReporte.Enabled = false;
-        //        btnHR.Enabled = false;
-        //        btnCalculo.Enabled = false;
-        //        btnConfig.Enabled = true;
-        //    }
-        //    else if (rol == "Rh")
-        //    {
-        //        btnEmpleado.Enabled = true;
-        //        btnSeguridad.Enabled = false;
-        //        btnDashboard.Enabled = true;
-        //        btnReporte.Enabled = true;
-        //        btnHR.Enabled = true;
-        //        btnCalculo.Enabled = true;
-        //        btnConfig.Enabled = true;
-        //    }
-        //    else if (rol == "Auditor")
-        //    {
-        //        btnEmpleado.Enabled = true;
-        //        btnSeguridad.Enabled = false;
-        //        btnDashboard.Enabled = true;
-        //        btnReporte.Enabled = true;
-        //        btnHR.Enabled = true;
-        //        btnCalculo.Enabled = true;
-        //        btnConfig.Enabled = true;
-        //    }
-        //    else
-        //    {
-        //        // Si no tiene un rol válido, deshabilitar todos los botones
-        //        btnEmpleado.Enabled = false;
-        //        btnSeguridad.Enabled = false;
-        //        btnDashboard.Enabled = false;
-        //        btnReporte.Enabled = false;
-        //    }
-        //}
+        private void ConfigurarPermisos()
+        {
+            var controller = new UsuariosController();
+            btnEmpleado.Enabled = controller.TienePermiso("EMP_VIEW");
+            btnCalculo.Enabled = controller.TienePermiso("NOM_VIEW");
+            btnReporte.Enabled = controller.TienePermiso("NOM_HIST");
+            btnSeguridad.Enabled = controller.TienePermiso("USR_VIEW");
+        }
     }
 }
 

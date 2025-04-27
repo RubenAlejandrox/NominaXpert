@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Numerics;
 using NominaXpert.Business;
 using NominaXpert.Controller;
 using NominaXpert.Model;
@@ -10,43 +11,21 @@ namespace NominaXpert.View.UsersControl
         private bool _modoEdicion = false;
 
         private int _idUsuarioEditar = 0;
+        private int _idPersonaEditar = 0;
 
-        public UC_UsuariosAlta(int idUsuario) : this() // llama al constructor por defecto
+        public UC_UsuariosAlta(int idUsuario) : this() 
         {
             _idUsuarioEditar = idUsuario;
             _modoEdicion = true;
 
         }
-        public void ObtenerDetalleUsuario(int idUsuario)
-        {
-            UsuariosController controller = new UsuariosController();
-            Usuario usuario = controller.ObtenerDetalleUsuario(idUsuario);
-
-            if (usuario != null)
-            {
-                _idUsuarioEditar = usuario.Id;
-                txtNomUsuario.Text = usuario.Nombre_Usuario;
-                txtContraseña.Text = usuario.Contrasena;
-                txtNombre.Text = usuario.DatosPersonales?.NombreCompleto ?? "";
-                txtCorreo.Text = usuario.DatosPersonales?.Correo ?? "";
-                txtTelefono.Text = usuario.DatosPersonales?.Telefono ?? "";
-                txtDireccion.Text = usuario.DatosPersonales?.Direccion ?? "";
-                txtCurp.Text = usuario.DatosPersonales?.Curp ?? "";
-                txtRfc.Text = usuario.DatosPersonales?.Rfc ?? "";
-                dtpFechaNacimiento.Value = usuario.DatosPersonales?.FechaNacimiento ?? DateTime.Now;
-                cbxEstatus.SelectedValue = usuario.Estatus ? 1 : 0;
-                cbxRoles.SelectedValue = usuario.IdRol;
-
-                EstablecerModoEdicion(true); // 🟢 Cambiar botón y modo
-            }
-        }
-
 
         private void EstablecerModoEdicion(bool edicion)
         {
             _modoEdicion = edicion;
             ibtnGuardar.Text = edicion ? "Actualizar" : "Guardar";
-            //.Text = edicion ? "Editar Usuario" : "Nuevo Usuario"; // si usas un label
+            //.Text = edicion ? "Editar Usuario" : "Nuevo Usuario";
+            ibtnRegresar.Visible = true;
         }
 
         public UC_UsuariosAlta()
@@ -121,7 +100,7 @@ namespace NominaXpert.View.UsersControl
             }
         }
 
-        private void ibtnGuardar_Click_1(object sender, EventArgs e)
+        private void ibtnGuardar_Click(object sender, EventArgs e)
         {
             if (_modoEdicion)
             {
@@ -132,6 +111,31 @@ namespace NominaXpert.View.UsersControl
                 GuardarUsuario(); // tu método normal
         }
 
+        public void ObtenerDetalleUsuario(int idUsuario)
+        {
+            UsuariosController controller = new UsuariosController();
+            Usuario usuario = controller.ObtenerDetalleUsuario(idUsuario);
+
+            if (usuario != null)
+            {
+                _idUsuarioEditar = usuario.Id;
+                _idPersonaEditar = usuario.DatosPersonales?.Id ?? 0; 
+
+                txtNomUsuario.Text = usuario.Nombre_Usuario;
+                txtContraseña.Text = usuario.Contrasena;
+                txtNombre.Text = usuario.DatosPersonales?.NombreCompleto ?? "";
+                txtCorreo.Text = usuario.DatosPersonales?.Correo ?? "";
+                txtTelefono.Text = usuario.DatosPersonales?.Telefono ?? "";
+                txtDireccion.Text = usuario.DatosPersonales?.Direccion ?? "";
+                txtCurp.Text = usuario.DatosPersonales?.Curp ?? "";
+                txtRfc.Text = usuario.DatosPersonales?.Rfc ?? "";
+                dtpFechaNacimiento.Value = usuario.DatosPersonales?.FechaNacimiento ?? DateTime.Now;
+                cbxEstatus.SelectedValue = usuario.Estatus ? 1 : 0;
+                cbxRoles.SelectedValue = usuario.IdRol;
+
+                EstablecerModoEdicion(true);
+            }
+        }
         private void ReiniciarFormulario()
         {
             txtNomUsuario.Clear();
@@ -148,7 +152,9 @@ namespace NominaXpert.View.UsersControl
 
             _modoEdicion = false;
             _idUsuarioEditar = 0;
-            EstablecerModoEdicion(false); // 🔄 Regresar texto a Guardar
+            EstablecerModoEdicion(false);
+            ibtnRegresar.Visible = false;
+            _idPersonaEditar = 0;
         }
 
 
@@ -272,11 +278,7 @@ namespace NominaXpert.View.UsersControl
             cbxRoles.ResetText();
             dtpFechaNacimiento.Value = DateTime.Now.AddYears(-18); // Valor por defecto
             cbxEstatus.SelectedValue = 1; // Activo por defecto
-        }
-
-        private void panel2_Paint(object sender, PaintEventArgs e)
-        {
-
+            ibtnRegresar.Visible = false;
         }
 
         private void ActualizarUsuario()
@@ -289,7 +291,7 @@ namespace NominaXpert.View.UsersControl
 
             Persona persona = new Persona
             {
-                Id = _idUsuarioEditar,
+                Id = _idPersonaEditar,
                 NombreCompleto = txtNombre.Text.Trim(),
                 Correo = txtCorreo.Text.Trim(),
                 Telefono = txtTelefono.Text.Trim(),
@@ -321,10 +323,6 @@ namespace NominaXpert.View.UsersControl
                 ReiniciarFormulario();
         }
 
-        private void txtCorreo_TextChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }
 

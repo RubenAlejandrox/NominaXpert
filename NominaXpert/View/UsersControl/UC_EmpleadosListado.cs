@@ -22,7 +22,7 @@ namespace NominaXpert.View.UsersControl
         private void UC_EmpleadosListado_Load(object sender, EventArgs e)
         {
 
-            
+
             CargarEmpleados();                  // Cargar todos los empleados
             CargarTiposDeContrato();             // Tipos de contrato
             CargarEstatus();                     // Estatus
@@ -32,7 +32,7 @@ namespace NominaXpert.View.UsersControl
 
         public void InicializaVentanaEmpleadoListado()
         {
-          
+
         }
 
 
@@ -201,7 +201,7 @@ namespace NominaXpert.View.UsersControl
             }
 
             // Mostrar el total real de filas
-            lblTotaldeRegistros.Text = $"Total de Registros: {dataGridView1.Rows.Count-1}";
+            lblTotaldeRegistros.Text = $"Total de Registros: {dataGridView1.Rows.Count - 1}";
         }
 
 
@@ -224,7 +224,7 @@ namespace NominaXpert.View.UsersControl
             FiltrarEmpleados();
         }
 
-   
+
 
         private void btnLimpiarFiltros_Click(object sender, EventArgs e)
         {
@@ -233,6 +233,16 @@ namespace NominaXpert.View.UsersControl
             txtSearchTable.Text = "Buscar empleados...";
             txtSearchTable.ForeColor = Color.LightGray;
             CargarEmpleados(); // Recargar todos los empleados
+        }
+
+        private void lblTotaldeRegistros_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }
