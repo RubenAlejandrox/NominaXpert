@@ -37,6 +37,11 @@ namespace NominaXpert.Model
             Descripcion = descripcion;
             Estatus = estatus;
         }
+
+        public override string ToString()
+        {
+            return $"{Codigo} - {Descripcion}";
+        }
     }
 
 

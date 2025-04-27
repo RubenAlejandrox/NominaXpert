@@ -1,51 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 
 namespace NominaXpert.Model
 {
     public class Usuario
     {
-        public int Id { get; set; }
-        public int IdPersona { get; set; }
-        public int IdRol { get; set; }
-        public string NombreUsuario { get; set; }
-        public string Contraseña { get; set; }  // Considerar encriptar la contraseña
-        public bool Estatus { get; set; }
-
-
-        // Constructor predeterminado
-        public Usuario()
-        {
-            IdPersona = 0;
-            IdRol = 0;
-            NombreUsuario = string.Empty;
-            Contraseña = string.Empty;
-            Estatus = true; // Por defecto, el usuario está activo
-        }
-
-        // Constructor con campos obligatorios
-        public Usuario(int idPersona, int idRol, string nombreUsuario, string contraseña)
-        {
-            IdPersona = idPersona;
-            IdRol = idRol;
-            NombreUsuario = nombreUsuario;
-            Contraseña = contraseña;
-            Estatus = true; // Por defecto, el usuario está activo
-        }
-
-        // Constructor con todos los campos
-        public Usuario(int id, int idPersona, int idRol, string nombreUsuario, string contraseña, bool estatus)
+        public Usuario(int idPersona, int id, string nombre_usuario, string contrasena, bool estatus, int idrol)
         {
             Id = id;
             IdPersona = idPersona;
-            IdRol = idRol;
-            NombreUsuario = nombreUsuario;
-            Contraseña = contraseña;
+            Nombre_Usuario = nombre_usuario;
+            Contrasena = contrasena;
             Estatus = estatus;
+            IdRol = idrol;
+            Persona = new Persona(); // Inicializar la propiedad Persona
         }
-    }
 
+        public Usuario()
+        {
+            Nombre_Usuario = string.Empty;
+            Contrasena = string.Empty;
+            IdRol = 1;
+            Estatus = true; // Por defecto, los estudiantes se crean activos
+            DatosPersonales = new Persona();
+        }
+
+        public int IdPersona { get; set; }
+        public int Id { get; set; }
+        public string Nombre_Usuario { get; set; }
+        public string Contrasena { get; set; }
+        public bool Estatus { get; set; }
+        public int IdRol { get; set; }
+        public Rol Rol { get; set; }
+        public Persona Persona { get; set; } // Nueva propiedad para los datos personales
+
+        /// <summary>
+        /// Datos personales del estudiante (relación con Persona)
+        /// </summary>
+        public Persona DatosPersonales { get; set; }
+
+    }
 }

@@ -198,6 +198,112 @@ namespace NominaXpert.Data
                 _dbAccess.Disconnect();
             }
         }
+        public bool ExisteRFC(string rfc)
+        {
+            try
+            {
+                string query = "SELECT COUNT(*) FROM seguridad.personas WHERE rfc = @Rfc";
+                NpgsqlParameter paramRfc = _dbAccess.CreateParameter("@Rfc", rfc);
+                _dbAccess.Connect();
+                object? resultado = _dbAccess.ExecuteScalar(query, paramRfc);
+                int count = Convert.ToInt32(resultado);
+                return count > 0;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Error al verificar la existencia del RFC: {rfc}");
+                return false;
+            }
+            finally
+            {
+                _dbAccess.Disconnect();
+            }
+        }
+        public int InsertarPersonaSeguridad(Persona persona)
+        {
+            try
+            {
+                string query = "INSERT INTO seguridad.personas (nombre_completo, correo, telefono, direccion, rfc, curp, fecha_nacimiento, estatus) " +
+                               "VALUES (@NombreCompleto, @Correo, @Telefono, @Direccion, @RFC, @Curp, @FechaNacimiento, @Estatus) " +
+                               "RETURNING id";
 
+                // Crea los parámetros
+                NpgsqlParameter paramNombre = _dbAccess.CreateParameter("@NombreCompleto", persona.NombreCompleto);
+                NpgsqlParameter paramCorreo = _dbAccess.CreateParameter("@Correo", persona.Correo);
+                NpgsqlParameter paramDireccion = _dbAccess.CreateParameter("@Direccion", persona.Direccion);
+                NpgsqlParameter paramTelefono = _dbAccess.CreateParameter("@Telefono", persona.Telefono);
+                NpgsqlParameter paramFechaNac = _dbAccess.CreateParameter("@FechaNacimiento", persona.FechaNacimiento ?? (object)DBNull.Value);
+                NpgsqlParameter paramRFC = _dbAccess.CreateParameter("@RFC", persona.Rfc);
+                NpgsqlParameter paramCurp = _dbAccess.CreateParameter("@Curp", persona.Curp);
+                NpgsqlParameter paramEstatus = _dbAccess.CreateParameter("@Estatus", persona.Estatus);
+
+                // Establece la conexión a la BD
+                _dbAccess.Connect();
+
+                // Ejecuta la inserción y obtiene el ID generado
+                object resultado = _dbAccess.ExecuteScalar(query, paramNombre, paramCorreo, paramTelefono, paramDireccion,
+                                                           paramRFC, paramCurp, paramFechaNac, paramEstatus);
+
+                // Convierte el resultado a entero
+                int idGenerado = Convert.ToInt32(resultado);
+                _logger.Info($"Persona insertada correctamente con ID: {idGenerado}");
+
+                return idGenerado;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Error al insertar la persona {persona.NombreCompleto}");
+                return -1;
+            }
+            finally
+            {
+                // Asegura que se cierre la conexión
+                _dbAccess.Disconnect();
+            }
+        }
+        public bool ActualizarPersonaSeguridad(Persona persona)
+        {
+            try
+            {
+                string query = @"
+            UPDATE seguridad.personas
+            SET nombre_completo = @NombreCompleto,
+                correo = @Correo,
+                telefono = @Telefono,
+                direccion = @Direccion,
+                rfc = @RFC,
+                curp = @Curp,
+                fecha_nacimiento = @FechaNacimiento,
+                estatus = @Estatus
+            WHERE id = @Id";
+
+                NpgsqlParameter paramId = _dbAccess.CreateParameter("@Id", persona.Id);
+                NpgsqlParameter paramNombre = _dbAccess.CreateParameter("@NombreCompleto", persona.NombreCompleto);
+                NpgsqlParameter paramCorreo = _dbAccess.CreateParameter("@Correo", persona.Correo);
+                NpgsqlParameter paramTelefono = _dbAccess.CreateParameter("@Telefono", persona.Telefono);
+                NpgsqlParameter paramDireccion = _dbAccess.CreateParameter("@Direccion", persona.Direccion);
+                NpgsqlParameter paramRFC = _dbAccess.CreateParameter("@RFC", persona.Rfc);
+                NpgsqlParameter paramCurp = _dbAccess.CreateParameter("@Curp", persona.Curp);
+                NpgsqlParameter paramFechaNacimiento = _dbAccess.CreateParameter("@FechaNacimiento", persona.FechaNacimiento ?? (object)DBNull.Value);
+                NpgsqlParameter paramEstatus = _dbAccess.CreateParameter("@Estatus", persona.Estatus);
+
+                _dbAccess.Connect();
+
+                int filasAfectadas = _dbAccess.ExecuteNonQuery(query,
+                    paramId, paramNombre, paramCorreo, paramTelefono, paramDireccion,
+                    paramRFC, paramCurp, paramFechaNacimiento, paramEstatus);
+
+                return filasAfectadas > 0;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Error al actualizar la persona con ID {persona.Id}");
+                return false;
+            }
+            finally
+            {
+                _dbAccess.Disconnect();
+            }
+        }
     }
 }

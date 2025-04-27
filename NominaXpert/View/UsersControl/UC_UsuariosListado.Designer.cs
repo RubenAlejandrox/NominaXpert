@@ -29,63 +29,64 @@
         private void InitializeComponent()
         {
             panelContenedor = new Panel();
-            btnSearch = new Button();
+            dgvListadoUsuario = new DataGridView();
+            button1 = new Button();
             txtSearchEmpleado = new TextBox();
             iconPIcture = new FontAwesome.Sharp.IconPictureBox();
-            dtgListaUsuario = new DataGridView();
-            Seleccion = new DataGridViewCheckBoxColumn();
-            Usuario = new DataGridViewTextBoxColumn();
-            Nombre = new DataGridViewTextBoxColumn();
-            ApellidoPat = new DataGridViewTextBoxColumn();
-            ApellidoMat = new DataGridViewTextBoxColumn();
-            Genero = new DataGridViewTextBoxColumn();
-            Correo = new DataGridViewTextBoxColumn();
-            Estatus = new DataGridViewTextBoxColumn();
-            Rol = new DataGridViewTextBoxColumn();
             panel1 = new Panel();
             ibtnEditar = new FontAwesome.Sharp.IconButton();
             ibtnBajaUsuario = new FontAwesome.Sharp.IconButton();
             lblTituloListado = new Label();
             panelContenedor.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvListadoUsuario).BeginInit();
             ((System.ComponentModel.ISupportInitialize)iconPIcture).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dtgListaUsuario).BeginInit();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
             // panelContenedor
             // 
-            panelContenedor.Controls.Add(btnSearch);
+            panelContenedor.Controls.Add(dgvListadoUsuario);
+            panelContenedor.Controls.Add(button1);
             panelContenedor.Controls.Add(txtSearchEmpleado);
             panelContenedor.Controls.Add(iconPIcture);
-            panelContenedor.Controls.Add(dtgListaUsuario);
             panelContenedor.Controls.Add(panel1);
             panelContenedor.Location = new Point(0, -1);
             panelContenedor.Name = "panelContenedor";
             panelContenedor.Size = new Size(1262, 705);
             panelContenedor.TabIndex = 0;
             // 
-            // btnSearch
+            // dgvListadoUsuario
             // 
-            btnSearch.BackColor = Color.Black;
-            btnSearch.FlatStyle = FlatStyle.Popup;
-            btnSearch.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnSearch.ForeColor = Color.White;
-            btnSearch.Location = new Point(708, 119);
-            btnSearch.Name = "btnSearch";
-            btnSearch.Size = new Size(94, 29);
-            btnSearch.TabIndex = 11;
-            btnSearch.Text = "Buscar";
-            btnSearch.UseVisualStyleBackColor = false;
+            dgvListadoUsuario.BackgroundColor = Color.FromArgb(37, 41, 47);
+            dgvListadoUsuario.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvListadoUsuario.Location = new Point(107, 190);
+            dgvListadoUsuario.Name = "dgvListadoUsuario";
+            dgvListadoUsuario.RowHeadersWidth = 51;
+            dgvListadoUsuario.Size = new Size(1042, 463);
+            dgvListadoUsuario.TabIndex = 16;
+            // 
+            // button1
+            // 
+            button1.BackColor = Color.Black;
+            button1.FlatStyle = FlatStyle.Popup;
+            button1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button1.ForeColor = Color.White;
+            button1.Location = new Point(772, 121);
+            button1.Name = "button1";
+            button1.Size = new Size(94, 29);
+            button1.TabIndex = 15;
+            button1.Text = "Buscar";
+            button1.UseVisualStyleBackColor = false;
             // 
             // txtSearchEmpleado
             // 
             txtSearchEmpleado.BackColor = Color.FromArgb(37, 41, 47);
             txtSearchEmpleado.BorderStyle = BorderStyle.FixedSingle;
             txtSearchEmpleado.ForeColor = Color.LightGray;
-            txtSearchEmpleado.Location = new Point(86, 119);
+            txtSearchEmpleado.Location = new Point(150, 115);
             txtSearchEmpleado.Name = "txtSearchEmpleado";
             txtSearchEmpleado.Size = new Size(585, 27);
-            txtSearchEmpleado.TabIndex = 10;
+            txtSearchEmpleado.TabIndex = 14;
             txtSearchEmpleado.Text = "Buscar usuario";
             // 
             // iconPIcture
@@ -96,88 +97,11 @@
             iconPIcture.IconColor = Color.FromArgb(12, 215, 253);
             iconPIcture.IconFont = FontAwesome.Sharp.IconFont.Auto;
             iconPIcture.IconSize = 36;
-            iconPIcture.Location = new Point(40, 110);
+            iconPIcture.Location = new Point(104, 112);
             iconPIcture.Name = "iconPIcture";
             iconPIcture.Size = new Size(40, 36);
-            iconPIcture.TabIndex = 9;
+            iconPIcture.TabIndex = 13;
             iconPIcture.TabStop = false;
-            // 
-            // dtgListaUsuario
-            // 
-            dtgListaUsuario.BackgroundColor = Color.FromArgb(48, 51, 59);
-            dtgListaUsuario.CellBorderStyle = DataGridViewCellBorderStyle.SingleVertical;
-            dtgListaUsuario.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dtgListaUsuario.Columns.AddRange(new DataGridViewColumn[] { Seleccion, Usuario, Nombre, ApellidoPat, ApellidoMat, Genero, Correo, Estatus, Rol });
-            dtgListaUsuario.GridColor = Color.MidnightBlue;
-            dtgListaUsuario.Location = new Point(40, 176);
-            dtgListaUsuario.Name = "dtgListaUsuario";
-            dtgListaUsuario.RowHeadersWidth = 51;
-            dtgListaUsuario.Size = new Size(1185, 634);
-            dtgListaUsuario.TabIndex = 8;
-            dtgListaUsuario.CellContentClick += dtgListaUsuario_CellContentClick;
-            // 
-            // Seleccion
-            // 
-            Seleccion.HeaderText = "Selección";
-            Seleccion.MinimumWidth = 6;
-            Seleccion.Name = "Seleccion";
-            Seleccion.Width = 125;
-            // 
-            // Usuario
-            // 
-            Usuario.HeaderText = "Usuario";
-            Usuario.MinimumWidth = 6;
-            Usuario.Name = "Usuario";
-            Usuario.Width = 125;
-            // 
-            // Nombre
-            // 
-            Nombre.HeaderText = "Nombre ";
-            Nombre.MinimumWidth = 6;
-            Nombre.Name = "Nombre";
-            Nombre.Width = 125;
-            // 
-            // ApellidoPat
-            // 
-            ApellidoPat.HeaderText = "Apellido Paterno";
-            ApellidoPat.MinimumWidth = 6;
-            ApellidoPat.Name = "ApellidoPat";
-            ApellidoPat.Width = 125;
-            // 
-            // ApellidoMat
-            // 
-            ApellidoMat.HeaderText = "Apellido Materno";
-            ApellidoMat.MinimumWidth = 6;
-            ApellidoMat.Name = "ApellidoMat";
-            ApellidoMat.Width = 125;
-            // 
-            // Genero
-            // 
-            Genero.HeaderText = "Género";
-            Genero.MinimumWidth = 6;
-            Genero.Name = "Genero";
-            Genero.Width = 125;
-            // 
-            // Correo
-            // 
-            Correo.HeaderText = "Correo";
-            Correo.MinimumWidth = 6;
-            Correo.Name = "Correo";
-            Correo.Width = 125;
-            // 
-            // Estatus
-            // 
-            Estatus.HeaderText = "Estatus";
-            Estatus.MinimumWidth = 6;
-            Estatus.Name = "Estatus";
-            Estatus.Width = 125;
-            // 
-            // Rol
-            // 
-            Rol.HeaderText = "Rol";
-            Rol.MinimumWidth = 6;
-            Rol.Name = "Rol";
-            Rol.Width = 125;
             // 
             // panel1
             // 
@@ -252,8 +176,8 @@
             Size = new Size(1262, 705);
             panelContenedor.ResumeLayout(false);
             panelContenedor.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvListadoUsuario).EndInit();
             ((System.ComponentModel.ISupportInitialize)iconPIcture).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dtgListaUsuario).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ResumeLayout(false);
@@ -262,22 +186,13 @@
         #endregion
 
         private Panel panelContenedor;
-        private DataGridView dtgListaUsuario;
         private Panel panel1;
         private Label lblTituloListado;
-        private Button btnSearch;
-        private TextBox txtSearchEmpleado;
-        private FontAwesome.Sharp.IconPictureBox iconPIcture;
         private FontAwesome.Sharp.IconButton ibtnBajaUsuario;
         private FontAwesome.Sharp.IconButton ibtnEditar;
-        private DataGridViewCheckBoxColumn Seleccion;
-        private DataGridViewTextBoxColumn Usuario;
-        private DataGridViewTextBoxColumn Nombre;
-        private DataGridViewTextBoxColumn ApellidoPat;
-        private DataGridViewTextBoxColumn ApellidoMat;
-        private DataGridViewTextBoxColumn Genero;
-        private DataGridViewTextBoxColumn Correo;
-        private DataGridViewTextBoxColumn Estatus;
-        private DataGridViewTextBoxColumn Rol;
+        private DataGridView dgvListadoUsuario;
+        private Button button1;
+        private TextBox txtSearchEmpleado;
+        private FontAwesome.Sharp.IconPictureBox iconPIcture;
     }
 }

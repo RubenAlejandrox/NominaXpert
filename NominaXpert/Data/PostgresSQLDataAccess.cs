@@ -92,6 +92,30 @@ namespace ControlEscolar.Data
             }
         }
 
+        public DataTable ExecuteQuery(string query, params NpgsqlParameter[] parameters)
+        {
+            DataTable dataTable = new DataTable();
+
+            try
+            {
+                _logger.Info($"Ejecutando consulta en la base de datos: {query}");
+                using (NpgsqlCommand command = CreateCommand(query, parameters))
+                {
+                    using (NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(command))
+                    {
+                        adapter.Fill(dataTable); //Llenar el DataTable con los resultados de la consulta
+                        _logger.Debug($"Consulta ejecutada correctamente, {dataTable.Rows.Count} filas obtenidas");
+                    }
+                }
+                return dataTable;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al ejecutar la consulta en la base de datos");
+                throw;
+            }
+        }
+
         public DataTable ExecuteQuery_Reader(string query, params NpgsqlParameter[] parameters)
         {
             DataTable dataTable = new DataTable();

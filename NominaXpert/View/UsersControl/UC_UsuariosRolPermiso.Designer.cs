@@ -29,36 +29,53 @@
         private void InitializeComponent()
         {
             panel = new Panel();
+            panelContenedor = new Panel();
+            dtgRoles = new DataGridView();
             btnSearch = new Button();
             txtSearchEmpleado = new TextBox();
             iconPIcture = new FontAwesome.Sharp.IconPictureBox();
-            dtgListaRoles = new DataGridView();
-            Seleccion = new DataGridViewCheckBoxColumn();
-            Codigo = new DataGridViewTextBoxColumn();
-            Nombre = new DataGridViewTextBoxColumn();
-            Descripcion = new DataGridViewTextBoxColumn();
-            Estatus = new DataGridViewTextBoxColumn();
-            PermisosAsignados = new DataGridViewTextBoxColumn();
             panel2 = new Panel();
+            ibtnEditar = new FontAwesome.Sharp.IconButton();
+            ibtnBajaUsuario = new FontAwesome.Sharp.IconButton();
             label1 = new Label();
             panel.SuspendLayout();
+            panelContenedor.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dtgRoles).BeginInit();
             ((System.ComponentModel.ISupportInitialize)iconPIcture).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dtgListaRoles).BeginInit();
             panel2.SuspendLayout();
             SuspendLayout();
             // 
             // panel
             // 
-            panel.Controls.Add(btnSearch);
-            panel.Controls.Add(txtSearchEmpleado);
-            panel.Controls.Add(iconPIcture);
-            panel.Controls.Add(dtgListaRoles);
-            panel.Controls.Add(panel2);
+            panel.Controls.Add(panelContenedor);
             panel.Dock = DockStyle.Fill;
             panel.Location = new Point(0, 0);
             panel.Name = "panel";
             panel.Size = new Size(1262, 705);
             panel.TabIndex = 0;
+            // 
+            // panelContenedor
+            // 
+            panelContenedor.Controls.Add(dtgRoles);
+            panelContenedor.Controls.Add(btnSearch);
+            panelContenedor.Controls.Add(txtSearchEmpleado);
+            panelContenedor.Controls.Add(iconPIcture);
+            panelContenedor.Controls.Add(panel2);
+            panelContenedor.Dock = DockStyle.Fill;
+            panelContenedor.Location = new Point(0, 0);
+            panelContenedor.Name = "panelContenedor";
+            panelContenedor.Size = new Size(1262, 705);
+            panelContenedor.TabIndex = 0;
+            // 
+            // dtgRoles
+            // 
+            dtgRoles.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dtgRoles.Location = new Point(114, 236);
+            dtgRoles.Name = "dtgRoles";
+            dtgRoles.RowHeadersWidth = 51;
+            dtgRoles.Size = new Size(744, 442);
+            dtgRoles.TabIndex = 48;
+            dtgRoles.CellContentClick += dtgRoles_CellContentClick;
             // 
             // btnSearch
             // 
@@ -66,10 +83,10 @@
             btnSearch.FlatStyle = FlatStyle.Popup;
             btnSearch.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnSearch.ForeColor = Color.White;
-            btnSearch.Location = new Point(720, 169);
+            btnSearch.Location = new Point(724, 151);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(94, 29);
-            btnSearch.TabIndex = 37;
+            btnSearch.TabIndex = 47;
             btnSearch.Text = "Buscar";
             btnSearch.UseVisualStyleBackColor = false;
             // 
@@ -78,10 +95,10 @@
             txtSearchEmpleado.BackColor = Color.FromArgb(37, 41, 47);
             txtSearchEmpleado.BorderStyle = BorderStyle.FixedSingle;
             txtSearchEmpleado.ForeColor = Color.LightGray;
-            txtSearchEmpleado.Location = new Point(98, 169);
+            txtSearchEmpleado.Location = new Point(102, 151);
             txtSearchEmpleado.Name = "txtSearchEmpleado";
             txtSearchEmpleado.Size = new Size(585, 27);
-            txtSearchEmpleado.TabIndex = 36;
+            txtSearchEmpleado.TabIndex = 46;
             txtSearchEmpleado.Text = "Buscar rol";
             // 
             // iconPIcture
@@ -92,76 +109,61 @@
             iconPIcture.IconColor = Color.FromArgb(12, 215, 253);
             iconPIcture.IconFont = FontAwesome.Sharp.IconFont.Auto;
             iconPIcture.IconSize = 36;
-            iconPIcture.Location = new Point(52, 160);
+            iconPIcture.Location = new Point(56, 142);
             iconPIcture.Name = "iconPIcture";
             iconPIcture.Size = new Size(40, 36);
-            iconPIcture.TabIndex = 35;
+            iconPIcture.TabIndex = 45;
             iconPIcture.TabStop = false;
-            // 
-            // dtgListaRoles
-            // 
-            dtgListaRoles.BackgroundColor = Color.FromArgb(48, 51, 59);
-            dtgListaRoles.CellBorderStyle = DataGridViewCellBorderStyle.SingleVertical;
-            dtgListaRoles.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dtgListaRoles.Columns.AddRange(new DataGridViewColumn[] { Seleccion, Codigo, Nombre, Descripcion, Estatus, PermisosAsignados });
-            dtgListaRoles.GridColor = Color.MidnightBlue;
-            dtgListaRoles.Location = new Point(52, 204);
-            dtgListaRoles.Name = "dtgListaRoles";
-            dtgListaRoles.RowHeadersWidth = 51;
-            dtgListaRoles.Size = new Size(799, 341);
-            dtgListaRoles.TabIndex = 34;
-            // 
-            // Seleccion
-            // 
-            Seleccion.HeaderText = "Selección";
-            Seleccion.MinimumWidth = 6;
-            Seleccion.Name = "Seleccion";
-            Seleccion.Width = 125;
-            // 
-            // Codigo
-            // 
-            Codigo.HeaderText = "Código";
-            Codigo.MinimumWidth = 6;
-            Codigo.Name = "Codigo";
-            Codigo.Width = 125;
-            // 
-            // Nombre
-            // 
-            Nombre.HeaderText = "Nombre";
-            Nombre.MinimumWidth = 6;
-            Nombre.Name = "Nombre";
-            Nombre.Width = 125;
-            // 
-            // Descripcion
-            // 
-            Descripcion.HeaderText = "Descripción";
-            Descripcion.MinimumWidth = 6;
-            Descripcion.Name = "Descripcion";
-            Descripcion.Width = 125;
-            // 
-            // Estatus
-            // 
-            Estatus.HeaderText = "Estatus";
-            Estatus.MinimumWidth = 6;
-            Estatus.Name = "Estatus";
-            Estatus.Width = 125;
-            // 
-            // PermisosAsignados
-            // 
-            PermisosAsignados.HeaderText = "Permisos Asignados";
-            PermisosAsignados.MinimumWidth = 6;
-            PermisosAsignados.Name = "PermisosAsignados";
-            PermisosAsignados.Width = 125;
             // 
             // panel2
             // 
             panel2.BackColor = Color.FromArgb(48, 51, 59);
+            panel2.Controls.Add(ibtnEditar);
+            panel2.Controls.Add(ibtnBajaUsuario);
             panel2.Controls.Add(label1);
             panel2.Dock = DockStyle.Top;
             panel2.Location = new Point(0, 0);
             panel2.Name = "panel2";
             panel2.Size = new Size(1262, 84);
-            panel2.TabIndex = 33;
+            panel2.TabIndex = 44;
+            // 
+            // ibtnEditar
+            // 
+            ibtnEditar.BackColor = Color.FromArgb(37, 41, 47);
+            ibtnEditar.FlatStyle = FlatStyle.Flat;
+            ibtnEditar.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            ibtnEditar.ForeColor = Color.FromArgb(12, 215, 253);
+            ibtnEditar.IconChar = FontAwesome.Sharp.IconChar.UserPen;
+            ibtnEditar.IconColor = Color.FromArgb(12, 215, 253);
+            ibtnEditar.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            ibtnEditar.IconSize = 24;
+            ibtnEditar.Location = new Point(646, 28);
+            ibtnEditar.Name = "ibtnEditar";
+            ibtnEditar.Size = new Size(125, 41);
+            ibtnEditar.TabIndex = 96;
+            ibtnEditar.Text = "Editar";
+            ibtnEditar.TextImageRelation = TextImageRelation.ImageBeforeText;
+            ibtnEditar.UseVisualStyleBackColor = false;
+            ibtnEditar.Click += ibtnEditar_Click;
+            // 
+            // ibtnBajaUsuario
+            // 
+            ibtnBajaUsuario.BackColor = Color.FromArgb(37, 41, 47);
+            ibtnBajaUsuario.FlatStyle = FlatStyle.Flat;
+            ibtnBajaUsuario.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            ibtnBajaUsuario.ForeColor = Color.FromArgb(12, 215, 253);
+            ibtnBajaUsuario.IconChar = FontAwesome.Sharp.IconChar.UserXmark;
+            ibtnBajaUsuario.IconColor = Color.FromArgb(12, 215, 253);
+            ibtnBajaUsuario.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            ibtnBajaUsuario.IconSize = 24;
+            ibtnBajaUsuario.Location = new Point(489, 28);
+            ibtnBajaUsuario.Name = "ibtnBajaUsuario";
+            ibtnBajaUsuario.Size = new Size(125, 41);
+            ibtnBajaUsuario.TabIndex = 95;
+            ibtnBajaUsuario.Text = "Baja";
+            ibtnBajaUsuario.TextImageRelation = TextImageRelation.ImageBeforeText;
+            ibtnBajaUsuario.UseVisualStyleBackColor = false;
+            ibtnBajaUsuario.Click += ibtnBajaUsuario_Click;
             // 
             // label1
             // 
@@ -184,9 +186,10 @@
             Name = "UC_UsuariosRolPermiso";
             Size = new Size(1262, 705);
             panel.ResumeLayout(false);
-            panel.PerformLayout();
+            panelContenedor.ResumeLayout(false);
+            panelContenedor.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dtgRoles).EndInit();
             ((System.ComponentModel.ISupportInitialize)iconPIcture).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dtgListaRoles).EndInit();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             ResumeLayout(false);
@@ -195,17 +198,14 @@
         #endregion
 
         private Panel panel;
+        private Panel panelContenedor;
+        private DataGridView dtgRoles;
         private Button btnSearch;
         private TextBox txtSearchEmpleado;
         private FontAwesome.Sharp.IconPictureBox iconPIcture;
-        private DataGridView dtgListaRoles;
         private Panel panel2;
+        private FontAwesome.Sharp.IconButton ibtnEditar;
+        private FontAwesome.Sharp.IconButton ibtnBajaUsuario;
         private Label label1;
-        private DataGridViewCheckBoxColumn Seleccion;
-        private DataGridViewTextBoxColumn Codigo;
-        private DataGridViewTextBoxColumn Nombre;
-        private DataGridViewTextBoxColumn Descripcion;
-        private DataGridViewTextBoxColumn Estatus;
-        private DataGridViewTextBoxColumn PermisosAsignados;
     }
 }

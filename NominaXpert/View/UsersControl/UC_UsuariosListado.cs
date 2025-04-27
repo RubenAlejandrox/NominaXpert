@@ -1,30 +1,17 @@
 ﻿using System.Data;
+using NominaXpert.Controller;
+using NominaXpert.Model;
 namespace NominaXpert.View.UsersControl
 {
     public partial class UC_UsuariosListado : UserControl
     {
+
         public UC_UsuariosListado()
         {
             InitializeComponent();
-            ConfigurarDataGridView(); //    this.Load += Form1_Load; // Vincular el evento Load
-            dtgListaUsuario.Columns.Add("Seleccion", "Seleccion"); // Columna de checkboxes
-            dtgListaUsuario.Columns["Seleccion"].ValueType = typeof(bool); // Tipo de dato booleano
-            dtgListaUsuario.Columns.Add("Nombre", "Nombre");
-            dtgListaUsuario.Columns.Add("ApellidoPat", "Apellido Paterno");
-            dtgListaUsuario.Columns.Add("ApellidoMat", "Apellido Materno");
-            dtgListaUsuario.Columns.Add("Genero", "Género");
-            dtgListaUsuario.Columns.Add("Correo", "Correo");
-            dtgListaUsuario.Columns.Add("Estatus", "Estatus");
-            dtgListaUsuario.Columns.Add("Rol", "Rol");
-            dtgListaUsuario.Columns.Add("Usuario", "Usuario");
-            // Agregar datos de ejemplo
-            dtgListaUsuario.Rows.Add(false, "UAuRuben", "Rubén", "Nolasco", "Ruiz", "Hombre", "audi@gmail.com", "Activo", "Auditor");
-            dtgListaUsuario.Rows.Add(false, "UAdJacqueline", "Jacquelin", "Escobar", "Espinoza", "Mujer", "admin@gmail.com", "Activo", "Administrador");
-            dtgListaUsuario.Rows.Add(false, "UEmEvans", "Evans", "Martinez", "Santana", "Mujer", "emp@gmail.com", "Activo", "RH");
+            ConfigurarDataGridView();
+            CargarUsuarios(); // Llama al método al cargar el UserControl
         }
-
-
-
 
         private void addUsersControl(UserControl userControl)
         {
@@ -35,34 +22,32 @@ namespace NominaXpert.View.UsersControl
             // Agregar el control de usuario al panel
             panelContenedor.Controls.Add(userControl);
         }
+        private void ibtnEditar_Click(object sender, EventArgs e)
+        {
+            if (dgvListadoUsuario.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Selecciona un usuario para editar", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
 
+            int idUsuario = Convert.ToInt32(dgvListadoUsuario.SelectedRows[0].Cells["id"].Value);
+
+            UC_UsuariosAlta ucEditar = new UC_UsuariosAlta(); // constructor vacío
+            addUsersControl(ucEditar);
+            ucEditar.ObtenerDetalleUsuario(idUsuario); // método correcto
+        }
+
+        private void ibtnBajaUsuario_Click(object sender, EventArgs e)
+        {
+
+            UC_UsuariosBaja ucBaja = new UC_UsuariosBaja();
+            addUsersControl(ucBaja);
+
+        }
         private void btnEditar_Click_2(object sender, EventArgs e)
         {
             // Obtener la fila seleccionada
-            var filaSeleccionada = dtgListaUsuario.Rows.Cast<DataGridViewRow>()
-                .FirstOrDefault(row => Convert.ToBoolean(row.Cells["Seleccion"].Value));
 
-            if (filaSeleccionada != null)
-            {
-                // Obtener los datos de la fila seleccionada
-                string apellidoPat = filaSeleccionada.Cells["ApellidoPat"].Value.ToString();
-                string apellidoMat = filaSeleccionada.Cells["ApellidoMat"].Value.ToString();
-                string nombre = filaSeleccionada.Cells["Nombre"].Value.ToString();
-                string genero = filaSeleccionada.Cells["Genero"].Value.ToString();
-                string correo = filaSeleccionada.Cells["Correo"].Value.ToString();
-                string estatus = filaSeleccionada.Cells["Estatus"].Value.ToString();
-                string rol = filaSeleccionada.Cells["Rol"].Value.ToString();
-                string usuario = filaSeleccionada.Cells["Usuario"].Value.ToString();
-                // Cargar el UserControl de edición
-                UC_UsuariosEditar ucEditar = new UC_UsuariosEditar();
-                ucEditar.CargarDatos(usuario, nombre, apellidoPat, apellidoMat, genero, correo, estatus, rol);
-
-                addUsersControl(ucEditar);
-            }
-            else
-            {
-                MessageBox.Show("No se puede realizar esta opción.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -70,90 +55,141 @@ namespace NominaXpert.View.UsersControl
 
         }
 
-        private void dtgListaUsuario_CellContentClick(object sender, DataGridViewCellEventArgs e)
+
+        private void dtgListadoUsuario_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void CargarUsuarios()
+        {
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+                UsuariosController usuariosController = new UsuariosController();
+
+                // Obtener todos los usuarios
+                List<Usuario> usuarios = usuariosController.ObtenerUsuarios(soloActivos: false);
+
+                dgvListadoUsuario.DataSource = null;
+
+                if (usuarios.Count == 0)
+                {
+                    MessageBox.Show("No se encontraron usuarios registrados",
+                                  "Información",
+                                  MessageBoxButtons.OK,
+                                  MessageBoxIcon.Information);
+                    return;
+                }
+
+                // Crear DataTable con estructura completa
+                DataTable dt = new DataTable();
+                dt.Columns.Add("id", typeof(int));
+                dt.Columns.Add("nombre_usuario", typeof(string));
+                dt.Columns.Add("nombre_completo", typeof(string));
+                dt.Columns.Add("correo", typeof(string));
+                dt.Columns.Add("telefono", typeof(string));
+                dt.Columns.Add("direccion", typeof(string));
+                dt.Columns.Add("curp", typeof(string));
+                dt.Columns.Add("rfc", typeof(string));
+                dt.Columns.Add("fecha_nacimiento", typeof(DateTime));
+                dt.Columns.Add("id_rol", typeof(int));
+                dt.Columns.Add("nombre_rol", typeof(string)); // Columna para nombre del rol
+                dt.Columns.Add("estatus", typeof(bool));
+                dt.Columns.Add("contraseña", typeof(string));
+
+                foreach (Usuario usuario in usuarios)
+                {
+                    dt.Rows.Add(
+                        usuario.Id,
+                        usuario.Nombre_Usuario,
+                        usuario.DatosPersonales?.NombreCompleto ?? "N/A",
+                        usuario.DatosPersonales?.Correo ?? "N/A",
+                        usuario.DatosPersonales?.Telefono ?? "N/A",
+                        usuario.DatosPersonales?.Direccion ?? "N/A",
+                        usuario.DatosPersonales?.Curp ?? "N/A",
+                        usuario.DatosPersonales?.Rfc ?? "N/A",
+                        usuario.DatosPersonales?.FechaNacimiento ?? DateTime.MinValue,
+                        usuario.IdRol,
+                        usuario.Rol?.Nombre ?? "Desconocido", // Nombre del rol
+                        usuario.Estatus,
+                        "*******" // No mostrar contraseña real
+                    );
+                }
+
+                dgvListadoUsuario.DataSource = dt;
+                ConfigurarDataGridView();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar usuarios: {ex.Message}",
+                              "Error",
+                              MessageBoxButtons.OK,
+                              MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
         }
 
         private void ConfigurarDataGridView()
         {
-            // Configurar el color de los bordes de las celdas
-            dtgListaUsuario.GridColor = Color.FromArgb(12, 215, 253); // Bordes internos de las celdas
+            if (dgvListadoUsuario.Columns.Count == 0) return;
 
-            // Configurar el estilo del encabezado (fondo blanco y letras personalizadas)
-            dtgListaUsuario.ColumnHeadersDefaultCellStyle.BackColor = Color.White; // Fondo blanco
-            dtgListaUsuario.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(12, 215, 253); // Letras color (12, 215, 253)
-            dtgListaUsuario.EnableHeadersVisualStyles = false; // Deshabilitar estilos visuales para aplicar los colores personalizados
+            // Ajustes generales
+            dgvListadoUsuario.AllowUserToAddRows = false;
+            dgvListadoUsuario.AllowUserToDeleteRows = false;
+            dgvListadoUsuario.ReadOnly = true;
 
-            // Configurar el estilo del cuerpo (fondo oscuro y letras personalizadas)
-            dtgListaUsuario.DefaultCellStyle.BackColor = Color.FromArgb(37, 41, 47); // Fondo oscuro (15, 15, 15)
-            dtgListaUsuario.DefaultCellStyle.ForeColor = Color.FromArgb(12, 215, 253); // Letras color (12, 215, 253)
-            dtgListaUsuario.BackgroundColor = Color.FromArgb(37, 41, 47); // Fondo de la tabla (15, 15, 15)
+            // Configurar columnas
+            var columnas = new[] {
+        new { Name = "id", Width = 50, Visible = false },
+        new { Name = "nombre_usuario", Width = 120, Visible = true },
+        new { Name = "nombre_completo", Width = 200, Visible = true },
+        new { Name = "correo", Width = 180, Visible = true },
+        new { Name = "telefono", Width = 100, Visible = true },
+        new { Name = "direccion", Width = 150, Visible = true },
+        new { Name = "curp", Width = 120, Visible = true },
+        new { Name = "rfc", Width = 120, Visible = true },
+        new { Name = "fecha_nacimiento", Width = 100, Visible = true },
+        new { Name = "id_rol", Width = 70, Visible = false }, // Ocultamos el ID del rol
+        new { Name = "nombre_rol", Width = 150, Visible = true }, // Mostramos el nombre
+        new { Name = "estatus", Width = 80, Visible = true },
+        new { Name = "contraseña", Width = 80, Visible = false }
+    };
 
-            // Configurar los bordes del encabezado
-            dtgListaUsuario.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dtgListaUsuario.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(12, 215, 253); // Color del borde del encabezado
+            foreach (var col in columnas)
+            {
+                if (dgvListadoUsuario.Columns.Contains(col.Name))
+                {
+                    dgvListadoUsuario.Columns[col.Name].Width = col.Width;
+                    dgvListadoUsuario.Columns[col.Name].Visible = col.Visible;
+                }
+            }
 
-            // Configurar los bordes externos del DataGridView
-            dtgListaUsuario.BorderStyle = BorderStyle.FixedSingle;
-            dtgListaUsuario.CellBorderStyle = DataGridViewCellBorderStyle.Single;
+            // Formato para fechas
+            dgvListadoUsuario.Columns["fecha_nacimiento"].DefaultCellStyle.Format = "dd/MM/yyyy";
+
+            // Estilo de cabeceras
+            dgvListadoUsuario.EnableHeadersVisualStyles = false;
+            dgvListadoUsuario.ColumnHeadersDefaultCellStyle.BackColor = Color.SteelBlue;
+            dgvListadoUsuario.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvListadoUsuario.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+
+            // Alternar colores de filas
+            dgvListadoUsuario.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
+
+            // Selección completa de fila
+            dgvListadoUsuario.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         }
 
-        private void ibtnBajaUsuario_Click(object sender, EventArgs e)
+        private void iconPIcture_Click(object sender, EventArgs e)
         {
-            // Obtener la fila seleccionada
-            var filaSeleccionada = dtgListaUsuario.Rows.Cast<DataGridViewRow>()
-                .FirstOrDefault(row => Convert.ToBoolean(row.Cells["Seleccion"].Value));
 
-            if (filaSeleccionada != null)
-            {
-                string usuario = filaSeleccionada.Cells["Usuario"].Value.ToString();
-                // Cargar el UserControl de edición
-                UC_UsuariosBaja ucBaja = new UC_UsuariosBaja();
-                ucBaja.CargarDatos(usuario);
-                addUsersControl(ucBaja);
-            }
-            else
-            {
-                MessageBox.Show("No se puede realizar esta opción.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void ibtnEditar_Click(object sender, EventArgs e)
-        {
-            // Obtener la fila seleccionada
-            var filaSeleccionada = dtgListaUsuario.Rows.Cast<DataGridViewRow>()
-                .FirstOrDefault(row => Convert.ToBoolean(row.Cells["Seleccion"].Value));
-
-            if (filaSeleccionada != null)
-            {
-                // Obtener los datos de la fila seleccionada
-                string apellidoPat = filaSeleccionada.Cells["ApellidoPat"].Value.ToString();
-                string apellidoMat = filaSeleccionada.Cells["ApellidoMat"].Value.ToString();
-                string nombre = filaSeleccionada.Cells["Nombre"].Value.ToString();
-                string genero = filaSeleccionada.Cells["Genero"].Value.ToString();
-                string correo = filaSeleccionada.Cells["Correo"].Value.ToString();
-                string estatus = filaSeleccionada.Cells["Estatus"].Value.ToString();
-                string rol = filaSeleccionada.Cells["Rol"].Value.ToString();
-                string usuario = filaSeleccionada.Cells["Usuario"].Value.ToString();
-                // Cargar el UserControl de edición
-                UC_UsuariosEditar ucEditar = new UC_UsuariosEditar();
-                ucEditar.CargarDatos(usuario, nombre, apellidoPat, apellidoMat, genero, correo, estatus, rol);
-
-                addUsersControl(ucEditar);
-            }
-            else
-            {
-                MessageBox.Show("No se puede realizar esta opción.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
     }
 }
-
-
-
-
-
 
 
 

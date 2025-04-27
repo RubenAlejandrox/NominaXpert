@@ -13,34 +13,28 @@ namespace NominaXpert.Model
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
         public bool Estatus { get; set; }
+        public List<Permiso> Permisos { get; set; } = new List<Permiso>();
 
-        // Constructor predeterminado
-        public Rol()
-        {
-            Codigo = string.Empty;
-            Nombre = string.Empty;
-            Descripcion = string.Empty;
-            Estatus = true; // Por defecto, los roles están activos
-        }
+        
 
         // Constructor con los campos necesarios
-        public Rol(string codigo, string nombre, string descripcion)
+        public Rol()
         {
-            Codigo = codigo;
-            Nombre = nombre;
-            Descripcion = descripcion;
-            Estatus = true; // Por defecto, el rol está activo
+            Id = 0;
+            Nombre = string.Empty;
+            Descripcion = string.Empty;
         }
 
-        // Constructor completo
-        public Rol(int id, string codigo, string nombre, string descripcion, bool estatus)
+        public Rol(int id, string codigo, string nombre, string descripcion, bool estatus, List<Permiso> permisos)
         {
             Id = id;
             Codigo = codigo;
             Nombre = nombre;
             Descripcion = descripcion;
             Estatus = estatus;
+            Permisos = permisos;
         }
+        
     }
 
 }

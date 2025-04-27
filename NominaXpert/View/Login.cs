@@ -1,4 +1,5 @@
 ﻿using NominaXpert.Business;
+using NominaXpert.Controller;
 
 namespace NominaXpert.View.Forms
 {
@@ -35,20 +36,17 @@ namespace NominaXpert.View.Forms
                 return;
             }
             // 3 Verificar credenciales y obtener rol
-            string rol = UsuarioNegocios.ObtenerRol(txtCorreo.Text, txtConstraseña.Text);
+            var controller = new UsuariosController();
+            var (autenticado, rol, mensaje) = controller.AutenticarUsuario(txtCorreo.Text, txtConstraseña.Text);
 
-            if (rol != null)
+            if (autenticado)
             {
-                // Guardar el rol en la propiedad estática de UsuarioNegocios
-                UsuarioNegocios.Rol = rol;
-
-                //Indicar que el login fue exitoso y cerrar este formulario
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             else
             {
-                MessageBox.Show("Usuario o contraseña incorrectos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(mensaje, "Error de acceso", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

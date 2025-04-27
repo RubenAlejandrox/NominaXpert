@@ -20,16 +20,16 @@ namespace NominaXpert.Model
         public bool Estatus { get; set; }  // Nuevo campo agregado
 
         // Constructor predeterminado
-        public Persona()
+        public Persona(string nombreCompleto, string correo, string telefono, string curp)
         {
-            NombreCompleto = string.Empty;
-            Correo = string.Empty;
-            Telefono = string.Empty;
-            Rfc = string.Empty;
-            Curp = string.Empty;
-            Direccion = string.Empty;
-            Estatus = true; // Por defecto, la persona está activa
+            NombreCompleto = nombreCompleto;
+            Correo = correo;
+            Telefono = telefono;
+            Curp = curp;
+            Estatus = true;
         }
+
+
 
         // Constructor con campos básicos
         public Persona(string nombreCompleto, string correo, string telefono, string rfc, string curp)
@@ -59,5 +59,8 @@ namespace NominaXpert.Model
             Estatus = estatus;
         }
 
+        public Persona()
+        {
+        }
     }
 }
