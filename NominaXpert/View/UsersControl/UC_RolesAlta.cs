@@ -48,7 +48,7 @@ namespace NominaXpert.View.UsersControl
             cbxEstatus.ValueMember = "Key"; //lo que se guarda como seleccion
             cbxEstatus.SelectedValue = 1;
         }
-        private void icbtnGuardar_Click(object sender, EventArgs e)
+        private void icbtnGuardar_Click_1(object sender, EventArgs e)
         {
             bool resultado = _modoEdicion ? ActualizarRol() : GuardarRol();
 
@@ -164,16 +164,6 @@ namespace NominaXpert.View.UsersControl
         }
 
         private void checkedListBoxPermisos_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lblEstatus_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cbxEstatus_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

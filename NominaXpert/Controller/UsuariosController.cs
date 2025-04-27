@@ -89,12 +89,12 @@ namespace NominaXpert.Controller
         {
             try
             {
-                _logger.Debug($"Solicitando detalle del estudiante con ID: {idUsuario}");
+                _logger.Debug($"Solicitando detalle del usuario con ID: {idUsuario}");
                 return _usuariosData.ObtenerUsuarioPorId(idUsuario);
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, $"Error al obtener detalles del estudiante con ID: {idUsuario}");
+                _logger.Error(ex, $"Error al obtener detalles del usuario con ID: {idUsuario}");
                 throw;
             }
         }
@@ -106,9 +106,9 @@ namespace NominaXpert.Controller
                 if (usuario == null)
                     return (false, "Usuario no válido.");
                 if (usuario.Id <= 0)
-                    return (false, "ID de estudiante no válido");
+                    return (false, "ID de usuario no válido");
                 if (usuario.DatosPersonales == null)
-                    return (false, "No se proporcionaron los datos personales del estudiante");
+                    return (false, "No se proporcionaron los datos personales del usuario");
 
 
                 Usuario? usuarioExistente = _usuariosData.ObtenerUsuarioPorId(usuario.Id);
@@ -122,7 +122,7 @@ namespace NominaXpert.Controller
                 }
                 if (usuario.DatosPersonales.Curp != usuarioExistente.DatosPersonales.Curp)
                 {
-                    // Buscar si existe otra persona con el mismo CURP que no sea la persona de este estudiante
+                    // Buscar si existe otra persona con el mismo CURP que no sea la persona de este usuario
                     bool personaConMismoCurp = _personasData.ExisteCurp(usuario.DatosPersonales.Curp);
                     if (personaConMismoCurp)
                     {
@@ -131,14 +131,14 @@ namespace NominaXpert.Controller
                 }
                 if (usuario.DatosPersonales.Rfc != usuarioExistente.DatosPersonales.Rfc)
                 {
-                    // Buscar si existe otra persona con el mismo RFC que no sea la persona de este estudiante
+                    // Buscar si existe otra persona con el mismo RFC que no sea la persona de este usuario
                     bool personaConMismoRFC = _personasData.ExisteRFC(usuario.DatosPersonales.Rfc);
                     if (personaConMismoRFC)
                     {
                         return (false, $"RFC {usuario.DatosPersonales.Rfc} ya está registrado para otra persona");
                     }
                 }
-                _logger.Info($"Actualizando estudiante con ID: {usuario.Id}, Nombre: {usuario.DatosPersonales.NombreCompleto}, Persona ID: {usuario.DatosPersonales.Id}");
+                _logger.Info($"Actualizando usuario con ID: {usuario.Id}, Nombre: {usuario.DatosPersonales.NombreCompleto}, Persona ID: {usuario.DatosPersonales.Id}");
 
                 bool actualizado = _usuariosData.ActualizarUsuario(usuario);
                 return actualizado
@@ -188,7 +188,7 @@ namespace NominaXpert.Controller
                     var usuario = _usuariosData.ObtenerUsuarioPorId(idUsuario);
                     if (usuario != null && !usuario.Estatus)
                     {
-                        return (true, "El usuario y su persona asociada están dados de baja");
+                        _logger.Info($"Dando de baja al usuario con ID: {usuario.Id}, Persona ID: {usuario.DatosPersonales.Id}, Nombre: {usuario.DatosPersonales.NombreCompleto}");
                     }
                     return (true, "Operación completada correctamente");
                 }
@@ -198,6 +198,19 @@ namespace NominaXpert.Controller
             {
                 _logger.Error(ex, "Error en DarDeBajaUsuario");
                 return (false, "Error al procesar la solicitud de baja: " + ex.Message);
+            }
+        }
+        public List<string> ObtenerNombresUsuarios(bool soloActivos = true)
+        {
+            try
+            {
+                var usuarios = _usuariosData.ObtenerTodosLosUsuarios(soloActivos);
+                return usuarios.Select(u => u.Nombre_Usuario).ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al obtener nombres de usuarios");
+                return new List<string>(); // Retorna lista vacía en caso de error
             }
         }
     }

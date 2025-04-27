@@ -5,7 +5,7 @@ namespace NominaXpert.View.UsersControl
 {
     public partial class UC_UsuariosBaja : UserControl
     {
-
+        private int _idRol;
         private int _idUsuario;
 
         // Constructor sin parámetros (para inicialización básica)
@@ -20,33 +20,37 @@ namespace NominaXpert.View.UsersControl
         {
             _idUsuario = idUsuario;
 
-            // Limpiar el DataSource existente
-            cbxSeleccionUsuario.DataSource = null;
-
-            // Añadir solo el usuario seleccionado
-            cbxSeleccionUsuario.Items.Add(nombreUsuario);
-            cbxSeleccionUsuario.SelectedIndex = 0;
-
-            // Deshabilitar el combo para que no se pueda modificar
-            cbxSeleccionUsuario.Enabled = false;
+            // Selecciona el usuario en el ComboBox (sin borrar los demás)
+            if (cbxUsuario.Items.Contains(nombreUsuario))
+            {
+                cbxUsuario.SelectedItem = nombreUsuario;
+            }
+            else
+            {
+                cbxUsuario.SelectedIndex = -1; // Si no existe, no seleccionar nada
+            }
         }
 
         private void inicializa_UC_Usuarios_Alta()
         {
-            PoblaComboSeleccionUsuario();
+            PoblarComboNombreUsuario();
             PoblaComboMotivo();
             dtpFechaBaja.Value = DateTime.Now;
         }
-        private void PoblaComboSeleccionUsuario()
+        private void PoblarComboNombreUsuario()
         {
-            UsuariosController controller = new UsuariosController();
-            var usuarios = controller.ObtenerUsuarios(false);
+            try
+            {
+                var controller = new UsuariosController();
+                var nombresUsuarios = controller.ObtenerNombresUsuarios(soloActivos: true); // Solo usuarios activos
 
-            Dictionary<int, string> lista = usuarios.ToDictionary(u => u.Id, u => u.Nombre_Usuario);
-
-            cbxSeleccionUsuario.DataSource = new BindingSource(lista, null);
-            cbxSeleccionUsuario.DisplayMember = "Value";
-            cbxSeleccionUsuario.ValueMember = "Key";
+                cbxUsuario.DataSource = nombresUsuarios;
+                cbxUsuario.SelectedIndex = -1; // Sin selección por defecto
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar usuarios: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void PoblaComboMotivo()
@@ -54,9 +58,11 @@ namespace NominaXpert.View.UsersControl
             Dictionary<int, string> list_estatus = new Dictionary<int, string>
             {
                 //key , value
-                {1, "Motivo 1"},
-                {0, "Motivo 2"},
-                {2, "Motivo 3"}
+                {1, "Rotación de personal"},
+                {0, "Problemas técnico"},
+                {2, "Violación de políticas"},
+                {3, "Solicitud del usuario"},
+                {4, "Terminacón de contrato"}
             };
             cbxMotivoBaja.DataSource = new BindingSource(list_estatus, null);
             cbxMotivoBaja.DisplayMember = "Value"; //lo que se muestra
@@ -85,23 +91,23 @@ namespace NominaXpert.View.UsersControl
         {
             if (DatosVacios())
             {
-                MessageBox.Show("Por favor llene todos los campos", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Por favor llene todos los campos", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
 
-            string motivo = cbxMotivoBaja.Text; // o SelectedValue
-            UsuariosController controller = new UsuariosController();
-            var (exito, mensaje) = controller.DarDeBajaUsuario(_idUsuario, motivo);
+            RolesController controller = new RolesController();
+            var (exito, mensaje) = controller.DarDeBajaRol(_idRol);
 
             MessageBox.Show(mensaje, exito ? "Éxito" : "Error",
                 MessageBoxButtons.OK,
-                exito ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
+                exito ? MessageBoxIcon.Information : MessageBoxIcon.Error);
 
             return exito;
         }
+
         private bool DatosVacios()
         {
-            if (1==2)
+            if (1 == 2)
             {
                 return true;
             }
@@ -110,7 +116,7 @@ namespace NominaXpert.View.UsersControl
                 return false;
             }
         }
-       
+
 
         private void addUsersControl(UserControl userControl)
         {
@@ -130,13 +136,13 @@ namespace NominaXpert.View.UsersControl
         public void CargarDatos(string usuarioSeleccionado)
         {
             // Aquí cargas los datos en los controles del UserControl
-            cbxSeleccionUsuario.SelectedValue = ObtenerClaveDeUsuario(usuarioSeleccionado);
+            cbxUsuario.SelectedValue = ObtenerClaveDeUsuario(usuarioSeleccionado);
         }
 
         private int ObtenerClaveDeUsuario(string usuarioSeleccionado)
         {
             // Obtener el BindingSource del ComboBox
-            var bindingSource = (BindingSource)cbxSeleccionUsuario.DataSource;
+            var bindingSource = (BindingSource)cbxUsuario.DataSource;
 
             // Obtener la lista de KeyValuePair desde el BindingSource
             var listaUsuarios = bindingSource.List as System.ComponentModel.BindingList<KeyValuePair<int, string>>;
@@ -154,6 +160,11 @@ namespace NominaXpert.View.UsersControl
         }
 
         private void panelContainer_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void cbxMotivoBaja_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

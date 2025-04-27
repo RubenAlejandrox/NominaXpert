@@ -74,9 +74,9 @@ namespace NominaXpert.View.UsersControl
             var columnas = new[] {
         new { Name = "id", Width = 50, Visible = false },
         new { Name = "Nombre", Width = 120, Visible = true },
-        new { Name = "Descripcion", Width = 200, Visible = true },
-        new { Name = "Estatus", Width = 80, Visible = true },
-        new { Name = "Permisos", Width = 300, Visible = true }
+        new { Name = "Descripcion", Width = 250, Visible = true },
+        new { Name = "Estatus", Width = 100, Visible = true },
+        new { Name = "Permisos", Width = 500, Visible = true }
     };
 
             foreach (var col in columnas)
@@ -99,6 +99,8 @@ namespace NominaXpert.View.UsersControl
 
             // Selección completa de fila
             dtgRoles.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            lblRegistros.Text = $"Total de Registros: {dtgRoles.Rows.Count}";
+
         }
 
         private void addUsersControl(UserControl userControl)
@@ -111,10 +113,6 @@ namespace NominaXpert.View.UsersControl
             panelContenedor.Controls.Add(userControl);
         }
 
-        private void dtgRoles_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
 
         private void ibtnEditar_Click(object sender, EventArgs e)
         {
@@ -146,7 +144,22 @@ namespace NominaXpert.View.UsersControl
 
         private void ibtnBajaUsuario_Click(object sender, EventArgs e)
         {
+            if (dtgRoles.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Selecciona un rol para dar de baja", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
 
+            int idRol = Convert.ToInt32(dtgRoles.SelectedRows[0].Cells["Id"].Value);
+            string nombreRol = dtgRoles.SelectedRows[0].Cells["Nombre"].Value?.ToString() ?? "";
+
+            UC_RolesBaja ucBaja = new UC_RolesBaja(idRol, nombreRol);
+            addUsersControl(ucBaja);
+        }
+
+        private void btnRefrescar_Click(object sender, EventArgs e)
+        {
+            CargarRoles();
         }
     }
 }

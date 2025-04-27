@@ -19,7 +19,8 @@ namespace ControlEscolar.Data
     public class PostgresSQLDataAccess
     {
         //Logger usando el LoggingManager centralizado
-        private static readonly Logger _logger = LoggingManager.GetLogger("NominaXpert.Data.PostgresSQLDataAccess");
+        // Logger usando el LoggingManager centralizado (se inicializa en el constructor)
+        private static Logger? _logger;
 
         //Cadena de conexión desde App.config
         private static readonly string _ConnectionString = ConfigurationManager.ConnectionStrings["ConexionBD"].ConnectionString;
@@ -34,15 +35,18 @@ namespace ControlEscolar.Data
         {
             try
             {
+                _logger = LoggingManager.GetLogger("NominaXpert.Data.PostgresSQLDataAccess");
+
                 _connection = new NpgsqlConnection(_ConnectionString);
-                _logger.Info("Instancia de acceso a datos creada correctamente");
+                _logger?.Info("Instancia de acceso a datos creada correctamente");
             }
             catch (Exception ex)
             {
-                _logger.Fatal(ex, "Error al inicializar el acceso a la base de datos");
+                _logger?.Fatal(ex, "Error al inicializar el acceso a la base de datos");
                 throw;
             }
         }
+
 
         public static PostgresSQLDataAccess GetInstance() //se instancio la base de datos
         {

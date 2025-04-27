@@ -36,8 +36,9 @@
             iconPIcture = new FontAwesome.Sharp.IconPictureBox();
             panel2 = new Panel();
             ibtnEditar = new FontAwesome.Sharp.IconButton();
-            ibtnBajaUsuario = new FontAwesome.Sharp.IconButton();
             label1 = new Label();
+            lblRegistros = new Label();
+            btnRefrescar = new FontAwesome.Sharp.IconButton();
             panel.SuspendLayout();
             panelContenedor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dtgRoles).BeginInit();
@@ -56,6 +57,8 @@
             // 
             // panelContenedor
             // 
+            panelContenedor.Controls.Add(btnRefrescar);
+            panelContenedor.Controls.Add(lblRegistros);
             panelContenedor.Controls.Add(dtgRoles);
             panelContenedor.Controls.Add(btnSearch);
             panelContenedor.Controls.Add(txtSearchEmpleado);
@@ -69,11 +72,12 @@
             // 
             // dtgRoles
             // 
+            dtgRoles.BackgroundColor = Color.FromArgb(37, 41, 47);
             dtgRoles.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dtgRoles.Location = new Point(114, 236);
             dtgRoles.Name = "dtgRoles";
             dtgRoles.RowHeadersWidth = 51;
-            dtgRoles.Size = new Size(744, 442);
+            dtgRoles.Size = new Size(1005, 341);
             dtgRoles.TabIndex = 48;
             dtgRoles.CellContentClick += dtgRoles_CellContentClick;
             // 
@@ -119,7 +123,6 @@
             // 
             panel2.BackColor = Color.FromArgb(48, 51, 59);
             panel2.Controls.Add(ibtnEditar);
-            panel2.Controls.Add(ibtnBajaUsuario);
             panel2.Controls.Add(label1);
             panel2.Dock = DockStyle.Top;
             panel2.Location = new Point(0, 0);
@@ -137,7 +140,7 @@
             ibtnEditar.IconColor = Color.FromArgb(12, 215, 253);
             ibtnEditar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             ibtnEditar.IconSize = 24;
-            ibtnEditar.Location = new Point(646, 28);
+            ibtnEditar.Location = new Point(974, 27);
             ibtnEditar.Name = "ibtnEditar";
             ibtnEditar.Size = new Size(125, 41);
             ibtnEditar.TabIndex = 96;
@@ -145,25 +148,6 @@
             ibtnEditar.TextImageRelation = TextImageRelation.ImageBeforeText;
             ibtnEditar.UseVisualStyleBackColor = false;
             ibtnEditar.Click += ibtnEditar_Click;
-            // 
-            // ibtnBajaUsuario
-            // 
-            ibtnBajaUsuario.BackColor = Color.FromArgb(37, 41, 47);
-            ibtnBajaUsuario.FlatStyle = FlatStyle.Flat;
-            ibtnBajaUsuario.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            ibtnBajaUsuario.ForeColor = Color.FromArgb(12, 215, 253);
-            ibtnBajaUsuario.IconChar = FontAwesome.Sharp.IconChar.UserXmark;
-            ibtnBajaUsuario.IconColor = Color.FromArgb(12, 215, 253);
-            ibtnBajaUsuario.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            ibtnBajaUsuario.IconSize = 24;
-            ibtnBajaUsuario.Location = new Point(489, 28);
-            ibtnBajaUsuario.Name = "ibtnBajaUsuario";
-            ibtnBajaUsuario.Size = new Size(125, 41);
-            ibtnBajaUsuario.TabIndex = 95;
-            ibtnBajaUsuario.Text = "Baja";
-            ibtnBajaUsuario.TextImageRelation = TextImageRelation.ImageBeforeText;
-            ibtnBajaUsuario.UseVisualStyleBackColor = false;
-            ibtnBajaUsuario.Click += ibtnBajaUsuario_Click;
             // 
             // label1
             // 
@@ -175,6 +159,34 @@
             label1.Size = new Size(81, 35);
             label1.TabIndex = 0;
             label1.Text = "Roles";
+            // 
+            // lblRegistros
+            // 
+            lblRegistros.AutoSize = true;
+            lblRegistros.Location = new Point(911, 159);
+            lblRegistros.Name = "lblRegistros";
+            lblRegistros.Size = new Size(104, 20);
+            lblRegistros.TabIndex = 49;
+            lblRegistros.Text = "No. Registros: ";
+            // 
+            // btnRefrescar
+            // 
+            btnRefrescar.BackColor = Color.FromArgb(37, 41, 47);
+            btnRefrescar.FlatStyle = FlatStyle.Flat;
+            btnRefrescar.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnRefrescar.ForeColor = Color.FromArgb(12, 215, 253);
+            btnRefrescar.IconChar = FontAwesome.Sharp.IconChar.Refresh;
+            btnRefrescar.IconColor = Color.FromArgb(12, 215, 253);
+            btnRefrescar.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            btnRefrescar.IconSize = 24;
+            btnRefrescar.Location = new Point(994, 629);
+            btnRefrescar.Name = "btnRefrescar";
+            btnRefrescar.Size = new Size(125, 41);
+            btnRefrescar.TabIndex = 96;
+            btnRefrescar.Text = "Refrescar";
+            btnRefrescar.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnRefrescar.UseVisualStyleBackColor = false;
+            btnRefrescar.Click += btnRefrescar_Click;
             // 
             // UC_UsuariosRolPermiso
             // 
@@ -205,7 +217,8 @@
         private FontAwesome.Sharp.IconPictureBox iconPIcture;
         private Panel panel2;
         private FontAwesome.Sharp.IconButton ibtnEditar;
-        private FontAwesome.Sharp.IconButton ibtnBajaUsuario;
         private Label label1;
+        private Label lblRegistros;
+        private FontAwesome.Sharp.IconButton btnRefrescar;
     }
 }

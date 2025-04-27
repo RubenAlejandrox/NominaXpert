@@ -31,16 +31,14 @@
             iconPIcture = new FontAwesome.Sharp.IconPictureBox();
             btnSearch = new Button();
             txtSearchEmpleado = new TextBox();
-            dtpFechaBaja = new Utilities.NominaDatePicker();
+            dtpFechaBaja = new NominaXpert.Utilities.NominaDatePicker();
             panel1 = new Panel();
             lblTituloBaja = new Label();
             cbxMotivoBaja = new ComboBox();
             lblMotivoBaja = new Label();
             lblSeleccionUsuario = new Label();
-            cbxSeleccionUsuario = new ComboBox();
+            cbxRoles = new ComboBox();
             label10 = new Label();
-            txtDetallesBaja = new TextBox();
-            lblNotas = new Label();
             ibtnGuardar = new FontAwesome.Sharp.IconButton();
             ((System.ComponentModel.ISupportInitialize)iconPIcture).BeginInit();
             panel1.SuspendLayout();
@@ -154,17 +152,17 @@
             lblSeleccionUsuario.TabIndex = 113;
             lblSeleccionUsuario.Text = "Seleccionar Rol*";
             // 
-            // cbxSeleccionUsuario
+            // cbxRoles
             // 
-            cbxSeleccionUsuario.BackColor = Color.FromArgb(37, 41, 47);
-            cbxSeleccionUsuario.Cursor = Cursors.Hand;
-            cbxSeleccionUsuario.Font = new Font("Century", 10F);
-            cbxSeleccionUsuario.ForeColor = Color.FromArgb(12, 215, 253);
-            cbxSeleccionUsuario.FormattingEnabled = true;
-            cbxSeleccionUsuario.Location = new Point(213, 246);
-            cbxSeleccionUsuario.Name = "cbxSeleccionUsuario";
-            cbxSeleccionUsuario.Size = new Size(688, 29);
-            cbxSeleccionUsuario.TabIndex = 117;
+            cbxRoles.BackColor = Color.FromArgb(37, 41, 47);
+            cbxRoles.Cursor = Cursors.Hand;
+            cbxRoles.Font = new Font("Century", 10F);
+            cbxRoles.ForeColor = Color.FromArgb(12, 215, 253);
+            cbxRoles.FormattingEnabled = true;
+            cbxRoles.Location = new Point(213, 246);
+            cbxRoles.Name = "cbxRoles";
+            cbxRoles.Size = new Size(688, 29);
+            cbxRoles.TabIndex = 117;
             // 
             // label10
             // 
@@ -176,29 +174,6 @@
             label10.Size = new Size(102, 23);
             label10.TabIndex = 114;
             label10.Text = "Fecha Baja*";
-            // 
-            // txtDetallesBaja
-            // 
-            txtDetallesBaja.BackColor = Color.FromArgb(37, 41, 47);
-            txtDetallesBaja.Cursor = Cursors.IBeam;
-            txtDetallesBaja.Font = new Font("Century", 10F);
-            txtDetallesBaja.ForeColor = Color.FromArgb(12, 215, 253);
-            txtDetallesBaja.Location = new Point(213, 572);
-            txtDetallesBaja.MaxLength = 100;
-            txtDetallesBaja.Name = "txtDetallesBaja";
-            txtDetallesBaja.Size = new Size(688, 28);
-            txtDetallesBaja.TabIndex = 116;
-            // 
-            // lblNotas
-            // 
-            lblNotas.AutoSize = true;
-            lblNotas.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            lblNotas.ForeColor = Color.FromArgb(12, 215, 253);
-            lblNotas.Location = new Point(213, 548);
-            lblNotas.Name = "lblNotas";
-            lblNotas.Size = new Size(121, 23);
-            lblNotas.TabIndex = 115;
-            lblNotas.Text = "Detalles Baja*";
             // 
             // ibtnGuardar
             // 
@@ -233,10 +208,8 @@
             Controls.Add(cbxMotivoBaja);
             Controls.Add(lblMotivoBaja);
             Controls.Add(lblSeleccionUsuario);
-            Controls.Add(cbxSeleccionUsuario);
+            Controls.Add(cbxRoles);
             Controls.Add(label10);
-            Controls.Add(txtDetallesBaja);
-            Controls.Add(lblNotas);
             Name = "UC_RolesBaja";
             Size = new Size(1262, 705);
             ((System.ComponentModel.ISupportInitialize)iconPIcture).EndInit();
@@ -257,10 +230,8 @@
         private ComboBox cbxMotivoBaja;
         private Label lblMotivoBaja;
         private Label lblSeleccionUsuario;
-        private ComboBox cbxSeleccionUsuario;
+        private ComboBox cbxRoles;
         private Label label10;
-        private TextBox txtDetallesBaja;
-        private Label lblNotas;
         private FontAwesome.Sharp.IconButton ibtnGuardar;
     }
 }

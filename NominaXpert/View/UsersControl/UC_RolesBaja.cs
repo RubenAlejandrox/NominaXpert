@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NominaXpert.Controller;
 
 namespace NominaXpert.View.UsersControl
 {
@@ -15,24 +16,26 @@ namespace NominaXpert.View.UsersControl
         public UC_RolesBaja()
         {
             InitializeComponent();
-            PoblaComboSeleccionRol();
             PoblaComboMotivo();
+            PoblaComboRol();
             dtpFechaBaja.Value = DateTime.Now;
         }
-        private void PoblaComboSeleccionRol()
+        private int _idRol; // Este campo privado almacena el ID del rol que voy a dar de baja
+
+        public UC_RolesBaja(int idRol, string nombreRol) : this() // Llama primero al constructor vacío
         {
-            Dictionary<int, string> list_estatus = new Dictionary<int, string> //almacena pares clave/valor
+            _idRol = idRol;
+
+            if (cbxRoles.Items.Contains(nombreRol))
             {
-                //key (id), value
-                {1, "Administrador"},
-                {0, "Recursos Humanos (RH)"},
-                {2, "Auditor"}
-            };
-            cbxSeleccionUsuario.DataSource = new BindingSource(list_estatus, null);
-            cbxSeleccionUsuario.DisplayMember = "Value"; //lo que se muestra
-            cbxSeleccionUsuario.ValueMember = "Key"; //lo que se guarda como seleccion
-            cbxSeleccionUsuario.SelectedValue = 1; // Valor por defecto
+                cbxRoles.SelectedItem = nombreRol;
+            }
+            else
+            {
+                cbxRoles.SelectedIndex = -1;
+            }
         }
+        
         private void PoblaComboMotivo()
         {
             Dictionary<int, string> list_estatus = new Dictionary<int, string>
@@ -47,43 +50,76 @@ namespace NominaXpert.View.UsersControl
             cbxMotivoBaja.ValueMember = "Key"; //lo que se guarda como seleccion
             cbxMotivoBaja.SelectedValue = 1;
         }
+        private RolesController _rolesController = new RolesController();
+
         private void ibtnGuardar_Click(object sender, EventArgs e)
         {
             DialogResult resultado = MessageBox.Show(
-                "¿Estás seguro de que deseas dar de baja?",
+                "¿¿Estás seguro de que deseas dar de baja??",
                 "Confirmar cambios",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question
             );
 
-            // Verificar si el usuario hizo clic en "Sí"
             if (resultado == DialogResult.Yes)
             {
-                if (RealizarBaja())
+                if (cbxRoles.SelectedItem == null)
                 {
-                    MessageBox.Show("Usuario dado de baja correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Por favor selecciona un rol antes de dar de baja.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                var seleccion = (KeyValuePair<int, string>)cbxRoles.SelectedItem;
+                int idSeleccionado = seleccion.Key;
+
+                var (exito, mensaje) = _rolesController.DarDeBajaRol(idSeleccionado);
+
+                MessageBox.Show(mensaje, exito ? "Éxito" : "Error",
+                    MessageBoxButtons.OK,
+                    exito ? MessageBoxIcon.Information : MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void PoblaComboRol()
+        {
+            try
+            {
+                var controller = new RolesController();
+                var listaRoles = controller.ObtenerRolesParaCombo();
+
+                // Configurar el ComboBox
+                cbxRoles.DataSource = new BindingSource(listaRoles, null);
+                cbxRoles.DisplayMember = "Value"; // Muestra el nombre del rol
+                cbxRoles.ValueMember = "Key";     // Guarda el ID del rol
+
+                // Seleccionar el primer valor por defecto si existe
+                if (listaRoles.Any())
+                {
+                    cbxRoles.SelectedValue = listaRoles.Keys.First();
                 }
             }
-        }
-        private bool RealizarBaja()
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                MessageBox.Show($"Error al cargar roles: {ex.Message}",
+                              "Error",
+                              MessageBoxButtons.OK,
+                              MessageBoxIcon.Error);
+
+                // Lista por defecto
+                var listaDefault = new Dictionary<int, string>
         {
-            if (DatosVacios())
-            {
-                MessageBox.Show("Por favor llene todos los campos", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-            return true;
-        }
-        private bool DatosVacios()
-        {
-            if (txtDetallesBaja.Text == "")
-            {
-                return true;
-            }
-            else
-            {
-                return false;
+            {1, "Administrador"},
+            {2, "Operador"},
+            {3, "Lector"},
+            {4, "Seguridad"},
+            {5, "Autorizador"}
+        };
+
+                cbxRoles.DataSource = new BindingSource(listaDefault, null);
             }
         }
+
     }
 }

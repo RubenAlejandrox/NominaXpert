@@ -213,5 +213,54 @@ namespace NominaXpert.Data
             }
         }
 
+
+        public List<string> ObtenerNombreRol()
+        {
+            List<string> nombresRoles = new List<string>();
+
+            try
+            {
+                string query = "SELECT nombre FROM seguridad.roles WHERE estatus = true";
+
+                DataTable dt = _dbAccess.ExecuteQuery_Reader(query, null);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    string nombreRol = row["nombre"].ToString();
+                    nombresRoles.Add(nombreRol);
+                }
+
+                return nombresRoles;
+            }
+            catch (Exception ex)
+            {
+                // Opcional: registrar el error (log.Error("Error al obtener roles", ex))
+                return nombresRoles; // Devuelve lista vacía en caso de error
+            }
+        }
+        public bool DarDeBajaRol(int idRol)
+        {
+            try
+            {
+                string query = "UPDATE seguridad.roles SET estatus = false WHERE id = @IdRol";
+                var param = _dbAccess.CreateParameter("@IdRol", idRol);
+
+                _dbAccess.Connect();
+                int result = _dbAccess.ExecuteNonQuery(query, param);
+
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al dar de baja el rol.");
+                return false;
+            }
+            finally
+            {
+                _dbAccess.Disconnect();
+            }
+        }
+
+
     }
 }

@@ -33,7 +33,6 @@
             label1 = new Label();
             tableLayoutPanel1 = new TableLayoutPanel();
             panel2 = new Panel();
-            Nombre = new Label();
             checkedListBoxPermisos = new CheckedListBox();
             lblSeleccionRol = new Label();
             label4 = new Label();
@@ -45,6 +44,7 @@
             txtCodigo = new TextBox();
             lblCodigo = new Label();
             lblEstatus = new Label();
+            Nombre = new Label();
             panel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             panel2.SuspendLayout();
@@ -124,17 +124,6 @@
             panel2.Name = "panel2";
             panel2.Size = new Size(877, 699);
             panel2.TabIndex = 0;
-            // 
-            // Nombre
-            // 
-            Nombre.AutoSize = true;
-            Nombre.Font = new Font("Century", 10F);
-            Nombre.ForeColor = Color.FromArgb(12, 215, 253);
-            Nombre.Location = new Point(25, 37);
-            Nombre.Name = "Nombre";
-            Nombre.Size = new Size(83, 21);
-            Nombre.TabIndex = 79;
-            Nombre.Text = "Nombre*";
             // 
             // checkedListBoxPermisos
             // 
@@ -223,6 +212,7 @@
             icbtnGuardar.Text = "Guardar";
             icbtnGuardar.TextImageRelation = TextImageRelation.ImageBeforeText;
             icbtnGuardar.UseVisualStyleBackColor = false;
+            icbtnGuardar.Click += icbtnGuardar_Click_1;
             // 
             // cbxEstatus
             // 
@@ -269,6 +259,17 @@
             lblEstatus.Size = new Size(74, 23);
             lblEstatus.TabIndex = 104;
             lblEstatus.Text = "Estatus*";
+            // 
+            // Nombre
+            // 
+            Nombre.AutoSize = true;
+            Nombre.Font = new Font("Century", 10F);
+            Nombre.ForeColor = Color.FromArgb(12, 215, 253);
+            Nombre.Location = new Point(25, 37);
+            Nombre.Name = "Nombre";
+            Nombre.Size = new Size(83, 21);
+            Nombre.TabIndex = 79;
+            Nombre.Text = "Nombre*";
             // 
             // UC_RolesAlta
             // 

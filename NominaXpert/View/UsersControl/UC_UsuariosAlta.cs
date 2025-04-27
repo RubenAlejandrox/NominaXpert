@@ -70,21 +70,45 @@ namespace NominaXpert.View.UsersControl
         }
 
 
+
         private void PoblaComboRol()
         {
-            Dictionary<int, string> list_fecha = new Dictionary<int, string>
+            try
             {
-                //key , value
-                {1, "Administrador"},
-                {3, "Lector"},
-                {2, "Operador"},
-                {4, "Seguridad"},
-                {5, "Autorizador"}
-            };
-            cbxRoles.DataSource = new BindingSource(list_fecha, null);
-            cbxRoles.DisplayMember = "Value"; //lo que se muestra
-            cbxRoles.ValueMember = "Key"; //lo que se guarda como seleccion
-            cbxRoles.SelectedValue = 1;
+                var controller = new RolesController();
+                var listaRoles = controller.ObtenerRolesParaCombo();
+
+                // Configurar el ComboBox
+                cbxRoles.DataSource = new BindingSource(listaRoles, null);
+                cbxRoles.DisplayMember = "Value"; // Muestra el nombre del rol
+                cbxRoles.ValueMember = "Key";     // Guarda el ID del rol
+
+                // Seleccionar el primer valor por defecto si existe
+                if (listaRoles.Any())
+                {
+                    cbxRoles.SelectedValue = listaRoles.Keys.First();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                MessageBox.Show($"Error al cargar roles: {ex.Message}",
+                              "Error",
+                              MessageBoxButtons.OK,
+                              MessageBoxIcon.Error);
+
+                // Lista por defecto
+                var listaDefault = new Dictionary<int, string>
+        {
+            {1, "Administrador"},
+            {2, "Operador"},
+            {3, "Lector"},
+            {4, "Seguridad"},
+            {5, "Autorizador"}
+        };
+
+                cbxRoles.DataSource = new BindingSource(listaDefault, null);
+            }
         }
 
         private bool DatosVacios()

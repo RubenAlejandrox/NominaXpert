@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             panelContenedor = new Panel();
+            lblRegistroUsuarios = new Label();
             btnRefrescar = new FontAwesome.Sharp.IconButton();
             dgvListadoUsuario = new DataGridView();
             button1 = new Button();
@@ -38,7 +39,6 @@
             ibtnEditar = new FontAwesome.Sharp.IconButton();
             ibtnBajaUsuario = new FontAwesome.Sharp.IconButton();
             lblTituloListado = new Label();
-            lblRegistroUsuarios = new Label();
             panelContenedor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvListadoUsuario).BeginInit();
             ((System.ComponentModel.ISupportInitialize)iconPIcture).BeginInit();
@@ -59,13 +59,24 @@
             panelContenedor.Size = new Size(1262, 705);
             panelContenedor.TabIndex = 0;
             // 
+            // lblRegistroUsuarios
+            // 
+            lblRegistroUsuarios.AutoSize = true;
+            lblRegistroUsuarios.ForeColor = Color.FromArgb(12, 215, 253);
+            lblRegistroUsuarios.Location = new Point(944, 125);
+            lblRegistroUsuarios.Name = "lblRegistroUsuarios";
+            lblRegistroUsuarios.Size = new Size(104, 20);
+            lblRegistroUsuarios.TabIndex = 96;
+            lblRegistroUsuarios.Text = "No. Registros: ";
+            lblRegistroUsuarios.Click += lblRegistroUsuarios_Click;
+            // 
             // btnRefrescar
             // 
             btnRefrescar.BackColor = Color.FromArgb(37, 41, 47);
             btnRefrescar.FlatStyle = FlatStyle.Flat;
             btnRefrescar.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnRefrescar.ForeColor = Color.FromArgb(12, 215, 253);
-            btnRefrescar.IconChar = FontAwesome.Sharp.IconChar.Rebel;
+            btnRefrescar.IconChar = FontAwesome.Sharp.IconChar.Refresh;
             btnRefrescar.IconColor = Color.FromArgb(12, 215, 253);
             btnRefrescar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             btnRefrescar.IconSize = 24;
@@ -187,16 +198,6 @@
             lblTituloListado.Size = new Size(253, 35);
             lblTituloListado.TabIndex = 9;
             lblTituloListado.Text = "Listado de Usuarios";
-            // 
-            // lblRegistroUsuarios
-            // 
-            lblRegistroUsuarios.AutoSize = true;
-            lblRegistroUsuarios.Location = new Point(973, 126);
-            lblRegistroUsuarios.Name = "lblRegistroUsuarios";
-            lblRegistroUsuarios.Size = new Size(158, 20);
-            lblRegistroUsuarios.TabIndex = 96;
-            lblRegistroUsuarios.Text = "Registros de Usuarios: ";
-            lblRegistroUsuarios.Click += lblRegistroUsuarios_Click;
             // 
             // UC_UsuariosListado
             // 

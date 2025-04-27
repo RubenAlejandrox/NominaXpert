@@ -40,7 +40,7 @@
             cbxMotivoBaja = new ComboBox();
             lblMotivoBaja = new Label();
             lblSeleccionUsuario = new Label();
-            cbxSeleccionUsuario = new ComboBox();
+            cbxUsuario = new ComboBox();
             label10 = new Label();
             txtDetallesBaja = new TextBox();
             lblNotas = new Label();
@@ -61,7 +61,7 @@
             panelContainer.Controls.Add(cbxMotivoBaja);
             panelContainer.Controls.Add(lblMotivoBaja);
             panelContainer.Controls.Add(lblSeleccionUsuario);
-            panelContainer.Controls.Add(cbxSeleccionUsuario);
+            panelContainer.Controls.Add(cbxUsuario);
             panelContainer.Controls.Add(label10);
             panelContainer.Controls.Add(txtDetallesBaja);
             panelContainer.Controls.Add(lblNotas);
@@ -195,6 +195,7 @@
             cbxMotivoBaja.Name = "cbxMotivoBaja";
             cbxMotivoBaja.Size = new Size(688, 29);
             cbxMotivoBaja.TabIndex = 90;
+            cbxMotivoBaja.SelectedIndexChanged += cbxMotivoBaja_SelectedIndexChanged;
             // 
             // lblMotivoBaja
             // 
@@ -218,17 +219,17 @@
             lblSeleccionUsuario.TabIndex = 84;
             lblSeleccionUsuario.Text = "Seleccionar Usuario*";
             // 
-            // cbxSeleccionUsuario
+            // cbxUsuario
             // 
-            cbxSeleccionUsuario.BackColor = Color.FromArgb(24, 44, 65);
-            cbxSeleccionUsuario.Cursor = Cursors.Hand;
-            cbxSeleccionUsuario.Font = new Font("Century", 10F);
-            cbxSeleccionUsuario.ForeColor = Color.FromArgb(12, 215, 253);
-            cbxSeleccionUsuario.FormattingEnabled = true;
-            cbxSeleccionUsuario.Location = new Point(213, 183);
-            cbxSeleccionUsuario.Name = "cbxSeleccionUsuario";
-            cbxSeleccionUsuario.Size = new Size(688, 29);
-            cbxSeleccionUsuario.TabIndex = 88;
+            cbxUsuario.BackColor = Color.FromArgb(24, 44, 65);
+            cbxUsuario.Cursor = Cursors.Hand;
+            cbxUsuario.Font = new Font("Century", 10F);
+            cbxUsuario.ForeColor = Color.FromArgb(12, 215, 253);
+            cbxUsuario.FormattingEnabled = true;
+            cbxUsuario.Location = new Point(213, 183);
+            cbxUsuario.Name = "cbxUsuario";
+            cbxUsuario.Size = new Size(688, 29);
+            cbxUsuario.TabIndex = 88;
             // 
             // label10
             // 
@@ -290,7 +291,7 @@
         private ComboBox cbxMotivoBaja;
         private Label lblMotivoBaja;
         private Label lblSeleccionUsuario;
-        private ComboBox cbxSeleccionUsuario;
+        private ComboBox cbxUsuario;
         private Label label10;
         private TextBox txtDetallesBaja;
         private Label lblNotas;
