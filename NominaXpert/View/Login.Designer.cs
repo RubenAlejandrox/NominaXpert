@@ -120,7 +120,7 @@
             txtCorreo.Name = "txtCorreo";
             txtCorreo.Size = new Size(234, 28);
             txtCorreo.TabIndex = 12;
-            txtCorreo.Text = "admin@gmail.com";
+            txtCorreo.Text = "admin@nomina.com";
             // 
             // panel1
             // 
