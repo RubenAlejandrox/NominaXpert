@@ -2,6 +2,7 @@
 using System.Data;
 using NominaXpert.Utilities;
 using NominaXpert.Model;
+using NominaXpert.Data;
 namespace NominaXpert.View.UsersControl
 {
     public partial class UC_UsuariosRolPermiso : UserControl
@@ -10,12 +11,23 @@ namespace NominaXpert.View.UsersControl
         {
             InitializeComponent();
             CargarRoles();
+            PoblaComboEstatus();
         }
 
 
         private void dtgRoles_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+        private void PoblaComboEstatus()
+        {
+            // Limpiar los valores previos si es necesario
+            cbxEstatus.Items.Clear();
+
+            // Agregar las opciones de estatus al ComboBox (Activo o Inactivo)
+            cbxEstatus.Items.Add("Activo");
+            cbxEstatus.Items.Add("Inactivo");
+            cbxEstatus.SelectedValue = true;
         }
         private void CargarRoles()
         {
@@ -112,8 +124,6 @@ namespace NominaXpert.View.UsersControl
             // Agregar el control de usuario al panel
             panelContenedor.Controls.Add(userControl);
         }
-
-
         private void ibtnEditar_Click(object sender, EventArgs e)
         {
             if (dtgRoles.SelectedRows.Count == 0)
@@ -141,25 +151,70 @@ namespace NominaXpert.View.UsersControl
                 ucEditar.CargarRolParaEditar(rol);
             }
         }
-
-        private void ibtnBajaUsuario_Click(object sender, EventArgs e)
-        {
-            if (dtgRoles.SelectedRows.Count == 0)
-            {
-                MessageBox.Show("Selecciona un rol para dar de baja", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            int idRol = Convert.ToInt32(dtgRoles.SelectedRows[0].Cells["Id"].Value);
-            string nombreRol = dtgRoles.SelectedRows[0].Cells["Nombre"].Value?.ToString() ?? "";
-
-            UC_RolesBaja ucBaja = new UC_RolesBaja(idRol, nombreRol);
-            addUsersControl(ucBaja);
-        }
-
         private void btnRefrescar_Click(object sender, EventArgs e)
         {
             CargarRoles();
+        }
+        private void MostrarRolesFiltrados(List<Rol> roles)
+        {
+            try
+            {
+                if (roles.Count == 0)
+                {
+                    MessageBox.Show("No se encontraron roles registrados.",
+                                    "Información",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                    return;
+                }
+
+                DataTable dt = new DataTable();
+                dt.Columns.Add("Id", typeof(int));
+                dt.Columns.Add("Nombre", typeof(string));
+                dt.Columns.Add("Descripcion", typeof(string));
+                dt.Columns.Add("Estatus", typeof(string));
+                dt.Columns.Add("Permisos", typeof(string));
+
+                foreach (var rol in roles)
+                {
+                    dt.Rows.Add(
+                        rol.Id,
+                        rol.Nombre,
+                        rol.Descripcion,
+                        rol.Estatus ? "Activo" : "Inactivo",
+                        string.Join(", ", rol.Permisos.Select(p => p.Descripcion))
+                    );
+                }
+
+                dtgRoles.DataSource = dt;
+                ConfigurarDataGridView();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar roles: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void FiltrarUsuarios()
+        {
+            if (cbxEstatus.SelectedItem == null)
+            {
+                MessageBox.Show("Por favor selecciona un estatus para filtrar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string estatusSeleccionado = cbxEstatus.SelectedItem.ToString();
+            bool estatusBool = estatusSeleccionado == "Activo"; // Si es "Activo" = true, sino = false
+
+            RolesDataAccess rolesDataAccess = new RolesDataAccess();
+            List<Rol> roles = rolesDataAccess.ObtenerRolesFiltrados(estatusBool);
+
+            MostrarRolesFiltrados(roles);
+
+        }
+
+        private void cbxEstatus_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FiltrarUsuarios();
         }
     }
 }

@@ -24,7 +24,7 @@ namespace NominaXpert.View.UsersControl
             // Agregar las opciones de estatus al ComboBox (Activo o Inactivo)
             cbxEstatus.Items.Add("Activo");
             cbxEstatus.Items.Add("Inactivo");
-            cbxEstatus.SelectedValue = 1;
+            cbxEstatus.SelectedValue = true;
         }
         private void addUsersControl(UserControl userControl)
         {

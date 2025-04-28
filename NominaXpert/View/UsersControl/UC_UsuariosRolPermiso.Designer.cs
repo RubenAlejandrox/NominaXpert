@@ -30,6 +30,8 @@
         {
             panel = new Panel();
             panelContenedor = new Panel();
+            btnRefrescar = new FontAwesome.Sharp.IconButton();
+            lblRegistros = new Label();
             dtgRoles = new DataGridView();
             btnSearch = new Button();
             txtSearchEmpleado = new TextBox();
@@ -37,8 +39,7 @@
             panel2 = new Panel();
             ibtnEditar = new FontAwesome.Sharp.IconButton();
             label1 = new Label();
-            lblRegistros = new Label();
-            btnRefrescar = new FontAwesome.Sharp.IconButton();
+            cbxEstatus = new ComboBox();
             panel.SuspendLayout();
             panelContenedor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dtgRoles).BeginInit();
@@ -57,6 +58,7 @@
             // 
             // panelContenedor
             // 
+            panelContenedor.Controls.Add(cbxEstatus);
             panelContenedor.Controls.Add(btnRefrescar);
             panelContenedor.Controls.Add(lblRegistros);
             panelContenedor.Controls.Add(dtgRoles);
@@ -69,6 +71,34 @@
             panelContenedor.Name = "panelContenedor";
             panelContenedor.Size = new Size(1262, 705);
             panelContenedor.TabIndex = 0;
+            // 
+            // btnRefrescar
+            // 
+            btnRefrescar.BackColor = Color.FromArgb(37, 41, 47);
+            btnRefrescar.FlatStyle = FlatStyle.Flat;
+            btnRefrescar.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnRefrescar.ForeColor = Color.FromArgb(12, 215, 253);
+            btnRefrescar.IconChar = FontAwesome.Sharp.IconChar.Refresh;
+            btnRefrescar.IconColor = Color.FromArgb(12, 215, 253);
+            btnRefrescar.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            btnRefrescar.IconSize = 24;
+            btnRefrescar.Location = new Point(994, 629);
+            btnRefrescar.Name = "btnRefrescar";
+            btnRefrescar.Size = new Size(125, 41);
+            btnRefrescar.TabIndex = 96;
+            btnRefrescar.Text = "Refrescar";
+            btnRefrescar.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnRefrescar.UseVisualStyleBackColor = false;
+            btnRefrescar.Click += btnRefrescar_Click;
+            // 
+            // lblRegistros
+            // 
+            lblRegistros.AutoSize = true;
+            lblRegistros.Location = new Point(911, 159);
+            lblRegistros.Name = "lblRegistros";
+            lblRegistros.Size = new Size(104, 20);
+            lblRegistros.TabIndex = 49;
+            lblRegistros.Text = "No. Registros: ";
             // 
             // dtgRoles
             // 
@@ -160,33 +190,14 @@
             label1.TabIndex = 0;
             label1.Text = "Roles";
             // 
-            // lblRegistros
+            // cbxEstatus
             // 
-            lblRegistros.AutoSize = true;
-            lblRegistros.Location = new Point(911, 159);
-            lblRegistros.Name = "lblRegistros";
-            lblRegistros.Size = new Size(104, 20);
-            lblRegistros.TabIndex = 49;
-            lblRegistros.Text = "No. Registros: ";
-            // 
-            // btnRefrescar
-            // 
-            btnRefrescar.BackColor = Color.FromArgb(37, 41, 47);
-            btnRefrescar.FlatStyle = FlatStyle.Flat;
-            btnRefrescar.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnRefrescar.ForeColor = Color.FromArgb(12, 215, 253);
-            btnRefrescar.IconChar = FontAwesome.Sharp.IconChar.Refresh;
-            btnRefrescar.IconColor = Color.FromArgb(12, 215, 253);
-            btnRefrescar.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            btnRefrescar.IconSize = 24;
-            btnRefrescar.Location = new Point(994, 629);
-            btnRefrescar.Name = "btnRefrescar";
-            btnRefrescar.Size = new Size(125, 41);
-            btnRefrescar.TabIndex = 96;
-            btnRefrescar.Text = "Refrescar";
-            btnRefrescar.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnRefrescar.UseVisualStyleBackColor = false;
-            btnRefrescar.Click += btnRefrescar_Click;
+            cbxEstatus.FormattingEnabled = true;
+            cbxEstatus.Location = new Point(948, 192);
+            cbxEstatus.Name = "cbxEstatus";
+            cbxEstatus.Size = new Size(151, 28);
+            cbxEstatus.TabIndex = 98;
+            cbxEstatus.SelectedIndexChanged += cbxEstatus_SelectedIndexChanged;
             // 
             // UC_UsuariosRolPermiso
             // 
@@ -220,5 +231,6 @@
         private Label label1;
         private Label lblRegistros;
         private FontAwesome.Sharp.IconButton btnRefrescar;
+        private ComboBox cbxEstatus;
     }
 }

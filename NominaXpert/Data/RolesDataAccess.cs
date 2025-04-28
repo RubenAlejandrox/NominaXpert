@@ -261,6 +261,50 @@ namespace NominaXpert.Data
             }
         }
 
+        public List<Rol> ObtenerRolesFiltrados(bool estatus)
+        {
+            List<Rol> roles = new List<Rol>();
+
+            try
+            {
+                string query = @"SELECT id, codigo, nombre, descripcion, estatus
+                         FROM seguridad.roles
+                         WHERE estatus = @Estatus";
+
+                NpgsqlParameter paramEstatus = _dbAccess.CreateParameter("@Estatus", estatus);
+
+                _dbAccess.Connect();
+                DataTable dt = _dbAccess.ExecuteQuery_Reader(query, paramEstatus);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    int idRol = Convert.ToInt32(row["id"]);
+
+                    Rol rol = new Rol
+                    {
+                        Id = idRol,
+                        Codigo = row["codigo"].ToString(),
+                        Nombre = row["nombre"].ToString(),
+                        Descripcion = row["descripcion"].ToString(),
+                        Estatus = Convert.ToBoolean(row["estatus"]),
+                        Permisos = ObtenerPermisosPorRol(idRol) // Ya tienes este método
+                    };
+
+                    roles.Add(rol);
+                }
+
+                return roles;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al obtener roles filtrados.");
+                return roles; // Retorna lista vacía si ocurre error
+            }
+            finally
+            {
+                _dbAccess.Disconnect();
+            }
+        }
 
     }
 }
