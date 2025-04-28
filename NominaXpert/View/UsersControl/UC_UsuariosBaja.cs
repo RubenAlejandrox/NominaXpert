@@ -5,7 +5,6 @@ namespace NominaXpert.View.UsersControl
 {
     public partial class UC_UsuariosBaja : UserControl
     {
-        private int _idRol;
         private int _idUsuario;
 
         // Constructor sin parámetros (para inicialización básica)
@@ -89,14 +88,9 @@ namespace NominaXpert.View.UsersControl
         }
         private bool RealizarBaja()
         {
-            if (DatosVacios())
-            {
-                MessageBox.Show("Por favor llene todos los campos", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
 
-            RolesController controller = new RolesController();
-            var (exito, mensaje) = controller.DarDeBajaRol(_idRol);
+            UsuariosController controller = new UsuariosController();
+            var (exito, mensaje) = controller.DarDeBajaUsuario(_idUsuario, cbxMotivoBaja.Text);
 
             MessageBox.Show(mensaje, exito ? "Éxito" : "Error",
                 MessageBoxButtons.OK,
@@ -104,19 +98,6 @@ namespace NominaXpert.View.UsersControl
 
             return exito;
         }
-
-        private bool DatosVacios()
-        {
-            if (1 == 2)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
 
         private void addUsersControl(UserControl userControl)
         {

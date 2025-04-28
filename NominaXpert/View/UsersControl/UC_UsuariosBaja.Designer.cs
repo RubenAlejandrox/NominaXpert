@@ -42,8 +42,6 @@
             lblSeleccionUsuario = new Label();
             cbxUsuario = new ComboBox();
             label10 = new Label();
-            txtDetallesBaja = new TextBox();
-            lblNotas = new Label();
             panelContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)iconPIcture).BeginInit();
             panel1.SuspendLayout();
@@ -63,8 +61,6 @@
             panelContainer.Controls.Add(lblSeleccionUsuario);
             panelContainer.Controls.Add(cbxUsuario);
             panelContainer.Controls.Add(label10);
-            panelContainer.Controls.Add(txtDetallesBaja);
-            panelContainer.Controls.Add(lblNotas);
             panelContainer.Dock = DockStyle.Fill;
             panelContainer.Location = new Point(0, 0);
             panelContainer.Name = "panelContainer";
@@ -242,29 +238,6 @@
             label10.TabIndex = 85;
             label10.Text = "Fecha Baja*";
             // 
-            // txtDetallesBaja
-            // 
-            txtDetallesBaja.BackColor = Color.FromArgb(37, 41, 47);
-            txtDetallesBaja.Cursor = Cursors.IBeam;
-            txtDetallesBaja.Font = new Font("Century", 10F);
-            txtDetallesBaja.ForeColor = Color.FromArgb(12, 215, 253);
-            txtDetallesBaja.Location = new Point(213, 511);
-            txtDetallesBaja.MaxLength = 50;
-            txtDetallesBaja.Name = "txtDetallesBaja";
-            txtDetallesBaja.Size = new Size(688, 28);
-            txtDetallesBaja.TabIndex = 87;
-            // 
-            // lblNotas
-            // 
-            lblNotas.AutoSize = true;
-            lblNotas.Font = new Font("Century", 10F);
-            lblNotas.ForeColor = Color.FromArgb(12, 215, 253);
-            lblNotas.Location = new Point(213, 487);
-            lblNotas.Name = "lblNotas";
-            lblNotas.Size = new Size(124, 21);
-            lblNotas.TabIndex = 86;
-            lblNotas.Text = "Detalles Baja*";
-            // 
             // UC_UsuariosBaja
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -293,8 +266,6 @@
         private Label lblSeleccionUsuario;
         private ComboBox cbxUsuario;
         private Label label10;
-        private TextBox txtDetallesBaja;
-        private Label lblNotas;
         private Utilities.NominaDatePicker dtpFechaBaja;
         private Button btnSearch;
         private TextBox txtSearchEmpleado;
