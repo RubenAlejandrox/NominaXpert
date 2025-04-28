@@ -378,6 +378,7 @@
             cboGenero.Name = "cboGenero";
             cboGenero.Size = new Size(192, 28);
             cboGenero.TabIndex = 3;
+            cboGenero.SelectedIndexChanged += cboGenero_SelectedIndexChanged;
             // 
             // label6
             // 

@@ -1,16 +1,6 @@
-﻿using FontAwesome.Sharp;
-using NominaXpert.Controller;
+﻿using NominaXpert.Controller;
 using NominaXpert.Utilities;
 using NominaXpert.View.UsersControl;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace NominaXpert.View.Forms
 {
@@ -22,9 +12,7 @@ namespace NominaXpert.View.Forms
             Formas.InitializePanel(panelBar); // Inicializa el borde izquierdo en el panel
             CargarUserControlInicial();
             ConfigurarPermisos();
-        }
-        
-
+        }        
         private void CargarUserControlInicial()
         {
             UC_EmpleadosListado uc = new UC_EmpleadosListado();

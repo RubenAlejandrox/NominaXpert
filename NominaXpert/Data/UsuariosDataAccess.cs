@@ -465,5 +465,80 @@ namespace NominaXpert.Data
                 _dbAccess.Disconnect();
             }
         }
+        public List<Usuario> ObtenerUsuariosFiltrados(bool estatus)
+        {
+            List<Usuario> usuarios = new List<Usuario>();
+            try
+            {
+                string query = @"
+            SELECT 
+                u.id, 
+                u.id_persona, 
+                u.nombre_usuario, 
+                u.contraseña, 
+                u.estatus AS estatus_usuario,
+                r.nombre AS nombre_rol,
+                r.descripcion AS descripcion_rol,
+                p.nombre_completo, 
+                p.correo, 
+                p.telefono, 
+                p.direccion, 
+                p.rfc, 
+                p.curp, 
+                p.fecha_nacimiento, 
+                p.estatus AS estatus_persona
+            FROM seguridad.usuarios u
+            INNER JOIN seguridad.personas p ON u.id_persona = p.id
+            INNER JOIN seguridad.roles r ON u.id_rol = r.id
+            WHERE u.estatus = @Estatus
+            ORDER BY u.id";
+
+                NpgsqlParameter paramEstatus = _dbAccess.CreateParameter("@Estatus", estatus);
+
+                _dbAccess.Connect();
+                DataTable resultado = _dbAccess.ExecuteQuery_Reader(query, paramEstatus);
+
+                foreach (DataRow row in resultado.Rows)
+                {
+                    Persona persona = new Persona(
+                        id: Convert.ToInt32(row["id_persona"]),
+                        nombreCompleto: row["nombre_completo"].ToString() ?? "",
+                        correo: row["correo"].ToString() ?? "",
+                        telefono: row["telefono"].ToString() ?? "",
+                        rfc: row["rfc"].ToString() ?? "",
+                        curp: row["curp"].ToString() ?? "",
+                        fechaNacimiento: row["fecha_nacimiento"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(row["fecha_nacimiento"]) : null,
+                        direccion: row["direccion"].ToString() ?? "",
+                        estatus: Convert.ToBoolean(row["estatus_persona"])
+                    );
+
+                    Usuario usuario = new Usuario(
+                        idPersona: Convert.ToInt32(row["id_persona"]),
+                        id: Convert.ToInt32(row["id"]),
+                        nombre_usuario: row["nombre_usuario"].ToString() ?? "",
+                        contrasena: row["contraseña"].ToString() ?? "",
+                        estatus: Convert.ToBoolean(row["estatus_usuario"]),
+                        idrol: 0 // Ojo: pon el ID de rol si lo necesitas, aquí no lo usé porque no estaba en tu modelo básico
+                    )
+                    {
+                        DatosPersonales = persona
+                    };
+
+                    usuarios.Add(usuario);
+                }
+
+                return usuarios;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al obtener usuarios filtrados por estatus");
+                throw;
+            }
+            finally
+            {
+                _dbAccess.Disconnect();
+            }
+        }
+
     }
-    }
+}

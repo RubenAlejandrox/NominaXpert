@@ -326,6 +326,9 @@ namespace NominaXpert.View.UsersControl
             }
         }
 
-        
+        private void cboGenero_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -39,6 +39,7 @@
             ibtnEditar = new FontAwesome.Sharp.IconButton();
             ibtnBajaUsuario = new FontAwesome.Sharp.IconButton();
             lblTituloListado = new Label();
+            cbxEstatus = new ComboBox();
             panelContenedor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvListadoUsuario).BeginInit();
             ((System.ComponentModel.ISupportInitialize)iconPIcture).BeginInit();
@@ -47,6 +48,7 @@
             // 
             // panelContenedor
             // 
+            panelContenedor.Controls.Add(cbxEstatus);
             panelContenedor.Controls.Add(lblRegistroUsuarios);
             panelContenedor.Controls.Add(btnRefrescar);
             panelContenedor.Controls.Add(dgvListadoUsuario);
@@ -199,6 +201,15 @@
             lblTituloListado.TabIndex = 9;
             lblTituloListado.Text = "Listado de Usuarios";
             // 
+            // cbxEstatus
+            // 
+            cbxEstatus.FormattingEnabled = true;
+            cbxEstatus.Location = new Point(998, 156);
+            cbxEstatus.Name = "cbxEstatus";
+            cbxEstatus.Size = new Size(151, 28);
+            cbxEstatus.TabIndex = 97;
+            cbxEstatus.SelectedIndexChanged += cbxEstatus_SelectedIndexChanged;
+            // 
             // UC_UsuariosListado
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -230,5 +241,6 @@
         private FontAwesome.Sharp.IconPictureBox iconPIcture;
         private FontAwesome.Sharp.IconButton btnRefrescar;
         private Label lblRegistroUsuarios;
+        private ComboBox cbxEstatus;
     }
 }

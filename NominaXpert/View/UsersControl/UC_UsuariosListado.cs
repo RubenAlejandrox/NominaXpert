@@ -1,5 +1,7 @@
 ﻿using System.Data;
+using System.Windows.Forms;
 using NominaXpert.Controller;
+using NominaXpert.Data;
 using NominaXpert.Model;
 namespace NominaXpert.View.UsersControl
 {
@@ -11,8 +13,19 @@ namespace NominaXpert.View.UsersControl
             InitializeComponent();
             ConfigurarDataGridView();
             CargarUsuarios(); // Llama al método al cargar el UserControl
+            CargarEstatus();
         }
 
+        private void CargarEstatus()
+        {
+            // Limpiar los valores previos si es necesario
+            cbxEstatus.Items.Clear();
+
+            // Agregar las opciones de estatus al ComboBox (Activo o Inactivo)
+            cbxEstatus.Items.Add("Activo");
+            cbxEstatus.Items.Add("Inactivo");
+            cbxEstatus.SelectedValue = 1;
+        }
         private void addUsersControl(UserControl userControl)
         {
             // Limpiar el panel contenedor
@@ -78,7 +91,7 @@ namespace NominaXpert.View.UsersControl
                 UsuariosController usuariosController = new UsuariosController();
 
                 // Obtener todos los usuarios
-                List<Usuario> usuarios = usuariosController.ObtenerUsuarios(soloActivos: false);
+                List<Usuario> usuarios = usuariosController.ObtenerUsuarios();
 
                 dgvListadoUsuario.DataSource = null;
 
@@ -204,6 +217,72 @@ namespace NominaXpert.View.UsersControl
         {
 
         }
+
+        private void cbxEstatus_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FiltrarUsuarios();
+        }
+
+        private void FiltrarUsuarios()
+        {
+            if (cbxEstatus.SelectedItem == null)
+            {
+                MessageBox.Show("Por favor selecciona un estatus para filtrar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string estatusSeleccionado = cbxEstatus.SelectedItem.ToString();
+            bool estatusBool = estatusSeleccionado == "Activo"; // Si es "Activo" = true, sino = false
+
+            UsuariosDataAccess usuariosDataAccess = new UsuariosDataAccess();
+            List<Usuario> usuarios = usuariosDataAccess.ObtenerUsuariosFiltrados(estatusBool);
+
+            MostrarUsuarios(usuarios);
+        }
+
+        private void MostrarUsuarios(List<Usuario> usuarios)
+        {
+            dgvListadoUsuario.DataSource = null;
+
+            // Crear un nuevo DataTable
+            DataTable dt = new DataTable();
+            dt.Columns.Add("id", typeof(int));
+            dt.Columns.Add("nombre_usuario", typeof(string));
+            dt.Columns.Add("nombre_completo", typeof(string));
+            dt.Columns.Add("correo", typeof(string));
+            dt.Columns.Add("telefono", typeof(string));
+            dt.Columns.Add("direccion", typeof(string));
+            dt.Columns.Add("curp", typeof(string));
+            dt.Columns.Add("rfc", typeof(string));
+            dt.Columns.Add("fecha_nacimiento", typeof(DateTime));
+            dt.Columns.Add("id_rol", typeof(int));
+            dt.Columns.Add("nombre_rol", typeof(string));
+            dt.Columns.Add("estatus", typeof(bool));
+            dt.Columns.Add("contraseña", typeof(string));
+
+            foreach (Usuario usuario in usuarios)
+            {
+                dt.Rows.Add(
+                    usuario.Id,
+                    usuario.Nombre_Usuario,
+                    usuario.DatosPersonales?.NombreCompleto ?? "N/A",
+                    usuario.DatosPersonales?.Correo ?? "N/A",
+                    usuario.DatosPersonales?.Telefono ?? "N/A",
+                    usuario.DatosPersonales?.Direccion ?? "N/A",
+                    usuario.DatosPersonales?.Curp ?? "N/A",
+                    usuario.DatosPersonales?.Rfc ?? "N/A",
+                    usuario.DatosPersonales?.FechaNacimiento ?? DateTime.MinValue,
+                    usuario.IdRol,
+                    usuario.Rol?.Nombre ?? "Desconocido",
+                    usuario.Estatus,
+                    "*******"
+                );
+            }
+
+            dgvListadoUsuario.DataSource = dt;
+            ConfigurarDataGridView(); // Aplicar configuración de columnas
+        }
+
     }
 }
 
