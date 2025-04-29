@@ -23,9 +23,9 @@ namespace NominaXpert.View.UsersControl
         {
 
 
-            CargarEmpleados();                  // Cargar todos los empleados
-            CargarTiposDeContrato();             // Tipos de contrato
-            CargarEstatus();                     // Estatus
+            CargarEmpleados(); // Cargar todos los empleados
+            CargarTiposDeContrato();// Tipos de contrato
+            CargarEstatus();// Estatus
 
 
         }

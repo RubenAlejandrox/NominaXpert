@@ -16,6 +16,8 @@ namespace NominaXpert.Model
         // Constructor predeterminado
         public Bonificacion()
         {
+            IdNomina = 0;
+            IdTipo = 0;
             Monto = 0.00m;
         }
 

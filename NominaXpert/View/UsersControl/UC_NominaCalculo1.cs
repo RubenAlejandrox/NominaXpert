@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using NominaXpert.Business;
+using NominaXpert.Controller;
 using NominaXpert.Utilities;
 
 namespace NominaXpert.View.UsersControl
@@ -47,7 +48,23 @@ namespace NominaXpert.View.UsersControl
                 MessageBox.Show("Matrícula inválida. Verifique el formato.", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
+            try
+            {
+                var controller = new EmpleadosController();
+                var (nombre, sueldo) = controller.BuscarEmpleadoPorMatricula(txtMatricula.Text.Trim());
+
+                // Mostrar datos en la UI
+                txtNombreEmpleado.Text = nombre;
+                txtSueldoBase.Text = sueldo.ToString("C");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
+       
 
         private void btnCalcularVerNomina_Click(object sender, EventArgs e)
         {

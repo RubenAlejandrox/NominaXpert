@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace NominaXpert.Model
 {
-    internal class Empleado
+    public class Empleado
     {
         public int Id { get; set; }
         public int IdPersona { get; set; }
+        public string Matricula { get; set; }
         public string Puesto { get; set; }
         public string Departamento { get; set; }
         public decimal Sueldo { get; set; }
@@ -25,11 +26,12 @@ namespace NominaXpert.Model
         public Persona DatosPersonales { get; set; }
 
         // Constructor para inicializar el objeto Empleado
-        public Empleado(int id, int idPersona, string puesto, string departamento, decimal sueldo, string tipoContrato,
+        public Empleado(int id, int idPersona, string matricula, string puesto, string departamento, decimal sueldo, string tipoContrato,
                         DateTime fechaIngreso, DateTime? fechaBaja, bool salarioFijo, bool estatus, Persona datosPersonales)
         {
             Id = id;
             IdPersona = idPersona;
+            Matricula = matricula;
             Puesto = puesto;
             Departamento = departamento;
             Sueldo = sueldo;
@@ -45,6 +47,7 @@ namespace NominaXpert.Model
         public Empleado()
         {
             IdPersona = 0;
+            Matricula = string.Empty;
             Puesto = string.Empty;
             Departamento = string.Empty;
             Sueldo = 0.00m;
@@ -56,9 +59,10 @@ namespace NominaXpert.Model
         }
 
         // Constructor con campos obligatorios
-        public Empleado(int idPersona, string puesto, string departamento, decimal sueldo, string tipoContrato, DateTime fechaIngreso)
+        public Empleado(int idPersona, string matricula, string puesto, string departamento, decimal sueldo, string tipoContrato, DateTime fechaIngreso)
         {
             IdPersona = idPersona;
+            Matricula = matricula;
             Puesto = puesto;
             Departamento = departamento;
             Sueldo = sueldo;
@@ -70,10 +74,11 @@ namespace NominaXpert.Model
         }
 
         // Constructor con todos los campos
-        public Empleado(int id, int idPersona, string puesto, string departamento, decimal sueldo, string tipoContrato, DateTime fechaIngreso, DateTime? fechaBaja, bool salarioFijo, bool estatus)
+        public Empleado(int id, int idPersona, string matricula, string puesto, string departamento, decimal sueldo, string tipoContrato, DateTime fechaIngreso, DateTime? fechaBaja, bool salarioFijo, bool estatus)
         {
             Id = id;
             IdPersona = idPersona;
+            Matricula = matricula;
             Puesto = puesto;
             Departamento = departamento;
             Sueldo = sueldo;

@@ -17,6 +17,7 @@ namespace NominaXpert.Model
         // Constructor predeterminado
         public DetalleNomina()
         {
+            IdNomina = 0;
             Descripcion = string.Empty;
             Tipo = string.Empty; // Dejarlo vacío o usar un valor por defecto que puede ser asignado dinámicamente
             Monto = 0.00m;

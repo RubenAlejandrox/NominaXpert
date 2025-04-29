@@ -14,7 +14,7 @@ using ControlEscolar.Data;
 
 namespace NominaXpert.Data
 {
-    internal class EmpleadosDataAccess
+    public class EmpleadosDataAccess
     {
         // Logger para la clase
         private static readonly Logger _logger = LoggingManager.GetLogger("NominaXpert.Data.EmpleadosDataAccess");
@@ -319,8 +319,86 @@ namespace NominaXpert.Data
 
             return empleado;
         }
+        // Método para verificar si un empleado está activo
+        public bool VerificarEmpleadoActivo(int idEmpleado)
+        {
+            string query = "SELECT estatus FROM nomina.empleados WHERE id = @idEmpleado";
 
+            try
+            {
+                // Crear el parámetro de la consulta SQL
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+                _dbAccess.CreateParameter("@idEmpleado", idEmpleado)
+                };
 
+                // Conectar a la base de datos
+                _dbAccess.Connect();
+
+                // Ejecutamos la consulta SQL
+                object result = _dbAccess.ExecuteScalar(query, parameters);
+
+                // Verificamos si el resultado es nulo o si el empleado no está activo
+                if (result != null && Convert.ToBoolean(result))
+                {
+                    return true; // El empleado está activo
+                }
+                else
+                {
+                    return false; // El empleado no está activo o el resultado es nulo
+                }
+            }
+            catch (Exception ex)
+            {
+                // Capturamos cualquier error que ocurra y lo registramos
+                _logger.Error(ex, "Error al verificar el estatus del empleado.");
+                throw;
+            }
+            finally
+            {
+                // Desconectamos de la base de datos
+                _dbAccess.Disconnect();
+            }
+        }
+
+        // En EmpleadosDataAccess.cs buscamos el Nombre y sueldo del empleado en la bd
+        public (string Nombre, decimal SueldoBase) ObtenerNombreYSueldoPorMatricula(string matricula)
+        {
+            try
+            {
+                string query = @"
+            SELECT p.nombre_completo AS Nombre, e.sueldo AS SueldoBase 
+            FROM nomina.empleados e
+            INNER JOIN seguridad.personas p ON e.id_persona = p.id
+            WHERE e.matricula = @Matricula";
+
+                NpgsqlParameter paramMatricula = _dbAccess.CreateParameter("@Matricula", matricula);
+
+                _dbAccess.Connect();
+                DataTable resultado = _dbAccess.ExecuteQuery_Reader(query, paramMatricula);
+
+                if (resultado.Rows.Count == 0)
+                {
+                    _logger.Warn($"No se encontró el empleado con matrícula: {matricula}");
+                    return (null, 0);
+                }
+
+                DataRow row = resultado.Rows[0];
+                string nombre = row["Nombre"].ToString();
+                decimal sueldoBase = Convert.ToDecimal(row["SueldoBase"]);
+
+                return (nombre, sueldoBase);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Error al obtener datos del empleado con matrícula: {matricula}");
+                throw;
+            }
+            finally
+            {
+                _dbAccess.Disconnect();
+            }
+        }
     }
 }
 
