@@ -69,17 +69,28 @@ namespace NominaXpert.Controller
             return _rolesRepo.ObtenerPermisosPorRol(0); // 0 para obtener todos
         }
 
-        public (bool exito, string mensaje) DarDeBajaRol(int idRol)
+        public (bool exito, string mensaje) DarDeBajaRol(int idRol, bool esBajaLogica)
         {
             if (idRol <= 0)
                 return (false, "ID de rol inválido.");
 
-            bool exito = _rolesRepo.DarDeBajaRol(idRol);
+            bool exito;
+            if (esBajaLogica)
+            {
+                // Baja lógica
+                exito = _rolesRepo.DarDeBajaRol(idRol);
+            }
+            else
+            {
+                // Eliminación definitiva
+                exito = _rolesRepo.EliminarRolDefinitivo(idRol);
+            }
 
             return exito
-                ? (true, "Rol dado de baja correctamente.")
-                : (false, "No se pudo dar de baja el rol.");
+                ? (true, esBajaLogica ? "Rol dado de baja correctamente." : "Rol eliminado definitivamente.")
+                : (false, "No se pudo completar la operación.");
         }
+
 
 
 

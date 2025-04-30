@@ -261,6 +261,58 @@ namespace NominaXpert.Data
             }
         }
 
+        public bool EliminarRolDefinitivo(int idRol)
+        {
+            try
+            {
+                _dbAccess.Connect();
+
+                // 0. Verificar si hay usuarios usando este rol
+                string queryVerificar = "SELECT COUNT(*) FROM seguridad.usuarios WHERE id_rol = @IdRol";
+                var paramCheck = _dbAccess.CreateParameter("@IdRol", idRol);
+
+                int usuariosAsociados = Convert.ToInt32(_dbAccess.ExecuteScalar(queryVerificar, paramCheck));
+
+                if (usuariosAsociados > 0)
+                {
+                    _logger.Warn($"No se puede eliminar el rol ID {idRol} porque está asignado a {usuariosAsociados} usuario(s).");
+                    return false; // No permitimos eliminar si aún está en uso
+                }
+
+                // 1. Eliminar primero sus permisos asignados
+                string deletePermisos = "DELETE FROM seguridad.permisos_rol WHERE id_rol = @IdRol";
+                var paramRol1 = _dbAccess.CreateParameter("@IdRol", idRol);
+                _dbAccess.ExecuteNonQuery(deletePermisos, paramRol1);
+
+                // 2. Eliminar el rol
+                string deleteRol = "DELETE FROM seguridad.roles WHERE id = @IdRol";
+                var paramRol2 = _dbAccess.CreateParameter("@IdRol", idRol);
+                int filasRol = _dbAccess.ExecuteNonQuery(deleteRol, paramRol2);
+
+                if (filasRol > 0)
+                {
+                    _logger.Info($"Rol ID {idRol} eliminado definitivamente.");
+                    return true;
+                }
+                else
+                {
+                    _logger.Warn($"No se pudo eliminar el rol ID {idRol}.");
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Error al eliminar rol ID {idRol}");
+                return false;
+            }
+            finally
+            {
+                _dbAccess.Disconnect();
+            }
+        }
+
+
+
         public List<Rol> ObtenerRolesFiltrados(bool estatus)
         {
             List<Rol> roles = new List<Rol>();

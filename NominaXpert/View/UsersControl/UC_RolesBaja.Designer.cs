@@ -143,7 +143,7 @@
             ibtnGuardar.IconColor = Color.FromArgb(12, 215, 253);
             ibtnGuardar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             ibtnGuardar.IconSize = 24;
-            ibtnGuardar.Location = new Point(776, 635);
+            ibtnGuardar.Location = new Point(776, 547);
             ibtnGuardar.Name = "ibtnGuardar";
             ibtnGuardar.Size = new Size(125, 41);
             ibtnGuardar.TabIndex = 119;

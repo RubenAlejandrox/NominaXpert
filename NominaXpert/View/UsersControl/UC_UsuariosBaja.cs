@@ -71,26 +71,28 @@ namespace NominaXpert.View.UsersControl
         private void ibtnGuardar_Click_1(object sender, EventArgs e)
         {
             DialogResult resultado = MessageBox.Show(
-                "¿Estás seguro de que deseas dar de baja?",
-                "Confirmar cambios",
-                MessageBoxButtons.YesNo,
+                "¿Deseas dar de baja (baja lógica) o eliminar definitivamente al usuario?\n\nSí = Baja lógica\nNo = Baja definitiva",
+                "Confirmar acción",
+                MessageBoxButtons.YesNoCancel,
                 MessageBoxIcon.Question
             );
 
-            // Verificar si el usuario hizo clic en "Sí"
-            if (resultado == DialogResult.Yes)
-            {
-                if (RealizarBaja())
-                {
-                    MessageBox.Show("Usuario dado de baja correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-            }
-        }
-        private bool RealizarBaja()
-        {
+            // Cancelar
+            if (resultado == DialogResult.Cancel)
+                return;
 
+            bool esBajaLogica = resultado == DialogResult.Yes; // Sí = baja lógica, No = baja definitiva
+
+            if (RealizarBaja(esBajaLogica))
+            {
+                MessageBox.Show("Operación completada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+        }
+        private bool RealizarBaja(bool esBajaLogica)
+        {
             UsuariosController controller = new UsuariosController();
-            var (exito, mensaje) = controller.DarDeBajaUsuario(_idUsuario, cbxMotivoBaja.Text);
+            var (exito, mensaje) = controller.DarDeBajaUsuario(_idUsuario, cbxMotivoBaja.Text, esBajaLogica);
 
             MessageBox.Show(mensaje, exito ? "Éxito" : "Error",
                 MessageBoxButtons.OK,
