@@ -36,7 +36,7 @@ namespace NominaXpert.View
             this.ControlBox = false;
             this.DoubleBuffered = true;
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
-         //   ConfigurarPermisos();
+         ConfigurarPermisos();
         }
 
         //Structs
@@ -205,7 +205,6 @@ namespace NominaXpert.View
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
-            // Confirmar si el usuario quiere cerrar sesión
             DialogResult resultado = MessageBox.Show("¿Estás seguro de que deseas cerrar sesión?", "Cerrar sesión",
                                              MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
@@ -224,8 +223,9 @@ namespace NominaXpert.View
                 View.Forms.Login loginForm = new View.Forms.Login();
                 if (loginForm.ShowDialog() == DialogResult.OK)
                 {
-                    // Si el login es exitoso, mostrar nuevamente el MDI
                     this.Show();
+                    ConfigurarPermisos();
+                    Reset();
                 }
                 else
                 {
