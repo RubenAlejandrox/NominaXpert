@@ -283,7 +283,65 @@ namespace NominaXpert.View.UsersControl
             ConfigurarDataGridView(); // Aplicar configuración de columnas
         }
 
+        private void btn_buscar_Click(object sender, EventArgs e)
+        {
+            string searchText = txtSearchUsuario.Text.Trim();
+
+            if (string.IsNullOrEmpty(searchText) || searchText == "Buscar Usuarios...")
+            {
+                MessageBox.Show("Por favor, ingrese un ID o Nombre de usuario para buscar.");
+                return;
+            }
+
+            if (int.TryParse(searchText, out int idEmpleado))
+            {
+                // Si se busca por ID
+                BuscarUsuarioPorId(idEmpleado);
+            }
+            else
+            {
+                // Si se busca por nombre
+                BuscarUsuarioPorNombre(searchText);
+            }
+        }
+
+        private void BuscarUsuarioPorId(int idUsuario)
+        {
+            UsuariosDataAccess usuarioDataAccess = new UsuariosDataAccess();
+            List<Usuario> usuario = usuarioDataAccess.ObtenerTodosLosUsuarios();
+
+            var usuariosEncontrados = usuario.Where(usr => usr.Id == idUsuario).ToList();
+
+            if (usuariosEncontrados.Count == 0)
+            {
+                MessageBox.Show("No se encontró el usuario con ese ID.");
+            }
+            else
+            {
+                MostrarUsuarios(usuariosEncontrados);
+            }
+        }
+
+        private void BuscarUsuarioPorNombre(string nombreUsuario)
+        {
+            UsuariosDataAccess usuarioDataAccess = new UsuariosDataAccess();
+            List<Usuario> usuario = usuarioDataAccess.ObtenerTodosLosUsuarios();
+
+            var usuariosEncontrados = usuario
+                .Where(emp => emp.DatosPersonales.NombreCompleto.Contains(nombreUsuario, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            if (usuariosEncontrados.Count == 0)
+            {
+                MessageBox.Show("No se encontró el empleado con ese nombre.");
+            }
+            else
+            {
+                MostrarUsuarios(usuariosEncontrados);
+            }
+        }
     }
+    
 }
 
 

@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MDI_Nomina));
             panelMenu = new Panel();
             btnLogout = new FontAwesome.Sharp.IconButton();
+            btnAuditoria = new FontAwesome.Sharp.IconButton();
             btnConfig = new FontAwesome.Sharp.IconButton();
             btnSeguridad = new FontAwesome.Sharp.IconButton();
             btnReporte = new FontAwesome.Sharp.IconButton();
@@ -70,6 +71,7 @@
             // 
             panelMenu.BackColor = Color.FromArgb(48, 51, 59);
             panelMenu.Controls.Add(btnLogout);
+            panelMenu.Controls.Add(btnAuditoria);
             panelMenu.Controls.Add(btnConfig);
             panelMenu.Controls.Add(btnSeguridad);
             panelMenu.Controls.Add(btnReporte);
@@ -97,16 +99,41 @@
             btnLogout.IconFont = FontAwesome.Sharp.IconFont.Auto;
             btnLogout.IconSize = 32;
             btnLogout.ImageAlign = ContentAlignment.MiddleLeft;
-            btnLogout.Location = new Point(0, 500);
+            btnLogout.Location = new Point(0, 560);
             btnLogout.Name = "btnLogout";
             btnLogout.Padding = new Padding(10, 0, 20, 0);
             btnLogout.Size = new Size(220, 60);
-            btnLogout.TabIndex = 7;
+            btnLogout.TabIndex = 8;
             btnLogout.Text = "Cerrar Sesión";
             btnLogout.TextAlign = ContentAlignment.MiddleLeft;
             btnLogout.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnLogout.UseVisualStyleBackColor = false;
             btnLogout.Click += btnLogout_Click;
+            // 
+            // btnAuditoria
+            // 
+            btnAuditoria.BackColor = Color.FromArgb(48, 51, 59);
+            btnAuditoria.Cursor = Cursors.Hand;
+            btnAuditoria.Dock = DockStyle.Top;
+            btnAuditoria.FlatAppearance.BorderSize = 0;
+            btnAuditoria.FlatStyle = FlatStyle.Flat;
+            btnAuditoria.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnAuditoria.ForeColor = Color.White;
+            btnAuditoria.IconChar = FontAwesome.Sharp.IconChar.SignOutAlt;
+            btnAuditoria.IconColor = Color.FromArgb(12, 215, 253);
+            btnAuditoria.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            btnAuditoria.IconSize = 32;
+            btnAuditoria.ImageAlign = ContentAlignment.MiddleLeft;
+            btnAuditoria.Location = new Point(0, 500);
+            btnAuditoria.Name = "btnAuditoria";
+            btnAuditoria.Padding = new Padding(10, 0, 20, 0);
+            btnAuditoria.Size = new Size(220, 60);
+            btnAuditoria.TabIndex = 7;
+            btnAuditoria.Text = "Auditoria";
+            btnAuditoria.TextAlign = ContentAlignment.MiddleLeft;
+            btnAuditoria.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnAuditoria.UseVisualStyleBackColor = false;
+            btnAuditoria.Click += btnAuditoria_Click;
             // 
             // btnConfig
             // 
@@ -500,6 +527,7 @@
         private Label lblhora;
         private System.Windows.Forms.Timer horafecha;
         private FontAwesome.Sharp.IconPictureBox icontime;
+        private FontAwesome.Sharp.IconButton btnAuditoria;
         private FontAwesome.Sharp.IconButton btnLogout;
     }
 }

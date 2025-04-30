@@ -23,9 +23,9 @@ namespace NominaXpert.Model
             Estatus = true; // Por defecto, los estudiantes se crean activos
             DatosPersonales = new Persona();
         }
+        public int Id { get; set; }
 
         public int IdPersona { get; set; }
-        public int Id { get; set; }
         public string Nombre_Usuario { get; set; }
         public string Contrasena { get; set; }
         public bool Estatus { get; set; }
