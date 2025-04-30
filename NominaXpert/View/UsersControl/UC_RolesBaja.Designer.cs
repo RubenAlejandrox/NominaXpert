@@ -28,9 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            iconPIcture = new FontAwesome.Sharp.IconPictureBox();
-            btnSearch = new Button();
-            txtSearchEmpleado = new TextBox();
             dtpFechaBaja = new NominaXpert.Utilities.NominaDatePicker();
             panel1 = new Panel();
             lblTituloBaja = new Label();
@@ -40,47 +37,8 @@
             cbxRoles = new ComboBox();
             label10 = new Label();
             ibtnGuardar = new FontAwesome.Sharp.IconButton();
-            ((System.ComponentModel.ISupportInitialize)iconPIcture).BeginInit();
             panel1.SuspendLayout();
             SuspendLayout();
-            // 
-            // iconPIcture
-            // 
-            iconPIcture.BackColor = Color.FromArgb(37, 41, 47);
-            iconPIcture.ForeColor = Color.FromArgb(12, 215, 253);
-            iconPIcture.IconChar = FontAwesome.Sharp.IconChar.Search;
-            iconPIcture.IconColor = Color.FromArgb(12, 215, 253);
-            iconPIcture.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            iconPIcture.IconSize = 36;
-            iconPIcture.Location = new Point(59, 165);
-            iconPIcture.Name = "iconPIcture";
-            iconPIcture.Size = new Size(40, 36);
-            iconPIcture.TabIndex = 123;
-            iconPIcture.TabStop = false;
-            // 
-            // btnSearch
-            // 
-            btnSearch.BackColor = Color.Black;
-            btnSearch.FlatStyle = FlatStyle.Popup;
-            btnSearch.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnSearch.ForeColor = Color.White;
-            btnSearch.Location = new Point(727, 174);
-            btnSearch.Name = "btnSearch";
-            btnSearch.Size = new Size(94, 29);
-            btnSearch.TabIndex = 122;
-            btnSearch.Text = "Buscar";
-            btnSearch.UseVisualStyleBackColor = false;
-            // 
-            // txtSearchEmpleado
-            // 
-            txtSearchEmpleado.BackColor = Color.FromArgb(37, 41, 47);
-            txtSearchEmpleado.BorderStyle = BorderStyle.FixedSingle;
-            txtSearchEmpleado.ForeColor = Color.LightGray;
-            txtSearchEmpleado.Location = new Point(105, 174);
-            txtSearchEmpleado.Name = "txtSearchEmpleado";
-            txtSearchEmpleado.Size = new Size(585, 27);
-            txtSearchEmpleado.TabIndex = 121;
-            txtSearchEmpleado.Text = "Buscar empleado";
             // 
             // dtpFechaBaja
             // 
@@ -199,9 +157,6 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(37, 41, 47);
-            Controls.Add(iconPIcture);
-            Controls.Add(btnSearch);
-            Controls.Add(txtSearchEmpleado);
             Controls.Add(dtpFechaBaja);
             Controls.Add(ibtnGuardar);
             Controls.Add(panel1);
@@ -212,7 +167,6 @@
             Controls.Add(label10);
             Name = "UC_RolesBaja";
             Size = new Size(1262, 705);
-            ((System.ComponentModel.ISupportInitialize)iconPIcture).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ResumeLayout(false);
@@ -220,10 +174,6 @@
         }
 
         #endregion
-
-        private FontAwesome.Sharp.IconPictureBox iconPIcture;
-        private Button btnSearch;
-        private TextBox txtSearchEmpleado;
         private Utilities.NominaDatePicker dtpFechaBaja;
         private Panel panel1;
         private Label lblTituloBaja;

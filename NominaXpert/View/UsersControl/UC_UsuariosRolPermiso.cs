@@ -3,6 +3,7 @@ using System.Data;
 using NominaXpert.Utilities;
 using NominaXpert.Model;
 using NominaXpert.Data;
+using static System.Net.Mime.MediaTypeNames;
 namespace NominaXpert.View.UsersControl
 {
     public partial class UC_UsuariosRolPermiso : UserControl
@@ -104,7 +105,7 @@ namespace NominaXpert.View.UsersControl
             dtgRoles.EnableHeadersVisualStyles = false;
             dtgRoles.ColumnHeadersDefaultCellStyle.BackColor = Color.SteelBlue;
             dtgRoles.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dtgRoles.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+            //dtgRoles.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9, FontStyle.Bold);
 
             // Alternar colores de filas
             dtgRoles.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
@@ -216,5 +217,64 @@ namespace NominaXpert.View.UsersControl
         {
             FiltrarUsuarios();
         }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            string searchText = txtBuscarRol.Text.Trim();
+
+            if (string.IsNullOrEmpty(searchText) || searchText == "Buscar Rol...")
+            {
+                MessageBox.Show("Por favor, ingrese un ID o Nombre del rol para buscar.");
+                return;
+            }
+
+            if (int.TryParse(searchText, out int idRol))
+            {
+                // Si se busca por ID
+                BuscarRolPorId(idRol);
+            }
+            else
+            {
+                // Si se busca por nombre
+                BuscarRolPorNombre(searchText);
+            }
+        }
+
+        private void BuscarRolPorId(int idRol)
+        {
+            RolesDataAccess rolDataAccess = new RolesDataAccess();
+            List<Rol> rol = rolDataAccess.ObtenerTodosLosRoles();
+
+            var rolesEncontrados = rol.Where(rol => rol.Id == idRol).ToList();
+
+            if (rolesEncontrados.Count == 0)
+            {
+                MessageBox.Show("No se encontró el rol con ese ID.");
+            }
+            else
+            {
+                MostrarRolesFiltrados(rolesEncontrados);
+            }
+        }
+
+        private void BuscarRolPorNombre(string nombreRol)
+        {
+            RolesDataAccess rolesDataAccess = new RolesDataAccess();
+            List<Rol> rol = rolesDataAccess.ObtenerTodosLosRoles();
+
+            var rolesEncontrados = rol
+                .Where(rol => rol.Nombre.Contains(nombreRol, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            if (rolesEncontrados.Count == 0)
+            {
+                MessageBox.Show("No se encontró el rol con ese nombre.");
+            }
+            else
+            {
+                MostrarRolesFiltrados(rolesEncontrados);
+            }
+        }
     }
 }
+

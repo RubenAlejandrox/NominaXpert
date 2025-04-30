@@ -293,10 +293,10 @@ namespace NominaXpert.View.UsersControl
                 return;
             }
 
-            if (int.TryParse(searchText, out int idEmpleado))
+            if (int.TryParse(searchText, out int idUsuario))
             {
                 // Si se busca por ID
-                BuscarUsuarioPorId(idEmpleado);
+                BuscarUsuarioPorId(idUsuario);
             }
             else
             {
@@ -328,7 +328,7 @@ namespace NominaXpert.View.UsersControl
             List<Usuario> usuario = usuarioDataAccess.ObtenerTodosLosUsuarios();
 
             var usuariosEncontrados = usuario
-                .Where(emp => emp.DatosPersonales.NombreCompleto.Contains(nombreUsuario, StringComparison.OrdinalIgnoreCase))
+                .Where(usr => usr.DatosPersonales.NombreCompleto.Contains(nombreUsuario, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
             if (usuariosEncontrados.Count == 0)

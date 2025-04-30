@@ -29,17 +29,18 @@
         private void InitializeComponent()
         {
             panelContenedor = new Panel();
+            txtSearchUsuario = new TextBox();
             cbxEstatus = new ComboBox();
             lblRegistroUsuarios = new Label();
             btnRefrescar = new FontAwesome.Sharp.IconButton();
             dgvListadoUsuario = new DataGridView();
             btn_buscar = new Button();
-            txtSearchUsuario = new TextBox();
             iconPIcture = new FontAwesome.Sharp.IconPictureBox();
             panel1 = new Panel();
             ibtnEditar = new FontAwesome.Sharp.IconButton();
             ibtnBajaUsuario = new FontAwesome.Sharp.IconButton();
             lblTituloListado = new Label();
+            label4 = new Label();
             panelContenedor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvListadoUsuario).BeginInit();
             ((System.ComponentModel.ISupportInitialize)iconPIcture).BeginInit();
@@ -48,18 +49,30 @@
             // 
             // panelContenedor
             // 
+            panelContenedor.Controls.Add(label4);
+            panelContenedor.Controls.Add(txtSearchUsuario);
             panelContenedor.Controls.Add(cbxEstatus);
             panelContenedor.Controls.Add(lblRegistroUsuarios);
             panelContenedor.Controls.Add(btnRefrescar);
             panelContenedor.Controls.Add(dgvListadoUsuario);
             panelContenedor.Controls.Add(btn_buscar);
-            panelContenedor.Controls.Add(txtSearchUsuario);
             panelContenedor.Controls.Add(iconPIcture);
             panelContenedor.Controls.Add(panel1);
             panelContenedor.Location = new Point(0, -1);
             panelContenedor.Name = "panelContenedor";
             panelContenedor.Size = new Size(1262, 705);
             panelContenedor.TabIndex = 0;
+            // 
+            // txtSearchUsuario
+            // 
+            txtSearchUsuario.BackColor = Color.FromArgb(37, 41, 47);
+            txtSearchUsuario.BorderStyle = BorderStyle.FixedSingle;
+            txtSearchUsuario.ForeColor = Color.LightGray;
+            txtSearchUsuario.Location = new Point(177, 118);
+            txtSearchUsuario.Name = "txtSearchUsuario";
+            txtSearchUsuario.Size = new Size(556, 27);
+            txtSearchUsuario.TabIndex = 98;
+            txtSearchUsuario.Text = "Buscar usuarios";
             // 
             // cbxEstatus
             // 
@@ -91,7 +104,7 @@
             btnRefrescar.IconColor = Color.FromArgb(12, 215, 253);
             btnRefrescar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             btnRefrescar.IconSize = 24;
-            btnRefrescar.Location = new Point(1024, 569);
+            btnRefrescar.Location = new Point(104, 156);
             btnRefrescar.Name = "btnRefrescar";
             btnRefrescar.Size = new Size(125, 41);
             btnRefrescar.TabIndex = 95;
@@ -104,10 +117,10 @@
             // 
             dgvListadoUsuario.BackgroundColor = Color.FromArgb(37, 41, 47);
             dgvListadoUsuario.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvListadoUsuario.Location = new Point(107, 190);
+            dgvListadoUsuario.Location = new Point(104, 203);
             dgvListadoUsuario.Name = "dgvListadoUsuario";
             dgvListadoUsuario.RowHeadersWidth = 51;
-            dgvListadoUsuario.Size = new Size(1042, 314);
+            dgvListadoUsuario.Size = new Size(1042, 400);
             dgvListadoUsuario.TabIndex = 16;
             // 
             // btn_buscar
@@ -123,17 +136,6 @@
             btn_buscar.Text = "Buscar";
             btn_buscar.UseVisualStyleBackColor = false;
             btn_buscar.Click += btn_buscar_Click;
-            // 
-            // txtSearchUsuario
-            // 
-            txtSearchUsuario.BackColor = Color.FromArgb(37, 41, 47);
-            txtSearchUsuario.BorderStyle = BorderStyle.FixedSingle;
-            txtSearchUsuario.ForeColor = Color.LightGray;
-            txtSearchUsuario.Location = new Point(150, 115);
-            txtSearchUsuario.Name = "txtSearchUsuario";
-            txtSearchUsuario.Size = new Size(585, 27);
-            txtSearchUsuario.TabIndex = 14;
-            txtSearchUsuario.Text = "Buscar usuario";
             // 
             // iconPIcture
             // 
@@ -211,6 +213,17 @@
             lblTituloListado.TabIndex = 9;
             lblTituloListado.Text = "Listado de Usuarios";
             // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label4.ForeColor = Color.FromArgb(12, 215, 253);
+            label4.Location = new Point(911, 161);
+            label4.Name = "label4";
+            label4.Size = new Size(66, 23);
+            label4.TabIndex = 100;
+            label4.Text = "Estatus";
+            // 
             // UC_UsuariosListado
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -238,10 +251,11 @@
         private FontAwesome.Sharp.IconButton ibtnEditar;
         private DataGridView dgvListadoUsuario;
         private Button btn_buscar;
-        private TextBox txtSearchUsuario;
         private FontAwesome.Sharp.IconPictureBox iconPIcture;
         private FontAwesome.Sharp.IconButton btnRefrescar;
         private Label lblRegistroUsuarios;
         private ComboBox cbxEstatus;
+        private TextBox txtSearchUsuario;
+        private Label label4;
     }
 }

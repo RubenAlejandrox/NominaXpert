@@ -30,16 +30,17 @@
         {
             panel = new Panel();
             panelContenedor = new Panel();
+            cbxEstatus = new ComboBox();
             btnRefrescar = new FontAwesome.Sharp.IconButton();
             lblRegistros = new Label();
             dtgRoles = new DataGridView();
             btnSearch = new Button();
-            txtSearchEmpleado = new TextBox();
+            txtBuscarRol = new TextBox();
             iconPIcture = new FontAwesome.Sharp.IconPictureBox();
             panel2 = new Panel();
             ibtnEditar = new FontAwesome.Sharp.IconButton();
             label1 = new Label();
-            cbxEstatus = new ComboBox();
+            label4 = new Label();
             panel.SuspendLayout();
             panelContenedor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dtgRoles).BeginInit();
@@ -58,12 +59,13 @@
             // 
             // panelContenedor
             // 
+            panelContenedor.Controls.Add(label4);
             panelContenedor.Controls.Add(cbxEstatus);
             panelContenedor.Controls.Add(btnRefrescar);
             panelContenedor.Controls.Add(lblRegistros);
             panelContenedor.Controls.Add(dtgRoles);
             panelContenedor.Controls.Add(btnSearch);
-            panelContenedor.Controls.Add(txtSearchEmpleado);
+            panelContenedor.Controls.Add(txtBuscarRol);
             panelContenedor.Controls.Add(iconPIcture);
             panelContenedor.Controls.Add(panel2);
             panelContenedor.Dock = DockStyle.Fill;
@@ -71,6 +73,15 @@
             panelContenedor.Name = "panelContenedor";
             panelContenedor.Size = new Size(1262, 705);
             panelContenedor.TabIndex = 0;
+            // 
+            // cbxEstatus
+            // 
+            cbxEstatus.FormattingEnabled = true;
+            cbxEstatus.Location = new Point(982, 192);
+            cbxEstatus.Name = "cbxEstatus";
+            cbxEstatus.Size = new Size(151, 28);
+            cbxEstatus.TabIndex = 98;
+            cbxEstatus.SelectedIndexChanged += cbxEstatus_SelectedIndexChanged;
             // 
             // btnRefrescar
             // 
@@ -82,7 +93,7 @@
             btnRefrescar.IconColor = Color.FromArgb(12, 215, 253);
             btnRefrescar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             btnRefrescar.IconSize = 24;
-            btnRefrescar.Location = new Point(994, 629);
+            btnRefrescar.Location = new Point(90, 184);
             btnRefrescar.Name = "btnRefrescar";
             btnRefrescar.Size = new Size(125, 41);
             btnRefrescar.TabIndex = 96;
@@ -94,7 +105,7 @@
             // lblRegistros
             // 
             lblRegistros.AutoSize = true;
-            lblRegistros.Location = new Point(911, 159);
+            lblRegistros.Location = new Point(945, 159);
             lblRegistros.Name = "lblRegistros";
             lblRegistros.Size = new Size(104, 20);
             lblRegistros.TabIndex = 49;
@@ -104,10 +115,10 @@
             // 
             dtgRoles.BackgroundColor = Color.FromArgb(37, 41, 47);
             dtgRoles.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dtgRoles.Location = new Point(114, 236);
+            dtgRoles.Location = new Point(90, 231);
             dtgRoles.Name = "dtgRoles";
             dtgRoles.RowHeadersWidth = 51;
-            dtgRoles.Size = new Size(1005, 341);
+            dtgRoles.Size = new Size(1043, 425);
             dtgRoles.TabIndex = 48;
             dtgRoles.CellContentClick += dtgRoles_CellContentClick;
             // 
@@ -117,23 +128,24 @@
             btnSearch.FlatStyle = FlatStyle.Popup;
             btnSearch.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnSearch.ForeColor = Color.White;
-            btnSearch.Location = new Point(724, 151);
+            btnSearch.Location = new Point(758, 151);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(94, 29);
             btnSearch.TabIndex = 47;
             btnSearch.Text = "Buscar";
             btnSearch.UseVisualStyleBackColor = false;
+            btnSearch.Click += btnSearch_Click;
             // 
-            // txtSearchEmpleado
+            // txtBuscarRol
             // 
-            txtSearchEmpleado.BackColor = Color.FromArgb(37, 41, 47);
-            txtSearchEmpleado.BorderStyle = BorderStyle.FixedSingle;
-            txtSearchEmpleado.ForeColor = Color.LightGray;
-            txtSearchEmpleado.Location = new Point(102, 151);
-            txtSearchEmpleado.Name = "txtSearchEmpleado";
-            txtSearchEmpleado.Size = new Size(585, 27);
-            txtSearchEmpleado.TabIndex = 46;
-            txtSearchEmpleado.Text = "Buscar rol";
+            txtBuscarRol.BackColor = Color.FromArgb(37, 41, 47);
+            txtBuscarRol.BorderStyle = BorderStyle.FixedSingle;
+            txtBuscarRol.ForeColor = Color.LightGray;
+            txtBuscarRol.Location = new Point(136, 151);
+            txtBuscarRol.Name = "txtBuscarRol";
+            txtBuscarRol.Size = new Size(585, 27);
+            txtBuscarRol.TabIndex = 46;
+            txtBuscarRol.Text = "Buscar rol";
             // 
             // iconPIcture
             // 
@@ -143,7 +155,7 @@
             iconPIcture.IconColor = Color.FromArgb(12, 215, 253);
             iconPIcture.IconFont = FontAwesome.Sharp.IconFont.Auto;
             iconPIcture.IconSize = 36;
-            iconPIcture.Location = new Point(56, 142);
+            iconPIcture.Location = new Point(90, 142);
             iconPIcture.Name = "iconPIcture";
             iconPIcture.Size = new Size(40, 36);
             iconPIcture.TabIndex = 45;
@@ -190,14 +202,16 @@
             label1.TabIndex = 0;
             label1.Text = "Roles";
             // 
-            // cbxEstatus
+            // label4
             // 
-            cbxEstatus.FormattingEnabled = true;
-            cbxEstatus.Location = new Point(948, 192);
-            cbxEstatus.Name = "cbxEstatus";
-            cbxEstatus.Size = new Size(151, 28);
-            cbxEstatus.TabIndex = 98;
-            cbxEstatus.SelectedIndexChanged += cbxEstatus_SelectedIndexChanged;
+            label4.AutoSize = true;
+            label4.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label4.ForeColor = Color.FromArgb(12, 215, 253);
+            label4.Location = new Point(885, 193);
+            label4.Name = "label4";
+            label4.Size = new Size(66, 23);
+            label4.TabIndex = 99;
+            label4.Text = "Estatus";
             // 
             // UC_UsuariosRolPermiso
             // 
@@ -224,7 +238,7 @@
         private Panel panelContenedor;
         private DataGridView dtgRoles;
         private Button btnSearch;
-        private TextBox txtSearchEmpleado;
+        private TextBox txtBuscarRol;
         private FontAwesome.Sharp.IconPictureBox iconPIcture;
         private Panel panel2;
         private FontAwesome.Sharp.IconButton ibtnEditar;
@@ -232,5 +246,6 @@
         private Label lblRegistros;
         private FontAwesome.Sharp.IconButton btnRefrescar;
         private ComboBox cbxEstatus;
+        private Label label4;
     }
 }

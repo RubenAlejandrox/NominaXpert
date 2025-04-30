@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using NominaXpert.Controller;
+using NominaXpert.Data;
+using NominaXpert.Model;
 
 namespace NominaXpert.View.UsersControl
 {
@@ -35,7 +37,7 @@ namespace NominaXpert.View.UsersControl
                 cbxRoles.SelectedIndex = -1;
             }
         }
-        
+
         private void PoblaComboMotivo()
         {
             Dictionary<int, string> list_estatus = new Dictionary<int, string>
@@ -121,5 +123,7 @@ namespace NominaXpert.View.UsersControl
             }
         }
 
-    }
+       
+
+}
 }
