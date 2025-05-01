@@ -328,6 +328,7 @@ namespace NominaXpert.Data
 
                 int filasAfectadas = _dbAccess.ExecuteNonQuery(query,
                     paramId, paramNombreUsuario, paramContrasena, paramEstatus, paramIdRol);
+                //si las filas afectadas son mayor de 0 entonces si se pudo actualizar
                 bool exito = filasAfectadas > 0;
                 if (!exito)
                 {
@@ -374,7 +375,7 @@ namespace NominaXpert.Data
                     _logger.Warn($"No se encontró ningún usuario con ID {id}");
                     return null;
                 }
-
+                //toma la primer fila devuelta pues solo debería haber un usuario con ese id
                 DataRow row = resultado.Rows[0];
 
                 Persona persona = new Persona(

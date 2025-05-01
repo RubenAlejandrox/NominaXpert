@@ -213,7 +213,6 @@ namespace NominaXpert.View
             var controller = new UsuariosController();
             btnEmpleado.Enabled = controller.TienePermiso("EMP_VIEW");
             btnCalculo.Enabled = controller.TienePermiso("NOM_EDIT");
-
             btnReporte.Enabled = controller.TienePermiso("NOM_HIST");
             btnSeguridad.Enabled = controller.TienePermiso("USR_VIEW");
             btnConfig.Enabled = controller.TienePermiso("CNF_SIST");

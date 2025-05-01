@@ -44,7 +44,7 @@ namespace NominaXpert.Controller
                 }
 
                 // Verificar si el RFC ya existe
-                if (_personasData.ExisteCurp(usuario.DatosPersonales.Curp))
+                if (_personasData.ExisteRFC(usuario.DatosPersonales.Rfc))
                 {
                     _logger.Warn($"Intento de registrar usuario con RFC duplicado: {usuario.DatosPersonales.Rfc}");
                     return (-2, $"RFC {usuario.DatosPersonales.Rfc} ya está registrado en el sistema");
@@ -52,6 +52,7 @@ namespace NominaXpert.Controller
 
                 // Registrar el usuario
                 _logger.Info($"Registrando nuevo usuario: {usuario.DatosPersonales.NombreCompleto}, Nombre_Usuario: {usuario.Nombre_Usuario}");
+                //id generado
                 int idUsuario = _usuariosData.InsertarUsuario(usuario);
 
                 if (idUsuario <= 0)
@@ -84,8 +85,8 @@ namespace NominaXpert.Controller
         }
 
 
-
-        public Usuario? ObtenerDetalleUsuario(int idUsuario)
+       
+        public Usuario? ObtenerDetalleUsuario(int idUsuario) //Devuelve un objeto usuario o null
         {
             try
             {
@@ -110,7 +111,7 @@ namespace NominaXpert.Controller
                 if (usuario.DatosPersonales == null)
                     return (false, "No se proporcionaron los datos personales del usuario");
 
-
+                //primero buscamos que el usuario que se va a actualizar exista
                 Usuario? usuarioExistente = _usuariosData.ObtenerUsuarioPorId(usuario.Id);
                 if (usuarioExistente == null)
                     return (false, $"No se encontró el usuario con ID {usuario.Id}");
@@ -139,7 +140,7 @@ namespace NominaXpert.Controller
                     }
                 }
                 _logger.Info($"Actualizando usuario con ID: {usuario.Id}, Nombre: {usuario.DatosPersonales.NombreCompleto}, Persona ID: {usuario.DatosPersonales.Id}");
-
+                //Actualizamos 
                 bool actualizado = _usuariosData.ActualizarUsuario(usuario);
                 return actualizado
                     ? (true, "Usuario actualizado correctamente.")

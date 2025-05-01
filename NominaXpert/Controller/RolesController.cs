@@ -36,6 +36,7 @@ namespace NominaXpert.Controller
 
         public List<Rol> ObtenerTodosLosRoles()
         {
+            
             return _rolesRepo.ObtenerTodosLosRoles();
         }
         public Dictionary<int, string> ObtenerRolesParaCombo()
