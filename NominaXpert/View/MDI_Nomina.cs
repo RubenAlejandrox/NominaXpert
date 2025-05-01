@@ -36,7 +36,7 @@ namespace NominaXpert.View
             this.ControlBox = false;
             this.DoubleBuffered = true;
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
-         //   ConfigurarPermisos();
+            ConfigurarPermisos();
         }
 
         //Structs
@@ -203,11 +203,24 @@ namespace NominaXpert.View
             lblfecha.Text = DateTime.Now.ToLongDateString();
         }
 
+        private void btnAuditoria_Click(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void ConfigurarPermisos()
+        {
+            var controller = new UsuariosController();
+            btnEmpleado.Enabled = controller.TienePermiso("EMP_VIEW");
+            btnCalculo.Enabled = controller.TienePermiso("NOM_VIEW");
+            btnReporte.Enabled = controller.TienePermiso("NOM_HIST");
+            btnSeguridad.Enabled = controller.TienePermiso("USR_VIEW");
+        }
+
         private void btnLogout_Click(object sender, EventArgs e)
         {
-            // Confirmar si el usuario quiere cerrar sesión
             DialogResult resultado = MessageBox.Show("¿Estás seguro de que deseas cerrar sesión?", "Cerrar sesión",
-                                             MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                                            MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (resultado == DialogResult.Yes)
             {
@@ -224,8 +237,9 @@ namespace NominaXpert.View
                 View.Forms.Login loginForm = new View.Forms.Login();
                 if (loginForm.ShowDialog() == DialogResult.OK)
                 {
-                    // Si el login es exitoso, mostrar nuevamente el MDI
                     this.Show();
+                    ConfigurarPermisos();
+                    Reset();
                 }
                 else
                 {
@@ -233,15 +247,6 @@ namespace NominaXpert.View
                     Application.Exit();
                 }
             }
-        }
-
-        private void ConfigurarPermisos()
-        {
-            var controller = new UsuariosController();
-            btnEmpleado.Enabled = controller.TienePermiso("EMP_VIEW");
-            btnCalculo.Enabled = controller.TienePermiso("NOM_VIEW");
-            btnReporte.Enabled = controller.TienePermiso("NOM_HIST");
-            btnSeguridad.Enabled = controller.TienePermiso("USR_VIEW");
         }
     }
 }

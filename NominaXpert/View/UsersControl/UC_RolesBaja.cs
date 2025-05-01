@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using NominaXpert.Controller;
+using NominaXpert.Data;
+using NominaXpert.Model;
 
 namespace NominaXpert.View.UsersControl
 {
@@ -35,7 +37,7 @@ namespace NominaXpert.View.UsersControl
                 cbxRoles.SelectedIndex = -1;
             }
         }
-        
+
         private void PoblaComboMotivo()
         {
             Dictionary<int, string> list_estatus = new Dictionary<int, string>
@@ -50,36 +52,44 @@ namespace NominaXpert.View.UsersControl
             cbxMotivoBaja.ValueMember = "Key"; //lo que se guarda como seleccion
             cbxMotivoBaja.SelectedValue = 1;
         }
-        private RolesController _rolesController = new RolesController();
 
         private void ibtnGuardar_Click(object sender, EventArgs e)
         {
+            RolesController _rolesController = new RolesController();
+
             DialogResult resultado = MessageBox.Show(
-                "¿¿Estás seguro de que deseas dar de baja??",
-                "Confirmar cambios",
-                MessageBoxButtons.YesNo,
+                "¿Deseas dar de baja (baja lógica) o eliminar definitivamente el rol?\n\nSí = Baja lógica\nNo = Eliminación definitiva",
+                "Confirmar acción",
+                MessageBoxButtons.YesNoCancel,
                 MessageBoxIcon.Question
             );
 
-            if (resultado == DialogResult.Yes)
+            // Cancelar
+            if (resultado == DialogResult.Cancel)
+                return;
+
+            // Baja lógica si presiona "Sí", eliminación si presiona "No"
+            bool esBajaLogica = resultado == DialogResult.Yes;
+
+            if (cbxRoles.SelectedItem == null)
             {
-                if (cbxRoles.SelectedItem == null)
-                {
-                    MessageBox.Show("Por favor selecciona un rol antes de dar de baja.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                var seleccion = (KeyValuePair<int, string>)cbxRoles.SelectedItem;
-                int idSeleccionado = seleccion.Key;
-
-                var (exito, mensaje) = _rolesController.DarDeBajaRol(idSeleccionado);
-
-                MessageBox.Show(mensaje, exito ? "Éxito" : "Error",
-                    MessageBoxButtons.OK,
-                    exito ? MessageBoxIcon.Information : MessageBoxIcon.Error);
+                MessageBox.Show("Por favor selecciona un rol antes de continuar.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
-        }
 
+            var seleccion = (KeyValuePair<int, string>)cbxRoles.SelectedItem;
+            int idSeleccionado = seleccion.Key;
+
+            var (exito, mensaje) = _rolesController.DarDeBajaRol(idSeleccionado, esBajaLogica);
+            if (!exito)
+            {
+                MessageBox.Show("No se puede eliminar este rol porque aún está asignado a usuarios.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+            MessageBox.Show(mensaje, exito ? "Éxito" : "Error",
+                MessageBoxButtons.OK,
+                exito ? MessageBoxIcon.Information : MessageBoxIcon.Error);
+        }
 
         private void PoblaComboRol()
         {
@@ -121,5 +131,7 @@ namespace NominaXpert.View.UsersControl
             }
         }
 
-    }
+       
+
+}
 }

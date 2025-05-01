@@ -291,6 +291,7 @@
             btnEliminar.TextAlign = ContentAlignment.MiddleRight;
             btnEliminar.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnEliminar.UseVisualStyleBackColor = false;
+            btnEliminar.Click += btnEliminar_Click;
             // 
             // panel2
             // 
@@ -316,6 +317,7 @@
             btnSearch.TabIndex = 6;
             btnSearch.Text = "Buscar";
             btnSearch.UseVisualStyleBackColor = false;
+            btnSearch.Click += btnSearch_Click;
             // 
             // txtSearchEmpleado
             // 

@@ -465,6 +465,57 @@ namespace NominaXpert.Data
                 _dbAccess.Disconnect();
             }
         }
+        public bool EliminarUsuarioDefinitivo(int idUsuario)
+        {
+            try
+            {
+                _dbAccess.Connect();
+
+                // 1. Obtener ID de persona desde usuarios
+                string queryObtenerIdPersona = "SELECT id_persona FROM seguridad.usuarios WHERE id = @IdUsuario";
+                var paramIdUsuario = _dbAccess.CreateParameter("@IdUsuario", idUsuario);
+
+                object result = _dbAccess.ExecuteScalar(queryObtenerIdPersona, paramIdUsuario);
+
+                if (result == null || result == DBNull.Value)
+                {
+                    _logger.Warn($"Usuario con ID {idUsuario} no encontrado al intentar eliminar.");
+                    return false;
+                }
+
+                int idPersona = Convert.ToInt32(result);
+
+                // 2. Eliminar usuario (borrado físico)
+                string queryEliminarUsuario = "DELETE FROM seguridad.usuarios WHERE id = @IdUsuarioDelete";
+                var paramUsuarioDelete = _dbAccess.CreateParameter("@IdUsuarioDelete", idUsuario);
+                int filasUsuario = _dbAccess.ExecuteNonQuery(queryEliminarUsuario, paramUsuarioDelete);
+
+                // 3. Eliminar persona (borrado físico)
+                string queryEliminarPersona = "DELETE FROM seguridad.personas WHERE id = @IdPersonaDelete";
+                var paramPersonaDelete = _dbAccess.CreateParameter("@IdPersonaDelete", idPersona);
+                int filasPersona = _dbAccess.ExecuteNonQuery(queryEliminarPersona, paramPersonaDelete);
+
+                if (filasUsuario > 0 && filasPersona > 0)
+                {
+                    _logger.Info($"Usuario ID {idUsuario} y persona ID {idPersona} eliminados definitivamente.");
+                    return true;
+                }
+                else
+                {
+                    _logger.Warn($"No se pudo eliminar correctamente Usuario ID {idUsuario} o Persona ID {idPersona}.");
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Error al eliminar usuario ID {idUsuario}");
+                return false;
+            }
+            finally
+            {
+                _dbAccess.Disconnect();
+            }
+        }
         public List<Usuario> ObtenerUsuariosFiltrados(bool estatus)
         {
             List<Usuario> usuarios = new List<Usuario>();

@@ -173,33 +173,47 @@ namespace NominaXpert.Controller
             return UsuarioSesion.Permisos?.Any(p => p.Codigo == codigoPermiso && p.Estatus) ?? false;
         }
 
-        public (bool exito, string mensaje) DarDeBajaUsuario(int idUsuario, string motivo)
+        public (bool exito, string mensaje) DarDeBajaUsuario(int idUsuario, string motivo, bool esBajaLogica)
         {
             if (idUsuario <= 0)
                 return (false, "ID de usuario inválido.");
 
             try
             {
-                bool exito = _usuariosData.DarDeBajaUsuario(idUsuario, motivo);
+                bool exito;
+
+                if (esBajaLogica)
+                {
+                    // Baja lógica (estatus = false)
+                    exito = _usuariosData.DarDeBajaUsuario(idUsuario, motivo);
+                }
+                else
+                {
+                    // Baja definitiva (eliminar registros)
+                    exito = _usuariosData.EliminarUsuarioDefinitivo(idUsuario);
+                }
 
                 if (exito)
                 {
-                    // Verificar si realmente se dio de baja o ya estaba inactivo
+                    // Verificar si realmente se dio de baja o eliminó
                     var usuario = _usuariosData.ObtenerUsuarioPorId(idUsuario);
-                    if (usuario != null && !usuario.Estatus)
+                    if (usuario == null || !usuario.Estatus)
                     {
-                        _logger.Info($"Dando de baja al usuario con ID: {usuario.Id}, Persona ID: {usuario.DatosPersonales.Id}, Nombre: {usuario.DatosPersonales.NombreCompleto}");
+                        string tipo = esBajaLogica ? "baja lógica" : "eliminado definitivamente";
+                        _logger.Info($"Usuario ID {idUsuario} ha sido {tipo}.");
                     }
+
                     return (true, "Operación completada correctamente");
                 }
-                return (false, "No se pudo completar la baja. Verifique los datos.");
+                return (false, "No se pudo completar la operación. Verifique los datos.");
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Error en DarDeBajaUsuario");
-                return (false, "Error al procesar la solicitud de baja: " + ex.Message);
+                return (false, "Error al procesar la solicitud: " + ex.Message);
             }
         }
+
         public List<string> ObtenerNombresUsuarios(bool soloActivos = true)
         {
             try
