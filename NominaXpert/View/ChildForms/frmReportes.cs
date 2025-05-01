@@ -153,8 +153,9 @@ namespace NominaXpert.View.Forms
             var controller = new UsuariosController();
             btnCancelarNomina.Enabled = controller.TienePermiso("NOM_EDIT");
             btnDatalleNomina.Enabled = controller.TienePermiso("NOM_VIEW");
-            btnExportarPDF.Enabled = controller.TienePermiso("NOM_HIST");
-            iconVerNomina.Enabled = controller.TienePermiso("NOM_HIST");
+            btnExportarPDF.Enabled = controller.TienePermiso("EXP_DATS");
+            btnEsportarExcel.Enabled = controller.TienePermiso("EXP_DATS");
+
         }
         private void btnDatalleNomina_Click(object sender, EventArgs e)
         {

@@ -62,7 +62,7 @@ namespace NominaXpert.View.Forms
         {
             var controller = new UsuariosController();
             btnListadoBar.Enabled = controller.TienePermiso("EMP_VIEW");
-            btnCargaBar.Enabled = controller.TienePermiso("EMP_VIEW");
+            btnCargaBar.Enabled = controller.TienePermiso("CRG_MASV");
         }
     }
 }

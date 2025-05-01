@@ -28,7 +28,7 @@ namespace NominaXpert.View.UsersControl
 
         public void InicializaVentanaCalculoRecibos()
         {
-           
+            ConfigurarPermisos();
         }
       
 
@@ -137,5 +137,11 @@ namespace NominaXpert.View.UsersControl
         //    Utilities.Formas.ActivateButton(sender, Formas.RGBColors.ChangeColor);
         //    ucr.Show();
         //}
+
+        private void ConfigurarPermisos()
+        {
+            var controller = new UsuariosController();
+            btnCalculoNomina1.Enabled = controller.TienePermiso("NOM_ADD");
+        }
     }
 }

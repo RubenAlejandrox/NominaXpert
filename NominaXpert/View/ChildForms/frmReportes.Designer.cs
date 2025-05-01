@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             panel1 = new Panel();
             label2 = new Label();
             label1 = new Label();
@@ -44,7 +44,7 @@
             btnExportarPDF = new FontAwesome.Sharp.IconButton();
             label4 = new Label();
             panel6 = new Panel();
-            iconVerNomina = new FontAwesome.Sharp.IconButton();
+            btnEsportarExcel = new FontAwesome.Sharp.IconButton();
             label7 = new Label();
             panel3 = new Panel();
             CBoxEstatusNomina = new ComboBox();
@@ -232,36 +232,36 @@
             // 
             // panel6
             // 
-            panel6.Controls.Add(iconVerNomina);
+            panel6.Controls.Add(btnEsportarExcel);
             panel6.Controls.Add(label7);
             panel6.Location = new Point(752, 3);
             panel6.Name = "panel6";
             panel6.Size = new Size(293, 79);
             panel6.TabIndex = 2;
             // 
-            // iconVerNomina
+            // btnEsportarExcel
             // 
-            iconVerNomina.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            iconVerNomina.BackColor = Color.Black;
-            iconVerNomina.Cursor = Cursors.Hand;
-            iconVerNomina.FlatAppearance.BorderColor = Color.Lime;
-            iconVerNomina.FlatAppearance.BorderSize = 2;
-            iconVerNomina.FlatStyle = FlatStyle.Flat;
-            iconVerNomina.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            iconVerNomina.ForeColor = Color.Azure;
-            iconVerNomina.IconChar = FontAwesome.Sharp.IconChar.SheetPlastic;
-            iconVerNomina.IconColor = Color.Lime;
-            iconVerNomina.IconFont = FontAwesome.Sharp.IconFont.Solid;
-            iconVerNomina.IconSize = 32;
-            iconVerNomina.Location = new Point(0, 32);
-            iconVerNomina.Name = "iconVerNomina";
-            iconVerNomina.Size = new Size(290, 40);
-            iconVerNomina.TabIndex = 11;
-            iconVerNomina.Text = "Descargar Excel de búsquedad";
-            iconVerNomina.TextAlign = ContentAlignment.MiddleRight;
-            iconVerNomina.TextImageRelation = TextImageRelation.ImageBeforeText;
-            iconVerNomina.UseVisualStyleBackColor = false;
-            iconVerNomina.Click += iconVerNomina_Click;
+            btnEsportarExcel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnEsportarExcel.BackColor = Color.Black;
+            btnEsportarExcel.Cursor = Cursors.Hand;
+            btnEsportarExcel.FlatAppearance.BorderColor = Color.Lime;
+            btnEsportarExcel.FlatAppearance.BorderSize = 2;
+            btnEsportarExcel.FlatStyle = FlatStyle.Flat;
+            btnEsportarExcel.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnEsportarExcel.ForeColor = Color.Azure;
+            btnEsportarExcel.IconChar = FontAwesome.Sharp.IconChar.SheetPlastic;
+            btnEsportarExcel.IconColor = Color.Lime;
+            btnEsportarExcel.IconFont = FontAwesome.Sharp.IconFont.Solid;
+            btnEsportarExcel.IconSize = 32;
+            btnEsportarExcel.Location = new Point(0, 32);
+            btnEsportarExcel.Name = "btnEsportarExcel";
+            btnEsportarExcel.Size = new Size(290, 40);
+            btnEsportarExcel.TabIndex = 11;
+            btnEsportarExcel.Text = "Descargar Excel de búsquedad";
+            btnEsportarExcel.TextAlign = ContentAlignment.MiddleRight;
+            btnEsportarExcel.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnEsportarExcel.UseVisualStyleBackColor = false;
+            btnEsportarExcel.Click += iconVerNomina_Click;
             // 
             // label7
             // 
@@ -434,24 +434,24 @@
             dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.BorderStyle = BorderStyle.None;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = Color.FromArgb(30, 30, 30);
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = Color.Cyan;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = Color.FromArgb(30, 30, 30);
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle3.ForeColor = Color.Cyan;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { chkSeleccion, Id_Nomina, Id_empleado, Empleado, Id_auditoria, FechaInicio, FechaFin, Estado_Pago });
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = Color.FromArgb(45, 45, 48);
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            dataGridViewCellStyle2.ForeColor = Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = Color.Teal;
-            dataGridViewCellStyle2.SelectionForeColor = Color.White;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
+            dataGridViewCellStyle4.ForeColor = SystemColors.ButtonHighlight;
+            dataGridViewCellStyle4.SelectionBackColor = Color.Teal;
+            dataGridViewCellStyle4.SelectionForeColor = Color.White;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
+            dataGridView1.DefaultCellStyle = dataGridViewCellStyle4;
             dataGridView1.EnableHeadersVisualStyles = false;
             dataGridView1.GridColor = Color.DarkCyan;
             dataGridView1.Location = new Point(6, 26);
@@ -576,7 +576,7 @@
         private Utilities.NominaDatePicker DTPFechaInicioNomina;
         private FontAwesome.Sharp.IconButton btnBuscar;
         private Panel panel6;
-        private FontAwesome.Sharp.IconButton iconVerNomina;
+        private FontAwesome.Sharp.IconButton btnEsportarExcel;
         private Label label7;
         private GroupBox gBoxHistorial;
         private DataGridView dataGridView1;
