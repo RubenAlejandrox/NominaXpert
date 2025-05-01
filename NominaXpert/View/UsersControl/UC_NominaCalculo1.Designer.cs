@@ -35,12 +35,13 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             flowLayoutPanel1 = new FlowLayoutPanel();
             gBoxDatosEmpleado = new GroupBox();
+            panel2 = new Panel();
+            txtIdEmpleado = new TextBox();
+            lblIDEmpleado = new Label();
             panel10 = new Panel();
             ipbMatricula = new FontAwesome.Sharp.IconPictureBox();
             txtMatricula = new TextBox();
             lblMatricula = new Label();
-            panel3 = new Panel();
-            btnBuscar = new FontAwesome.Sharp.IconButton();
             panel4 = new Panel();
             txtNombreEmpleado = new TextBox();
             lblNombreCompleto = new Label();
@@ -49,9 +50,11 @@
             lblSueldoBase = new Label();
             gBoxPrestacionesLey = new GroupBox();
             label1 = new Label();
+            panel3 = new Panel();
+            btnBuscar = new FontAwesome.Sharp.IconButton();
             label6 = new Label();
-            DTPFechaFinNomina = new Utilities.NominaDatePicker();
-            DTPFechaInicioNomina = new Utilities.NominaDatePicker();
+            dtpFechaFinNomina = new NominaXpert.Utilities.NominaDatePicker();
+            dtpFechaInicioNomina = new NominaXpert.Utilities.NominaDatePicker();
             btnCalculoNomina1 = new FontAwesome.Sharp.IconButton();
             lblDatosObligatorios = new Label();
             panel7 = new Panel();
@@ -62,12 +65,13 @@
             tableLayoutPanel1.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             gBoxDatosEmpleado.SuspendLayout();
+            panel2.SuspendLayout();
             panel10.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)ipbMatricula).BeginInit();
-            panel3.SuspendLayout();
             panel4.SuspendLayout();
             panel6.SuspendLayout();
             gBoxPrestacionesLey.SuspendLayout();
+            panel3.SuspendLayout();
             panel7.SuspendLayout();
             SuspendLayout();
             // 
@@ -130,8 +134,8 @@
             // 
             // gBoxDatosEmpleado
             // 
+            gBoxDatosEmpleado.Controls.Add(panel2);
             gBoxDatosEmpleado.Controls.Add(panel10);
-            gBoxDatosEmpleado.Controls.Add(panel3);
             gBoxDatosEmpleado.Controls.Add(panel4);
             gBoxDatosEmpleado.Controls.Add(panel6);
             gBoxDatosEmpleado.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
@@ -142,6 +146,36 @@
             gBoxDatosEmpleado.TabIndex = 10;
             gBoxDatosEmpleado.TabStop = false;
             gBoxDatosEmpleado.Text = "Datos de empleado";
+            // 
+            // panel2
+            // 
+            panel2.BackColor = Color.FromArgb(37, 41, 47);
+            panel2.Controls.Add(txtIdEmpleado);
+            panel2.Controls.Add(lblIDEmpleado);
+            panel2.Location = new Point(453, 51);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(371, 43);
+            panel2.TabIndex = 15;
+            // 
+            // txtIdEmpleado
+            // 
+            txtIdEmpleado.Location = new Point(126, 3);
+            txtIdEmpleado.MaxLength = 20;
+            txtIdEmpleado.Name = "txtIdEmpleado";
+            txtIdEmpleado.ReadOnly = true;
+            txtIdEmpleado.Size = new Size(178, 30);
+            txtIdEmpleado.TabIndex = 5;
+            // 
+            // lblIDEmpleado
+            // 
+            lblIDEmpleado.Dock = DockStyle.Top;
+            lblIDEmpleado.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblIDEmpleado.ForeColor = Color.White;
+            lblIDEmpleado.Location = new Point(0, 0);
+            lblIDEmpleado.Name = "lblIDEmpleado";
+            lblIDEmpleado.Size = new Size(371, 29);
+            lblIDEmpleado.TabIndex = 4;
+            lblIDEmpleado.Text = "ID empleado*";
             // 
             // panel10
             // 
@@ -186,33 +220,7 @@
             lblMatricula.Name = "lblMatricula";
             lblMatricula.Size = new Size(371, 29);
             lblMatricula.TabIndex = 4;
-            lblMatricula.Text = "ID empleado*";
-            // 
-            // panel3
-            // 
-            panel3.BackColor = Color.FromArgb(37, 41, 47);
-            panel3.Controls.Add(btnBuscar);
-            panel3.Location = new Point(392, 48);
-            panel3.Name = "panel3";
-            panel3.Size = new Size(145, 43);
-            panel3.TabIndex = 9;
-            // 
-            // btnBuscar
-            // 
-            btnBuscar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnBuscar.ForeColor = SystemColors.ActiveCaptionText;
-            btnBuscar.IconChar = FontAwesome.Sharp.IconChar.Search;
-            btnBuscar.IconColor = Color.DeepSkyBlue;
-            btnBuscar.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            btnBuscar.IconSize = 32;
-            btnBuscar.Location = new Point(8, 3);
-            btnBuscar.Name = "btnBuscar";
-            btnBuscar.Size = new Size(129, 36);
-            btnBuscar.TabIndex = 23;
-            btnBuscar.Text = "Buscar";
-            btnBuscar.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnBuscar.UseVisualStyleBackColor = true;
-            btnBuscar.Click += btnBuscar_Click;
+            lblMatricula.Text = "Matrícula *";
             // 
             // panel4
             // 
@@ -276,9 +284,10 @@
             // gBoxPrestacionesLey
             // 
             gBoxPrestacionesLey.Controls.Add(label1);
+            gBoxPrestacionesLey.Controls.Add(panel3);
             gBoxPrestacionesLey.Controls.Add(label6);
-            gBoxPrestacionesLey.Controls.Add(DTPFechaFinNomina);
-            gBoxPrestacionesLey.Controls.Add(DTPFechaInicioNomina);
+            gBoxPrestacionesLey.Controls.Add(dtpFechaFinNomina);
+            gBoxPrestacionesLey.Controls.Add(dtpFechaInicioNomina);
             gBoxPrestacionesLey.Controls.Add(btnCalculoNomina1);
             gBoxPrestacionesLey.Controls.Add(lblDatosObligatorios);
             gBoxPrestacionesLey.Controls.Add(panel7);
@@ -301,6 +310,32 @@
             label1.TabIndex = 17;
             label1.Text = "Fecha de inicio:";
             // 
+            // panel3
+            // 
+            panel3.BackColor = Color.FromArgb(37, 41, 47);
+            panel3.Controls.Add(btnBuscar);
+            panel3.Location = new Point(733, 259);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(145, 43);
+            panel3.TabIndex = 9;
+            // 
+            // btnBuscar
+            // 
+            btnBuscar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnBuscar.ForeColor = SystemColors.ActiveCaptionText;
+            btnBuscar.IconChar = FontAwesome.Sharp.IconChar.Search;
+            btnBuscar.IconColor = Color.DeepSkyBlue;
+            btnBuscar.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            btnBuscar.IconSize = 32;
+            btnBuscar.Location = new Point(8, 3);
+            btnBuscar.Name = "btnBuscar";
+            btnBuscar.Size = new Size(129, 36);
+            btnBuscar.TabIndex = 23;
+            btnBuscar.Text = "Buscar";
+            btnBuscar.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnBuscar.UseVisualStyleBackColor = true;
+            btnBuscar.Click += btnBuscar_Click;
+            // 
             // label6
             // 
             label6.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -311,33 +346,33 @@
             label6.TabIndex = 16;
             label6.Text = "Fecha de fin:";
             // 
-            // DTPFechaFinNomina
+            // dtpFechaFinNomina
             // 
-            DTPFechaFinNomina.BorderColor = Color.FromArgb(12, 215, 253);
-            DTPFechaFinNomina.BorderSize = 2;
-            DTPFechaFinNomina.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            DTPFechaFinNomina.Format = DateTimePickerFormat.Short;
-            DTPFechaFinNomina.Location = new Point(512, 142);
-            DTPFechaFinNomina.MinimumSize = new Size(0, 35);
-            DTPFechaFinNomina.Name = "DTPFechaFinNomina";
-            DTPFechaFinNomina.Size = new Size(419, 35);
-            DTPFechaFinNomina.SkinColor = Color.FromArgb(48, 51, 59);
-            DTPFechaFinNomina.TabIndex = 15;
-            DTPFechaFinNomina.TextColor = Color.FromArgb(12, 215, 253);
+            dtpFechaFinNomina.BorderColor = Color.FromArgb(12, 215, 253);
+            dtpFechaFinNomina.BorderSize = 2;
+            dtpFechaFinNomina.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            dtpFechaFinNomina.Format = DateTimePickerFormat.Short;
+            dtpFechaFinNomina.Location = new Point(512, 142);
+            dtpFechaFinNomina.MinimumSize = new Size(0, 35);
+            dtpFechaFinNomina.Name = "dtpFechaFinNomina";
+            dtpFechaFinNomina.Size = new Size(419, 35);
+            dtpFechaFinNomina.SkinColor = Color.FromArgb(48, 51, 59);
+            dtpFechaFinNomina.TabIndex = 15;
+            dtpFechaFinNomina.TextColor = Color.FromArgb(12, 215, 253);
             // 
-            // DTPFechaInicioNomina
+            // dtpFechaInicioNomina
             // 
-            DTPFechaInicioNomina.BorderColor = Color.FromArgb(12, 215, 253);
-            DTPFechaInicioNomina.BorderSize = 2;
-            DTPFechaInicioNomina.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            DTPFechaInicioNomina.Format = DateTimePickerFormat.Short;
-            DTPFechaInicioNomina.Location = new Point(27, 142);
-            DTPFechaInicioNomina.MinimumSize = new Size(0, 35);
-            DTPFechaInicioNomina.Name = "DTPFechaInicioNomina";
-            DTPFechaInicioNomina.Size = new Size(419, 35);
-            DTPFechaInicioNomina.SkinColor = Color.FromArgb(48, 51, 59);
-            DTPFechaInicioNomina.TabIndex = 14;
-            DTPFechaInicioNomina.TextColor = Color.FromArgb(12, 215, 253);
+            dtpFechaInicioNomina.BorderColor = Color.FromArgb(12, 215, 253);
+            dtpFechaInicioNomina.BorderSize = 2;
+            dtpFechaInicioNomina.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            dtpFechaInicioNomina.Format = DateTimePickerFormat.Short;
+            dtpFechaInicioNomina.Location = new Point(27, 142);
+            dtpFechaInicioNomina.MinimumSize = new Size(0, 35);
+            dtpFechaInicioNomina.Name = "dtpFechaInicioNomina";
+            dtpFechaInicioNomina.Size = new Size(419, 35);
+            dtpFechaInicioNomina.SkinColor = Color.FromArgb(48, 51, 59);
+            dtpFechaInicioNomina.TabIndex = 14;
+            dtpFechaInicioNomina.TextColor = Color.FromArgb(12, 215, 253);
             // 
             // btnCalculoNomina1
             // 
@@ -417,16 +452,18 @@
             tableLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.ResumeLayout(false);
             gBoxDatosEmpleado.ResumeLayout(false);
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
             panel10.ResumeLayout(false);
             panel10.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)ipbMatricula).EndInit();
-            panel3.ResumeLayout(false);
             panel4.ResumeLayout(false);
             panel4.PerformLayout();
             panel6.ResumeLayout(false);
             panel6.PerformLayout();
             gBoxPrestacionesLey.ResumeLayout(false);
             gBoxPrestacionesLey.PerformLayout();
+            panel3.ResumeLayout(false);
             panel7.ResumeLayout(false);
             panel7.PerformLayout();
             ResumeLayout(false);
@@ -460,9 +497,12 @@
         private ToolTip toolTip1;
         private Panel panel3;
         private FontAwesome.Sharp.IconButton btnBuscar;
-        private Utilities.NominaDatePicker DTPFechaFinNomina;
-        private Utilities.NominaDatePicker DTPFechaInicioNomina;
+        private Utilities.NominaDatePicker dtpFechaFinNomina;
+        private Utilities.NominaDatePicker dtpFechaInicioNomina;
         private Label label1;
         private Label label6;
+        private Panel panel2;
+        private TextBox txtIdEmpleado;
+        private Label lblIDEmpleado;
     }
 }
