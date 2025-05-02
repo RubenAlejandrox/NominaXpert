@@ -64,8 +64,10 @@
             lblTotalNetoletra = new Label();
             lblTotalDeduccionletra = new Label();
             lblTotalPercepcionletra = new Label();
-            toolTip1 = new ToolTip(components);
             btnRegresar = new FontAwesome.Sharp.IconButton();
+            toolTip1 = new ToolTip(components);
+            label10 = new Label();
+            cboMetodoPago = new ComboBox();
             panel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
@@ -118,7 +120,7 @@
             btnPDFReciboNomina.IconColor = Color.Red;
             btnPDFReciboNomina.IconFont = FontAwesome.Sharp.IconFont.Auto;
             btnPDFReciboNomina.IconSize = 32;
-            btnPDFReciboNomina.Location = new Point(663, 167);
+            btnPDFReciboNomina.Location = new Point(689, 187);
             btnPDFReciboNomina.Name = "btnPDFReciboNomina";
             btnPDFReciboNomina.Size = new Size(176, 40);
             btnPDFReciboNomina.TabIndex = 11;
@@ -344,6 +346,8 @@
             // 
             // gBoxVPCalculoNom
             // 
+            gBoxVPCalculoNom.Controls.Add(cboMetodoPago);
+            gBoxVPCalculoNom.Controls.Add(label10);
             gBoxVPCalculoNom.Controls.Add(btnGenerarNómina);
             gBoxVPCalculoNom.Controls.Add(btnPDFReciboNomina);
             gBoxVPCalculoNom.Controls.Add(lblLetraPagado);
@@ -380,7 +384,7 @@
             btnGenerarNómina.IconColor = Color.Cyan;
             btnGenerarNómina.IconFont = FontAwesome.Sharp.IconFont.Auto;
             btnGenerarNómina.IconSize = 32;
-            btnGenerarNómina.Location = new Point(885, 167);
+            btnGenerarNómina.Location = new Point(895, 187);
             btnGenerarNómina.Name = "btnGenerarNómina";
             btnGenerarNómina.Size = new Size(176, 40);
             btnGenerarNómina.TabIndex = 27;
@@ -522,6 +526,25 @@
             btnRegresar.UseVisualStyleBackColor = false;
             btnRegresar.Click += btnRegresar_Click;
             // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label10.ForeColor = Color.White;
+            label10.Location = new Point(617, 102);
+            label10.Name = "label10";
+            label10.Size = new Size(132, 20);
+            label10.TabIndex = 28;
+            label10.Text = "Método de Pago: ";
+            // 
+            // cboMetodoPago
+            // 
+            cboMetodoPago.FormattingEnabled = true;
+            cboMetodoPago.Location = new Point(776, 97);
+            cboMetodoPago.Name = "cboMetodoPago";
+            cboMetodoPago.Size = new Size(151, 31);
+            cboMetodoPago.TabIndex = 29;
+            // 
             // UC_NominaRecibo
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -585,5 +608,7 @@
         private Label lblfechaFin;
         private FontAwesome.Sharp.IconButton btnGenerarNómina;
         private FontAwesome.Sharp.IconButton btnRegresar;
+        private Label label10;
+        private ComboBox cboMetodoPago;
     }
 }

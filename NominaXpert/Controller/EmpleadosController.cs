@@ -15,7 +15,7 @@ namespace NominaXpert.Controller
         }
 
         // Método para buscar empleado por matrícula
-        public (string Nombre, decimal SueldoBase) BuscarEmpleadoPorMatricula(string matricula)
+        public (string Nombre, decimal SueldoBase, int IdEmpleado, string Estatus) BuscarEmpleadoPorMatricula(string matricula)
         {
             try
             {
@@ -23,16 +23,22 @@ namespace NominaXpert.Controller
                 if (!Validaciones.EsNoMatriculaValido(matricula))
                     throw new Exception("Formato de matrícula inválido.");
 
-                var (nombre, sueldo) = _empleadosData.ObtenerNombreYSueldoPorMatricula(matricula);
+                // Llamamos al método que obtiene los datos del empleado y su estatus
+                var (nombre, sueldo, idEmpleado, estatus) = _empleadosData.ObtenerNombreYSueldoPorMatricula(matricula);
 
+                // Verificar si se encontró el empleado
                 if (string.IsNullOrEmpty(nombre))
                     throw new Exception("Empleado no encontrado.");
 
-                return (nombre, sueldo);
+                // Si el estatus es true, devolvemos "Activo", si es false devolvemos "Inactivo"
+                string estatusEmpleado = estatus == "Activo" ? "Activo" : "Inactivo";
+
+                // Retornamos el nombre, sueldo, idEmpleado y el estatus (Activo/Inactivo)
+                return (nombre, sueldo, idEmpleado, estatusEmpleado);
             }
             catch (Exception ex)
             {
-                // Loggear error si es necesario
+                // Loggear el error si es necesario
                 throw new Exception($"Error al buscar empleado: {ex.Message}");
             }
         }

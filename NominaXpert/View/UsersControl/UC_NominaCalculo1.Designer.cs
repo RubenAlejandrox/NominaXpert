@@ -35,6 +35,9 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             flowLayoutPanel1 = new FlowLayoutPanel();
             gBoxDatosEmpleado = new GroupBox();
+            panel5 = new Panel();
+            txtEstatusEmpleado = new TextBox();
+            label2 = new Label();
             panel2 = new Panel();
             txtIdEmpleado = new TextBox();
             lblIDEmpleado = new Label();
@@ -53,8 +56,8 @@
             panel3 = new Panel();
             btnBuscar = new FontAwesome.Sharp.IconButton();
             label6 = new Label();
-            dtpFechaFinNomina = new NominaXpert.Utilities.NominaDatePicker();
-            dtpFechaInicioNomina = new NominaXpert.Utilities.NominaDatePicker();
+            dtpFechaFinNomina = new Utilities.NominaDatePicker();
+            dtpFechaInicioNomina = new Utilities.NominaDatePicker();
             btnCalculoNomina1 = new FontAwesome.Sharp.IconButton();
             lblDatosObligatorios = new Label();
             panel7 = new Panel();
@@ -65,6 +68,7 @@
             tableLayoutPanel1.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             gBoxDatosEmpleado.SuspendLayout();
+            panel5.SuspendLayout();
             panel2.SuspendLayout();
             panel10.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)ipbMatricula).BeginInit();
@@ -134,6 +138,7 @@
             // 
             // gBoxDatosEmpleado
             // 
+            gBoxDatosEmpleado.Controls.Add(panel5);
             gBoxDatosEmpleado.Controls.Add(panel2);
             gBoxDatosEmpleado.Controls.Add(panel10);
             gBoxDatosEmpleado.Controls.Add(panel4);
@@ -147,12 +152,42 @@
             gBoxDatosEmpleado.TabStop = false;
             gBoxDatosEmpleado.Text = "Datos de empleado";
             // 
+            // panel5
+            // 
+            panel5.BackColor = Color.FromArgb(37, 41, 47);
+            panel5.Controls.Add(txtEstatusEmpleado);
+            panel5.Controls.Add(label2);
+            panel5.Location = new Point(763, 48);
+            panel5.Name = "panel5";
+            panel5.Size = new Size(342, 43);
+            panel5.TabIndex = 16;
+            // 
+            // txtEstatusEmpleado
+            // 
+            txtEstatusEmpleado.Location = new Point(115, 3);
+            txtEstatusEmpleado.MaxLength = 20;
+            txtEstatusEmpleado.Name = "txtEstatusEmpleado";
+            txtEstatusEmpleado.ReadOnly = true;
+            txtEstatusEmpleado.Size = new Size(189, 30);
+            txtEstatusEmpleado.TabIndex = 5;
+            // 
+            // label2
+            // 
+            label2.Dock = DockStyle.Top;
+            label2.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label2.ForeColor = Color.White;
+            label2.Location = new Point(0, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(342, 29);
+            label2.TabIndex = 4;
+            label2.Text = "Estatus*";
+            // 
             // panel2
             // 
             panel2.BackColor = Color.FromArgb(37, 41, 47);
             panel2.Controls.Add(txtIdEmpleado);
             panel2.Controls.Add(lblIDEmpleado);
-            panel2.Location = new Point(453, 51);
+            panel2.Location = new Point(386, 47);
             panel2.Name = "panel2";
             panel2.Size = new Size(371, 43);
             panel2.TabIndex = 15;
@@ -359,6 +394,7 @@
             dtpFechaFinNomina.SkinColor = Color.FromArgb(48, 51, 59);
             dtpFechaFinNomina.TabIndex = 15;
             dtpFechaFinNomina.TextColor = Color.FromArgb(12, 215, 253);
+            dtpFechaFinNomina.ValueChanged += dtpFechaFinNomina_ValueChanged;
             // 
             // dtpFechaInicioNomina
             // 
@@ -373,6 +409,7 @@
             dtpFechaInicioNomina.SkinColor = Color.FromArgb(48, 51, 59);
             dtpFechaInicioNomina.TabIndex = 14;
             dtpFechaInicioNomina.TextColor = Color.FromArgb(12, 215, 253);
+            dtpFechaInicioNomina.ValueChanged += dtpFechaInicioNomina_ValueChanged;
             // 
             // btnCalculoNomina1
             // 
@@ -414,12 +451,12 @@
             panel7.Controls.Add(lblDiasLaborados);
             panel7.Location = new Point(27, 201);
             panel7.Name = "panel7";
-            panel7.Size = new Size(282, 42);
+            panel7.Size = new Size(318, 42);
             panel7.TabIndex = 13;
             // 
             // txtDiasLaborados
             // 
-            txtDiasLaborados.Location = new Point(138, -1);
+            txtDiasLaborados.Location = new Point(154, 0);
             txtDiasLaborados.MaxLength = 2;
             txtDiasLaborados.Name = "txtDiasLaborados";
             txtDiasLaborados.ReadOnly = true;
@@ -428,14 +465,15 @@
             // 
             // lblDiasLaborados
             // 
+            lblDiasLaborados.AutoSize = true;
             lblDiasLaborados.Dock = DockStyle.Top;
             lblDiasLaborados.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblDiasLaborados.ForeColor = Color.White;
             lblDiasLaborados.Location = new Point(0, 0);
             lblDiasLaborados.Name = "lblDiasLaborados";
-            lblDiasLaborados.Size = new Size(282, 29);
+            lblDiasLaborados.Size = new Size(153, 23);
             lblDiasLaborados.TabIndex = 3;
-            lblDiasLaborados.Text = "Días laborados";
+            lblDiasLaborados.Text = "Horas Laboradas: ";
             // 
             // UC_NominaCalculo1
             // 
@@ -452,6 +490,8 @@
             tableLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.ResumeLayout(false);
             gBoxDatosEmpleado.ResumeLayout(false);
+            panel5.ResumeLayout(false);
+            panel5.PerformLayout();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             panel10.ResumeLayout(false);
@@ -504,5 +544,8 @@
         private Panel panel2;
         private TextBox txtIdEmpleado;
         private Label lblIDEmpleado;
+        private Panel panel5;
+        private TextBox txtEstatusEmpleado;
+        private Label label2;
     }
 }

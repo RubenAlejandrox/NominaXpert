@@ -1,0 +1,51 @@
+﻿using NominaXpert.Data;
+using NominaXpert.Model;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace NominaXpert.Controller
+{
+    public class DetalleNominaController
+    {
+        private readonly DetalleNominaDataAccess _detalleNominaDataAccess;
+
+        public DetalleNominaController()
+        {
+            _detalleNominaDataAccess = new DetalleNominaDataAccess(); // Inicializamos el acceso a datos
+        }
+
+        // Método para registrar un detalle de nómina
+        public void RegistrarDetalleNomina(DetalleNomina detalleNomina)
+        {
+            try
+            {
+                // Llamamos al acceso a datos para registrar el detalle
+                _detalleNominaDataAccess.RegistrarDetalleNomina(detalleNomina);
+            }
+            catch (Exception ex)
+            {
+                // Si ocurre un error, lanzamos una excepción personalizada
+                throw new ApplicationException("Error al registrar el detalle de la nómina.", ex);
+            }
+        
+        }
+
+        // Método para obtener los detalles de una nómina específica por su ID
+        public List<DetalleNomina> ObtenerDetallesPorNomina(int idNomina)
+        {
+            try
+            {
+                // Llamamos al acceso a datos para obtener los detalles de la nómina
+                return _detalleNominaDataAccess.ObtenerDetallesPorNomina(idNomina);
+            }
+            catch (Exception ex)
+            {
+                // Si ocurre un error, lanzamos una excepción personalizada
+                throw new ApplicationException("Error al obtener los detalles de la nómina.", ex);
+            }
+        }
+    }
+}

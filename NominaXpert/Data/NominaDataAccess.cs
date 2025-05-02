@@ -40,29 +40,40 @@ namespace NominaXpert.Data
             }
 
         // Crear una nueva nómina
-        public void RegistrarNomina(int idEmpleado, int idAuditoria, DateTime periodoInicio, DateTime periodoFin)
+        public int RegistrarNomina(int idEmpleado, int idAuditoria, DateTime periodoInicio, DateTime periodoFin)
         {
             string estadoPago = "Pendiente";  // El estado inicial por defecto
 
             string query = @"
-                INSERT INTO nomina.nomina (id_empleado, id_auditoria, periodo_inicio, periodo_fin, estado_pago, creado_at)
-                VALUES (@idEmpleado, @idAuditoria, @periodoInicio, @periodoFin, @estadoPago, @creadoAt)";
+                INSERT INTO nomina.nomina (id_empleado, fecha_inicio, fecha_fin, estado_pago, creado_at)
+                VALUES (@idEmpleado, @periodoInicio, @periodoFin, @estadoPago, @creadoAt)
+                RETURNING id;";  // Usamos RETURNING para obtener la ID generada
 
             try
             {
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
                 {
-                    _dbAccess.CreateParameter("@idEmpleado", idEmpleado),
-                    _dbAccess.CreateParameter("@idAuditoria", idAuditoria),
-                    _dbAccess.CreateParameter("@periodoInicio", periodoInicio),
-                    _dbAccess.CreateParameter("@periodoFin", periodoFin),
-                    _dbAccess.CreateParameter("@estadoPago", estadoPago),
-                    _dbAccess.CreateParameter("@creadoAt", DateTime.Now)
+            _dbAccess.CreateParameter("@idEmpleado", idEmpleado),
+            _dbAccess.CreateParameter("@periodoInicio", periodoInicio),
+            _dbAccess.CreateParameter("@periodoFin", periodoFin),
+            _dbAccess.CreateParameter("@estadoPago", estadoPago),
+            _dbAccess.CreateParameter("@creadoAt", DateTime.Now)
                 };
 
                 _dbAccess.Connect();
-                _dbAccess.ExecuteNonQuery(query, parameters);
-                _logger.Info($"Nómina registrada correctamente para el empleado {idEmpleado}.");
+                DataTable result = _dbAccess.ExecuteQuery_Reader(query, parameters);
+
+                if (result.Rows.Count > 0)
+                {
+                    // Obtener la ID generada
+                    int idNomina = Convert.ToInt32(result.Rows[0]["id"]);
+                    _logger.Info($"Nómina registrada correctamente para el empleado {idEmpleado}, ID de la nómina: {idNomina}.");
+                    return idNomina;  // Retornar la ID de la nómina recién creada
+                }
+                else
+                {
+                    throw new Exception("No se pudo obtener la ID de la nómina.");
+                }
             }
             catch (Exception ex)
             {
@@ -80,7 +91,7 @@ namespace NominaXpert.Data
             List<Nomina> nominas = new List<Nomina>();
 
             string query = @"
-                SELECT id, id_empleado, id_auditoria, periodo_inicio, periodo_fin, estado_pago, creado_at
+                SELECT id, id_empleado, periodo_inicio, periodo_fin, estado_pago, creado_at
                 FROM nomina.nomina
                 ORDER BY id";
 
@@ -95,7 +106,6 @@ namespace NominaXpert.Data
                     {
                         Id = Convert.ToInt32(row["id"]),
                         IdEmpleado = Convert.ToInt32(row["id_empleado"]),
-                        IdAuditoria = Convert.ToInt32(row["id_auditoria"]),
                         FechaInicio = Convert.ToDateTime(row["periodo_inicio"]),
                         FechaFin = Convert.ToDateTime(row["periodo_fin"]),
                         EstadoPago = row["estado_pago"].ToString(),
@@ -124,7 +134,6 @@ namespace NominaXpert.Data
             string query = @"
                 UPDATE nomina.nomina
                 SET id_empleado = @idEmpleado,
-                    id_auditoria = @idAuditoria,
                     periodo_inicio = @periodoInicio,
                     periodo_fin = @periodoFin,
                     estado_pago = @estadoPago
@@ -136,7 +145,6 @@ namespace NominaXpert.Data
                 {
                     _dbAccess.CreateParameter("@id", nomina.Id),
                     _dbAccess.CreateParameter("@idEmpleado", nomina.IdEmpleado),
-                    _dbAccess.CreateParameter("@idAuditoria", nomina.IdAuditoria),
                     _dbAccess.CreateParameter("@periodoInicio", nomina.FechaInicio),
                     _dbAccess.CreateParameter("@periodoFin", nomina.FechaFin),
                     _dbAccess.CreateParameter("@estadoPago", nomina.EstadoPago)
@@ -185,5 +193,44 @@ namespace NominaXpert.Data
                 _dbAccess.Disconnect();
             }
         }
+
+        public int ObtenerUltimaNominaGenerada(int idEmpleado)
+        {
+            string query = @"
+                SELECT id
+                FROM nomina.nominas
+                WHERE id_empleado = @idEmpleado
+                ORDER BY fecha_creacion DESC
+                LIMIT 1"; // Asegura que traes la última nómina generada
+            try
+            {
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+            _dbAccess.CreateParameter("@idEmpleado", idEmpleado)
+                };
+
+                _dbAccess.Connect();
+                DataTable resultado = _dbAccess.ExecuteQuery_Reader(query, parameters);
+
+                if (resultado.Rows.Count > 0)
+                {
+                    return Convert.ToInt32(resultado.Rows[0]["id"]);
+                }
+                else
+                {
+                    return 0; // Retornar 0 si no se encuentra ninguna nómina
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al obtener la última nómina generada.");
+                return 0;
+            }
+            finally
+            {
+                _dbAccess.Disconnect();
+            }
+        }
+
     }
 }

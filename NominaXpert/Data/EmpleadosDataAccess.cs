@@ -362,32 +362,40 @@ namespace NominaXpert.Data
         }
 
         // En EmpleadosDataAccess.cs buscamos el Nombre y sueldo del empleado en la bd
-        public (string Nombre, decimal SueldoBase) ObtenerNombreYSueldoPorMatricula(string matricula)
+        public (string Nombre, decimal SueldoBase, int IdEmpleado, string Estatus) ObtenerNombreYSueldoPorMatricula(string matricula)
         {
             try
             {
+                // Consulta SQL para obtener el nombre, sueldo, idEmpleado y estatus del empleado
                 string query = @"
-            SELECT p.nombre_completo AS Nombre, e.sueldo AS SueldoBase 
-            FROM nomina.empleados e
-            INNER JOIN seguridad.personas p ON e.id_persona = p.id
-            WHERE e.matricula = @Matricula";
+                    SELECT p.nombre_completo AS Nombre, e.sueldo AS SueldoBase, e.id AS IdEmpleado, e.estatus AS Estatus
+                    FROM nomina.empleados e
+                    INNER JOIN seguridad.personas p ON e.id_persona = p.id
+                    WHERE e.matricula = @Matricula";  // Buscamos por la matrícula
 
                 NpgsqlParameter paramMatricula = _dbAccess.CreateParameter("@Matricula", matricula);
 
                 _dbAccess.Connect();
                 DataTable resultado = _dbAccess.ExecuteQuery_Reader(query, paramMatricula);
 
+                // Si no se encuentra el empleado con esa matrícula, devolvemos (null, 0, 0, "Inactivo")
                 if (resultado.Rows.Count == 0)
                 {
                     _logger.Warn($"No se encontró el empleado con matrícula: {matricula}");
-                    return (null, 0);
+                    return (null, 0, 0, "Inactivo");
                 }
 
                 DataRow row = resultado.Rows[0];
                 string nombre = row["Nombre"].ToString();
                 decimal sueldoBase = Convert.ToDecimal(row["SueldoBase"]);
+                int idEmpleado = Convert.ToInt32(row["IdEmpleado"]);
+                bool estatus = Convert.ToBoolean(row["Estatus"]);
 
-                return (nombre, sueldoBase);
+                // Convertir el estatus a "Activo" o "Inactivo" según el valor de estatus (true/false)
+                string estatusEmpleado = estatus ? "Activo" : "Inactivo";
+
+                // Devolvemos los valores como un tuple
+                return (nombre, sueldoBase, idEmpleado, estatusEmpleado);
             }
             catch (Exception ex)
             {

@@ -43,20 +43,28 @@ namespace NominaXpert.Data
         public void RegistrarBonificacion(Bonificacion bonificacion)
         {
             string query = @"
-                INSERT INTO nomina.bonificaciones (id_nomina, tipo, monto)
-                VALUES (@idNomina, @tipo, @monto)";
+                INSERT INTO nomina.bonificaciones (id_nomina, id_tipo, monto)
+                VALUES (@idNomina, @idTipo, @monto)";
 
             try
             {
+                // Verificar si los parámetros son válidos
+                if (bonificacion.IdNomina <= 0 || bonificacion.IdTipo <= 0 || bonificacion.Monto <= 0)
+                {
+                    throw new ArgumentException("Los valores proporcionados son inválidos.");
+                }
+
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
                 {
                     _dbAccess.CreateParameter("@idNomina", bonificacion.IdNomina),
-                    _dbAccess.CreateParameter("@tipo", bonificacion.IdTipo),
+                    _dbAccess.CreateParameter("@idTipo", bonificacion.IdTipo),
                     _dbAccess.CreateParameter("@monto", bonificacion.Monto)
                 };
 
                 _dbAccess.Connect();
                 _dbAccess.ExecuteNonQuery(query, parameters);
+
+                _logger.Info($"Bonificación registrada con éxito para la nómina ID: {bonificacion.IdNomina}");
             }
             catch (Exception ex)
             {
@@ -74,20 +82,26 @@ namespace NominaXpert.Data
         {
             List<Bonificacion> bonificaciones = new List<Bonificacion>();
             string query = @"
-                SELECT id, id_nomina, tipo, monto
-                FROM nomina.bonificaciones
-                WHERE id_nomina = @idNomina";
+        SELECT id, id_nomina, id_tipo, monto
+        FROM nomina.bonificaciones
+        WHERE id_nomina = @idNomina";
 
             try
             {
+                if (idNomina <= 0)
+                {
+                    throw new ArgumentException("La ID de la nómina no es válida.");
+                }
+
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
                 {
-                    _dbAccess.CreateParameter("@idNomina", idNomina)
+                 _dbAccess.CreateParameter("@idNomina", idNomina)
                 };
 
                 _dbAccess.Connect();
                 DataTable resultado = _dbAccess.ExecuteQuery_Reader(query, parameters);
 
+                // Si la consulta devuelve filas, agregar las bonificaciones a la lista
                 foreach (DataRow row in resultado.Rows)
                 {
                     Bonificacion bonificacion = new Bonificacion
@@ -120,6 +134,12 @@ namespace NominaXpert.Data
 
             try
             {
+                // Validar si el ID de la bonificación es válido
+                if (idBonificacion <= 0)
+                {
+                    throw new ArgumentException("El ID de la bonificación es inválido.");
+                }
+
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
                 {
                     _dbAccess.CreateParameter("@id", idBonificacion)
@@ -127,6 +147,7 @@ namespace NominaXpert.Data
 
                 _dbAccess.Connect();
                 int rowsAffected = _dbAccess.ExecuteNonQuery(query, parameters);
+
                 return rowsAffected;
             }
             catch (Exception ex)
@@ -139,5 +160,45 @@ namespace NominaXpert.Data
                 _dbAccess.Disconnect();
             }
         }
+
+        // Actualizar Bonificación
+        public int ActualizarBonificacion(Bonificacion bonificacion)
+        {
+            string query = @"
+                UPDATE nomina.bonificaciones
+                SET id_tipo = @idTipo, monto = @monto
+                WHERE id = @id";
+
+            try
+            {
+                // Validar si los parámetros de la bonificación son válidos
+                if (bonificacion.Id <= 0 || bonificacion.IdNomina <= 0 || bonificacion.IdTipo <= 0 || bonificacion.Monto <= 0)
+                {
+                    throw new ArgumentException("Los valores proporcionados son inválidos.");
+                }
+
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+                    _dbAccess.CreateParameter("@id", bonificacion.Id),
+                    _dbAccess.CreateParameter("@idTipo", bonificacion.IdTipo),
+                    _dbAccess.CreateParameter("@monto", bonificacion.Monto)
+                };
+
+                _dbAccess.Connect();
+                int rowsAffected = _dbAccess.ExecuteNonQuery(query, parameters);
+
+                return rowsAffected;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al actualizar la bonificación.");
+                return 0;
+            }
+            finally
+            {
+                _dbAccess.Disconnect();
+            }
+        }
+
     }
 }

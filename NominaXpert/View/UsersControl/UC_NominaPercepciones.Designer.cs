@@ -35,28 +35,32 @@
             btnEliminar = new FontAwesome.Sharp.IconButton();
             btnModificar = new FontAwesome.Sharp.IconButton();
             groupBox1 = new GroupBox();
+            label3 = new Label();
+            cboTipo = new ComboBox();
             btnLimpiar = new FontAwesome.Sharp.IconButton();
             btnGuardar = new FontAwesome.Sharp.IconButton();
             txtMonto = new TextBox();
             label2 = new Label();
             label1 = new Label();
-            dataGridView1 = new DataGridView();
+            DataGridViewPercepciones = new DataGridView();
             Id_nomina = new DataGridViewTextBoxColumn();
             Tipo = new DataGridViewTextBoxColumn();
             Monto = new DataGridViewTextBoxColumn();
             panel3 = new Panel();
             btnSiguiente = new FontAwesome.Sharp.IconButton();
-            cboTipo = new ComboBox();
-            label3 = new Label();
+            label4 = new Label();
+            txtIdNomina = new TextBox();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)DataGridViewPercepciones).BeginInit();
             panel3.SuspendLayout();
             SuspendLayout();
             // 
             // panel1
             // 
+            panel1.Controls.Add(txtIdNomina);
+            panel1.Controls.Add(label4);
             panel1.Controls.Add(lblDescripcionCN);
             panel1.Controls.Add(lblHistorialNominas);
             panel1.Dock = DockStyle.Top;
@@ -91,7 +95,7 @@
             panel2.Controls.Add(btnEliminar);
             panel2.Controls.Add(btnModificar);
             panel2.Controls.Add(groupBox1);
-            panel2.Controls.Add(dataGridView1);
+            panel2.Controls.Add(DataGridViewPercepciones);
             panel2.Dock = DockStyle.Top;
             panel2.Location = new Point(0, 119);
             panel2.Name = "panel2";
@@ -119,6 +123,7 @@
             btnEliminar.TextAlign = ContentAlignment.MiddleRight;
             btnEliminar.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnEliminar.UseVisualStyleBackColor = false;
+            btnEliminar.Click += btnEliminar_Click;
             // 
             // btnModificar
             // 
@@ -141,6 +146,7 @@
             btnModificar.TextAlign = ContentAlignment.MiddleRight;
             btnModificar.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnModificar.UseVisualStyleBackColor = false;
+            btnModificar.Click += btnModificar_Click;
             // 
             // groupBox1
             // 
@@ -159,6 +165,24 @@
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "Datos de la Percepción";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.ForeColor = Color.Cyan;
+            label3.Location = new Point(47, 199);
+            label3.Name = "label3";
+            label3.Size = new Size(367, 20);
+            label3.TabIndex = 21;
+            label3.Text = "(Se permite números hasta con 2 decimales: 00.00)";
+            // 
+            // cboTipo
+            // 
+            cboTipo.FormattingEnabled = true;
+            cboTipo.Location = new Point(126, 71);
+            cboTipo.Name = "cboTipo";
+            cboTipo.Size = new Size(204, 28);
+            cboTipo.TabIndex = 20;
             // 
             // btnLimpiar
             // 
@@ -181,6 +205,7 @@
             btnLimpiar.TextAlign = ContentAlignment.MiddleRight;
             btnLimpiar.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnLimpiar.UseVisualStyleBackColor = false;
+            btnLimpiar.Click += btnLimpiar_Click;
             // 
             // btnGuardar
             // 
@@ -203,6 +228,7 @@
             btnGuardar.TextAlign = ContentAlignment.MiddleRight;
             btnGuardar.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnGuardar.UseVisualStyleBackColor = false;
+            btnGuardar.Click += btnGuardar_Click;
             // 
             // txtMonto
             // 
@@ -229,15 +255,15 @@
             label1.TabIndex = 0;
             label1.Text = "Tipo: ";
             // 
-            // dataGridView1
+            // DataGridViewPercepciones
             // 
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Id_nomina, Tipo, Monto });
-            dataGridView1.Location = new Point(32, 32);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(579, 345);
-            dataGridView1.TabIndex = 0;
+            DataGridViewPercepciones.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            DataGridViewPercepciones.Columns.AddRange(new DataGridViewColumn[] { Id_nomina, Tipo, Monto });
+            DataGridViewPercepciones.Location = new Point(32, 32);
+            DataGridViewPercepciones.Name = "DataGridViewPercepciones";
+            DataGridViewPercepciones.RowHeadersWidth = 51;
+            DataGridViewPercepciones.Size = new Size(579, 345);
+            DataGridViewPercepciones.TabIndex = 0;
             // 
             // Id_nomina
             // 
@@ -269,7 +295,7 @@
             panel3.Dock = DockStyle.Top;
             panel3.Location = new Point(0, 592);
             panel3.Name = "panel3";
-            panel3.Size = new Size(1262, 125);
+            panel3.Size = new Size(1262, 76);
             panel3.TabIndex = 4;
             // 
             // btnSiguiente
@@ -286,7 +312,7 @@
             btnSiguiente.IconColor = Color.Lime;
             btnSiguiente.IconFont = FontAwesome.Sharp.IconFont.Auto;
             btnSiguiente.IconSize = 32;
-            btnSiguiente.Location = new Point(1086, 33);
+            btnSiguiente.Location = new Point(1066, 17);
             btnSiguiente.Name = "btnSiguiente";
             btnSiguiente.Size = new Size(148, 40);
             btnSiguiente.TabIndex = 12;
@@ -296,23 +322,23 @@
             btnSiguiente.UseVisualStyleBackColor = false;
             btnSiguiente.Click += btnSiguiente_Click;
             // 
-            // cboTipo
+            // label4
             // 
-            cboTipo.FormattingEnabled = true;
-            cboTipo.Location = new Point(126, 71);
-            cboTipo.Name = "cboTipo";
-            cboTipo.Size = new Size(204, 28);
-            cboTipo.TabIndex = 20;
+            label4.AutoSize = true;
+            label4.ForeColor = Color.White;
+            label4.Location = new Point(662, 73);
+            label4.Name = "label4";
+            label4.Size = new Size(84, 20);
+            label4.TabIndex = 5;
+            label4.Text = "ID Nomina:";
             // 
-            // label3
+            // txtIdNomina
             // 
-            label3.AutoSize = true;
-            label3.ForeColor = Color.Cyan;
-            label3.Location = new Point(47, 199);
-            label3.Name = "label3";
-            label3.Size = new Size(367, 20);
-            label3.TabIndex = 21;
-            label3.Text = "(Se permite números hasta con 2 decimales: 00.00)";
+            txtIdNomina.Location = new Point(752, 70);
+            txtIdNomina.Name = "txtIdNomina";
+            txtIdNomina.ReadOnly = true;
+            txtIdNomina.Size = new Size(115, 27);
+            txtIdNomina.TabIndex = 22;
             // 
             // UC_NominaPercepciones
             // 
@@ -324,12 +350,13 @@
             Controls.Add(panel1);
             Name = "UC_NominaPercepciones";
             Size = new Size(1262, 691);
+            Load += UC_NominaPercepciones_Load_1;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             panel2.ResumeLayout(false);
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)DataGridViewPercepciones).EndInit();
             panel3.ResumeLayout(false);
             ResumeLayout(false);
         }
@@ -341,7 +368,7 @@
         private Label lblHistorialNominas;
         private Panel panel2;
         private Panel panel3;
-        private DataGridView dataGridView1;
+        private DataGridView DataGridViewPercepciones;
         private DataGridViewTextBoxColumn Id_nomina;
         private DataGridViewTextBoxColumn Tipo;
         private DataGridViewTextBoxColumn Monto;
@@ -356,5 +383,7 @@
         private FontAwesome.Sharp.IconButton btnSiguiente;
         private ComboBox cboTipo;
         private Label label3;
+        private TextBox txtIdNomina;
+        private Label label4;
     }
 }

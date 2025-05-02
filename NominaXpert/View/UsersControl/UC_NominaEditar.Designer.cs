@@ -35,14 +35,19 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             flowLayoutPanel1 = new FlowLayoutPanel();
             gBoxDatosEmpleado = new GroupBox();
+            panel3 = new Panel();
+            txtEstadoDePago = new TextBox();
+            label1 = new Label();
+            panel2 = new Panel();
+            txtNoNomina = new TextBox();
+            lblNoNomina = new Label();
             btnBuscar = new FontAwesome.Sharp.IconButton();
             panel4 = new Panel();
             textBox2 = new TextBox();
             lblNombreCompleto = new Label();
             gBoxEditarEstatus = new GroupBox();
-            panel2 = new Panel();
-            txtNoNomina = new TextBox();
-            lblNoNomina = new Label();
+            btnVisualizarNomina = new FontAwesome.Sharp.IconButton();
+            btnModificar = new FontAwesome.Sharp.IconButton();
             panel18 = new Panel();
             btnActualizarCambios = new FontAwesome.Sharp.IconButton();
             lblDatosObligatorios = new Label();
@@ -50,20 +55,16 @@
             cBoxEstatusNomina = new ComboBox();
             lblEstatusNomina = new Label();
             toolTip1 = new ToolTip(components);
-            panel3 = new Panel();
-            txtEstadoDePago = new TextBox();
-            label1 = new Label();
-            btnModificar = new FontAwesome.Sharp.IconButton();
             panel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             gBoxDatosEmpleado.SuspendLayout();
+            panel3.SuspendLayout();
+            panel2.SuspendLayout();
             panel4.SuspendLayout();
             gBoxEditarEstatus.SuspendLayout();
-            panel2.SuspendLayout();
             panel18.SuspendLayout();
             panel9.SuspendLayout();
-            panel3.SuspendLayout();
             SuspendLayout();
             // 
             // panel1
@@ -138,6 +139,63 @@
             gBoxDatosEmpleado.TabStop = false;
             gBoxDatosEmpleado.Text = "Datos de empleado";
             // 
+            // panel3
+            // 
+            panel3.Controls.Add(txtEstadoDePago);
+            panel3.Controls.Add(label1);
+            panel3.Location = new Point(578, 37);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(363, 42);
+            panel3.TabIndex = 11;
+            // 
+            // txtEstadoDePago
+            // 
+            txtEstadoDePago.Location = new Point(140, 3);
+            txtEstadoDePago.MaxLength = 100;
+            txtEstadoDePago.Name = "txtEstadoDePago";
+            txtEstadoDePago.ReadOnly = true;
+            txtEstadoDePago.Size = new Size(208, 30);
+            txtEstadoDePago.TabIndex = 4;
+            // 
+            // label1
+            // 
+            label1.Dock = DockStyle.Top;
+            label1.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.ForeColor = Color.White;
+            label1.Location = new Point(0, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(363, 29);
+            label1.TabIndex = 3;
+            label1.Text = "Estado de Pago";
+            // 
+            // panel2
+            // 
+            panel2.Controls.Add(txtNoNomina);
+            panel2.Controls.Add(lblNoNomina);
+            panel2.Location = new Point(23, 36);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(347, 43);
+            panel2.TabIndex = 17;
+            // 
+            // txtNoNomina
+            // 
+            txtNoNomina.Location = new Point(158, 3);
+            txtNoNomina.MaxLength = 20;
+            txtNoNomina.Name = "txtNoNomina";
+            txtNoNomina.Size = new Size(183, 30);
+            txtNoNomina.TabIndex = 6;
+            // 
+            // lblNoNomina
+            // 
+            lblNoNomina.Dock = DockStyle.Top;
+            lblNoNomina.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblNoNomina.ForeColor = Color.White;
+            lblNoNomina.Location = new Point(0, 0);
+            lblNoNomina.Name = "lblNoNomina";
+            lblNoNomina.Size = new Size(347, 29);
+            lblNoNomina.TabIndex = 3;
+            lblNoNomina.Text = "No. de Nómina* ";
+            // 
             // btnBuscar
             // 
             btnBuscar.ForeColor = SystemColors.ActiveCaptionText;
@@ -185,6 +243,7 @@
             // 
             // gBoxEditarEstatus
             // 
+            gBoxEditarEstatus.Controls.Add(btnVisualizarNomina);
             gBoxEditarEstatus.Controls.Add(btnModificar);
             gBoxEditarEstatus.Controls.Add(panel18);
             gBoxEditarEstatus.Controls.Add(lblDatosObligatorios);
@@ -198,33 +257,51 @@
             gBoxEditarEstatus.TabStop = false;
             gBoxEditarEstatus.Text = "Editar estatus de nómina";
             // 
-            // panel2
+            // btnVisualizarNomina
             // 
-            panel2.Controls.Add(txtNoNomina);
-            panel2.Controls.Add(lblNoNomina);
-            panel2.Location = new Point(23, 36);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(347, 43);
-            panel2.TabIndex = 17;
+            btnVisualizarNomina.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnVisualizarNomina.BackColor = Color.Black;
+            btnVisualizarNomina.Cursor = Cursors.Hand;
+            btnVisualizarNomina.FlatAppearance.BorderColor = Color.LightGreen;
+            btnVisualizarNomina.FlatAppearance.BorderSize = 2;
+            btnVisualizarNomina.FlatStyle = FlatStyle.Flat;
+            btnVisualizarNomina.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnVisualizarNomina.ForeColor = Color.Azure;
+            btnVisualizarNomina.IconChar = FontAwesome.Sharp.IconChar.Eye;
+            btnVisualizarNomina.IconColor = Color.LightGreen;
+            btnVisualizarNomina.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            btnVisualizarNomina.IconSize = 32;
+            btnVisualizarNomina.Location = new Point(811, 47);
+            btnVisualizarNomina.Name = "btnVisualizarNomina";
+            btnVisualizarNomina.Size = new Size(219, 40);
+            btnVisualizarNomina.TabIndex = 12;
+            btnVisualizarNomina.Text = "Vista previa de Nómina";
+            btnVisualizarNomina.TextAlign = ContentAlignment.MiddleRight;
+            btnVisualizarNomina.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnVisualizarNomina.UseVisualStyleBackColor = false;
             // 
-            // txtNoNomina
+            // btnModificar
             // 
-            txtNoNomina.Location = new Point(158, 3);
-            txtNoNomina.MaxLength = 20;
-            txtNoNomina.Name = "txtNoNomina";
-            txtNoNomina.Size = new Size(183, 30);
-            txtNoNomina.TabIndex = 6;
-            // 
-            // lblNoNomina
-            // 
-            lblNoNomina.Dock = DockStyle.Top;
-            lblNoNomina.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblNoNomina.ForeColor = Color.White;
-            lblNoNomina.Location = new Point(0, 0);
-            lblNoNomina.Name = "lblNoNomina";
-            lblNoNomina.Size = new Size(347, 29);
-            lblNoNomina.TabIndex = 3;
-            lblNoNomina.Text = "No. de Nómina* ";
+            btnModificar.BackColor = Color.Black;
+            btnModificar.Cursor = Cursors.Hand;
+            btnModificar.FlatAppearance.BorderColor = Color.Yellow;
+            btnModificar.FlatAppearance.BorderSize = 2;
+            btnModificar.FlatStyle = FlatStyle.Flat;
+            btnModificar.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnModificar.ForeColor = Color.Azure;
+            btnModificar.IconChar = FontAwesome.Sharp.IconChar.Edit;
+            btnModificar.IconColor = Color.Yellow;
+            btnModificar.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            btnModificar.IconSize = 32;
+            btnModificar.Location = new Point(392, 185);
+            btnModificar.Name = "btnModificar";
+            btnModificar.Size = new Size(335, 40);
+            btnModificar.TabIndex = 17;
+            btnModificar.Text = "Modificar Percepciones y Deducciones";
+            btnModificar.TextAlign = ContentAlignment.MiddleRight;
+            btnModificar.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnModificar.UseVisualStyleBackColor = false;
+            btnModificar.Click += btnModificar_Click;
             // 
             // panel18
             // 
@@ -298,58 +375,6 @@
             lblEstatusNomina.TabIndex = 3;
             lblEstatusNomina.Text = "Estatus Nómina*";
             // 
-            // panel3
-            // 
-            panel3.Controls.Add(txtEstadoDePago);
-            panel3.Controls.Add(label1);
-            panel3.Location = new Point(578, 37);
-            panel3.Name = "panel3";
-            panel3.Size = new Size(363, 42);
-            panel3.TabIndex = 11;
-            // 
-            // txtEstadoDePago
-            // 
-            txtEstadoDePago.Location = new Point(140, 3);
-            txtEstadoDePago.MaxLength = 100;
-            txtEstadoDePago.Name = "txtEstadoDePago";
-            txtEstadoDePago.ReadOnly = true;
-            txtEstadoDePago.Size = new Size(208, 30);
-            txtEstadoDePago.TabIndex = 4;
-            // 
-            // label1
-            // 
-            label1.Dock = DockStyle.Top;
-            label1.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.ForeColor = Color.White;
-            label1.Location = new Point(0, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(363, 29);
-            label1.TabIndex = 3;
-            label1.Text = "Estado de Pago";
-            // 
-            // btnModificar
-            // 
-            btnModificar.BackColor = Color.Black;
-            btnModificar.Cursor = Cursors.Hand;
-            btnModificar.FlatAppearance.BorderColor = Color.Yellow;
-            btnModificar.FlatAppearance.BorderSize = 2;
-            btnModificar.FlatStyle = FlatStyle.Flat;
-            btnModificar.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnModificar.ForeColor = Color.Azure;
-            btnModificar.IconChar = FontAwesome.Sharp.IconChar.Edit;
-            btnModificar.IconColor = Color.Yellow;
-            btnModificar.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            btnModificar.IconSize = 32;
-            btnModificar.Location = new Point(392, 185);
-            btnModificar.Name = "btnModificar";
-            btnModificar.Size = new Size(335, 40);
-            btnModificar.TabIndex = 17;
-            btnModificar.Text = "Modificar Percepciones y Deducciones";
-            btnModificar.TextAlign = ContentAlignment.MiddleRight;
-            btnModificar.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnModificar.UseVisualStyleBackColor = false;
-            btnModificar.Click += btnModificar_Click;
-            // 
             // UC_NominaEditar
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -366,16 +391,16 @@
             tableLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.ResumeLayout(false);
             gBoxDatosEmpleado.ResumeLayout(false);
+            panel3.ResumeLayout(false);
+            panel3.PerformLayout();
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
             panel4.ResumeLayout(false);
             panel4.PerformLayout();
             gBoxEditarEstatus.ResumeLayout(false);
             gBoxEditarEstatus.PerformLayout();
-            panel2.ResumeLayout(false);
-            panel2.PerformLayout();
             panel18.ResumeLayout(false);
             panel9.ResumeLayout(false);
-            panel3.ResumeLayout(false);
-            panel3.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -406,5 +431,6 @@
         private TextBox txtEstadoDePago;
         private Label label1;
         private FontAwesome.Sharp.IconButton btnModificar;
+        private FontAwesome.Sharp.IconButton btnVisualizarNomina;
     }
 }

@@ -591,5 +591,51 @@ namespace NominaXpert.Data
             }
         }
 
+        public bool PermisoUsuarioGenerarNomina(int idUsuario)
+        {
+            try
+            {
+                // Consulta SQL para obtener el rol del usuario
+                    string query = @"
+                SELECT u.id_rol
+                FROM seguridad.usuarios u
+                WHERE u.id = @IdUsuario";
+
+                NpgsqlParameter paramIdUsuario = _dbAccess.CreateParameter("@IdUsuario", idUsuario);
+
+                _dbAccess.Connect();
+                object result = _dbAccess.ExecuteScalar(query, paramIdUsuario);
+
+                // Si el resultado es nulo
+                if (result == null)
+                {
+                    _logger.Error($"No se encontró el usuario con ID {idUsuario}");
+                    throw new Exception("Usuario no encontrado.");
+                }
+
+                int idRol = Convert.ToInt32(result);
+
+                // Verificar si el rol Admin o Operador
+                if (idRol != 1 && idRol != 2)
+                {
+                    _logger.Error($"Lo siento, no eres operador o administrador, no puedes generar nómina. Usuario ID: {idUsuario}, Rol ID: {idRol}");
+                    throw new Exception("Lo siento, no eres operador o administrador, no puedes generar nómina.");
+                }
+
+                
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Error al verificar el permiso para generar nómina del usuario con ID {idUsuario}");
+                throw;  
+            }
+            finally
+            {
+                _dbAccess.Disconnect();
+            }
+        }
+
+
     }
 }

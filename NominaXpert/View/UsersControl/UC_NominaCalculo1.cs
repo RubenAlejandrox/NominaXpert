@@ -16,21 +16,29 @@ namespace NominaXpert.View.UsersControl
 {
     public partial class UC_NominaCalculo1 : UserControl
     {
+        private readonly NominasController _nominasController; // Controlador de nómina
+        private readonly RegistroJornadaController _jornadaController; // Controlador de empleados
+
         public UC_NominaCalculo1()
         {
             InitializeComponent();
+            _nominasController = new NominasController();
+            _jornadaController = new RegistroJornadaController();
         }
 
         private void UC_NominaAlta_Load(object sender, EventArgs e)
         {
-            InicializaVentanaCalculoRecibos();
+            // 1. Verificar que el usuario tenga permisos
+            int idUsuario = 1;
+            var usuarioAutorizado = _nominasController.VerificarPermisosUsuario(idUsuario);
+
+            if (!usuarioAutorizado)
+            {
+                MessageBox.Show("Lo siento, no tienes permisos suficientes para generar nómina.", "Error de acceso", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return; // Bloqueamos el acceso a la vista si no tiene permisos
+            }
         }
 
-        public void InicializaVentanaCalculoRecibos()
-        {
-           
-        }
-      
 
 
         private void btnBuscar_Click(object sender, EventArgs e)
@@ -52,11 +60,13 @@ namespace NominaXpert.View.UsersControl
             try
             {
                 var controller = new EmpleadosController();
-                var (nombre, sueldo) = controller.BuscarEmpleadoPorMatricula(txtMatricula.Text.Trim());
+                var (nombre, sueldo, idEmpleado, estatus) = controller.BuscarEmpleadoPorMatricula(txtMatricula.Text.Trim());
 
                 // Mostrar datos en la UI
                 txtNombreEmpleado.Text = nombre;
                 txtSueldoBase.Text = sueldo.ToString("C");
+                txtIdEmpleado.Text = idEmpleado.ToString();
+                txtEstatusEmpleado.Text = estatus.ToString();
             }
             catch (Exception ex)
             {
@@ -64,71 +74,153 @@ namespace NominaXpert.View.UsersControl
             }
         }
 
-       
+
 
         private void btnCalcularVerNomina_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtMatricula.Text)) //si esto esta vacio, mandamos el sig msj
+            if (string.IsNullOrWhiteSpace(txtMatricula.Text)) // Si el campo de matrícula está vacío
             {
-                MessageBox.Show("El campo de matricula no puede estar vacío", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("El campo de matrícula no puede estar vacío", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Crear un formulario de notificación temporal
-            Form mensajeForm = new Form
+            // 1. Validar las horas trabajadas
+            decimal totalHoras;
+            bool isValid = decimal.TryParse(txtDiasLaborados.Text, out totalHoras); // Intentar convertir el texto a decimal
+
+            if (!isValid || totalHoras == 0)
             {
-                FormBorderStyle = FormBorderStyle.FixedDialog,
-                StartPosition = FormStartPosition.CenterScreen,
-                Size = new System.Drawing.Size(350, 220),
-                Text = "Información del sistema",
-                ControlBox = false // Evita que se cierre manualmente
-            };
+                MessageBox.Show("No se puede generar la nómina porque las horas trabajadas son 0 o no son válidas.", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            Label lblMensaje = new Label
+            // 2. Validar que el empleado esté activo
+            if (txtEstatusEmpleado.Text != "Activo")
             {
-                Text = "Generando Nómina del Empleado...",
-                AutoSize = false, //evita su crecimiento
-                TextAlign = System.Drawing.ContentAlignment.MiddleCenter,
-                Dock = DockStyle.Fill //redimensiona al panel debajo
-            };
+                MessageBox.Show("El empleado no está activo. No se puede generar la nómina.", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            mensajeForm.Controls.Add(lblMensaje);
-            mensajeForm.Show();
+            // Iniciar el proceso de inserción de la nómina
+            this.Cursor = Cursors.WaitCursor;
 
-            // Configurar el temporizador para cerrar la ventana después de 2 segundos y cambiar de UC
-            System.Timers.Timer timer = new System.Timers.Timer(2000);
-            timer.Elapsed += (s, ev) =>
+            // Crear y mostrar un ProgressBar de carga
+            ProgressBar progressBar = new ProgressBar();
+            progressBar.Style = ProgressBarStyle.Marquee;
+            progressBar.Dock = DockStyle.Fill;
+            this.Controls.Add(progressBar);
+            progressBar.BringToFront();
+
+            try
             {
-                timer.Stop();
-                mensajeForm.Invoke((MethodInvoker)delegate { mensajeForm.Close(); });
+                int idEmpleado = int.Parse(txtIdEmpleado.Text);
+                DateTime fechaInicio = dtpFechaInicioNomina.Value;
+                DateTime fechaFin = dtpFechaFinNomina.Value;
 
-                // Ejecutar en el hilo principal
-                this.Invoke((MethodInvoker)delegate //asistente solo ve y dile a chef y delega la tarea
+                // Para pruebas, el idUsuario puede ser nulo
+                int? idUsuario = null;
+
+                // Llamar al controlador para registrar la nómina y obtener la ID generada
+                bool resultado = _nominasController.CrearNomina(idEmpleado, idUsuario ?? 1, fechaInicio, fechaFin);
+
+                if (resultado)
                 {
-                    // Obtener el contenedor padre del UserControl actual
-                    Control parent = this.Parent; //Quién es el padre?
+                    MessageBox.Show("La nómina se generó correctamente.", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Obtener el ID de la nómina recién creada
+                    int idNominaGenerada = _nominasController.ObtenerUltimaNominaGenerada(idEmpleado); // Aquí obtenemos la ID de la nómina
+
+                    // Redirigir a otro UserControl o pantalla después de generar la nómina
+                    Control parent = this.Parent;
                     if (parent != null)
                     {
-                        // Remover el UserControl actual
                         parent.Controls.Remove(this);
 
-                        // Crear una nueva instancia de UC_NominaRecibo
-                        UC_NominaPercepciones ucRecibo = new UC_NominaPercepciones();
-                        ucRecibo.Dock = DockStyle.Fill;
+                        UC_NominaPercepciones ucPercepciones = new UC_NominaPercepciones();
+                        ucPercepciones.Dock = DockStyle.Fill;
 
-                        // Agregar el nuevo UserControl al mismo contenedor
-                        parent.Controls.Add(ucRecibo);
-                        parent.Controls.SetChildIndex(ucRecibo, 0); // Ponerlo al frente
+                        // Pasar la ID de la nómina a UC_NominaPercepciones
+                        ucPercepciones.IdNomina = idNominaGenerada;
+
+                        parent.Controls.Add(ucPercepciones);
+                        parent.Controls.SetChildIndex(ucPercepciones, 0); // Ponerlo al frente
                     }
-                });
-            };
-            timer.Start();
+                }
+                else
+                {
+                    MessageBox.Show("Hubo un error al generar la nómina.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+                progressBar.Visible = false;
+            }
 
         }
 
         private void textBox3_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void dtpFechaInicioNomina_ValueChanged(object sender, EventArgs e)
+        {
+            ActualizarHorasLaboradas();
+        }
+
+        private void dtpFechaFinNomina_ValueChanged(object sender, EventArgs e)
+        {
+            ActualizarHorasLaboradas();  
+        }
+
+        // Método para calcular y actualizar los días laborados en el TextBox
+        private void ActualizarHorasLaboradas()
+        {
+            try
+            {
+                // 1. Verificar que el campo de matrícula no esté vacío
+                if (string.IsNullOrWhiteSpace(txtMatricula.Text))
+                {
+                    MessageBox.Show("El campo de matrícula no puede estar vacío.", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // 2. Obtener la matrícula
+                string matricula = txtMatricula.Text.Trim();
+
+                // 3. Verificar el formato de la matrícula
+                if (!EmpleadosNegocio.EsMatriculaValido(matricula))
+                {
+                    MessageBox.Show("Matrícula inválida. Verifique el formato.", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // 4. Buscar el ID del empleado utilizando la matrícula
+                var controller = new EmpleadosController();
+                var (nombre, sueldo, idEmpleado, estatus) = controller.BuscarEmpleadoPorMatricula(matricula);
+
+                // 5. Consultar las horas trabajadas en el periodo seleccionado
+                DateTime periodoInicio = dtpFechaInicioNomina.Value;
+                DateTime periodoFin = dtpFechaFinNomina.Value;
+
+                int idUsuario = 1; // Este ID debe ser del usuario actual (el que está logueado)
+
+                // Llamar al controlador para consultar las horas trabajadas
+                decimal totalHoras = _jornadaController.ConsultarTotalHorasTrabajadas(idEmpleado, periodoInicio, periodoFin, idUsuario);
+
+                // Mostrar el total de horas trabajadas en el TextBox (txtDiasLaborados)
+                txtDiasLaborados.Text = totalHoras.ToString("0"); // Mostrar como número entero
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al consultar las horas trabajadas: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         //private void btnCalcularVerNomina_Click(object sender, EventArgs e)

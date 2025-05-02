@@ -36,12 +36,12 @@ namespace NominaXpert.Controller
                 // Log de inicio del proceso de consulta
                 _logger.Info($"Iniciando consulta de total de horas trabajadas para el empleado ID: {idEmpleado}, periodo: {fechaInicio.ToShortDateString()} - {fechaFin.ToShortDateString()}.");
 
-                //// Validar que el usuario tenga permisos para consultar
-                //bool usuarioAutorizado = _usuariosDataAccess.VerificarUsuarioAutorizado(idUsuario);
-                //if (!usuarioAutorizado)
-                //{
-                //    throw new Exception("El usuario no tiene permisos suficientes para realizar la consulta.");
-                //}
+                // Validar que el usuario tenga permisos para consultar
+                bool usuarioAutorizado = _usuariosDataAccess.PermisoUsuarioGenerarNomina(idUsuario);
+                if (!usuarioAutorizado)
+                {
+                    throw new Exception("El usuario no tiene permisos suficientes para realizar la consulta de días trabajados.");
+                }
 
                 // Log: Usuario autorizado
                 _logger.Info($"Usuario ID: {idUsuario} autorizado para consultar las horas trabajadas.");
