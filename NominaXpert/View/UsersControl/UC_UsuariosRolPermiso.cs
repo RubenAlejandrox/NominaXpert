@@ -105,6 +105,8 @@ namespace NominaXpert.View.UsersControl
             dtgRoles.EnableHeadersVisualStyles = false;
             dtgRoles.ColumnHeadersDefaultCellStyle.BackColor = Color.SteelBlue;
             dtgRoles.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dtgRoles.DefaultCellStyle.ForeColor = Color.Black;
+
             //dtgRoles.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9, FontStyle.Bold);
 
             // Alternar colores de filas

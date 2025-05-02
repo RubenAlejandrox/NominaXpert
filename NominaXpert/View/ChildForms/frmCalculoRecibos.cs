@@ -59,4 +59,5 @@ namespace NominaXpert.View.Forms
             btnEstatusNomina.Enabled = controller.TienePermiso("NOM_EDIT");
         }
     }
+
 }

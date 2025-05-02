@@ -212,9 +212,15 @@ namespace NominaXpert.View
         {
             var controller = new UsuariosController();
             btnEmpleado.Enabled = controller.TienePermiso("EMP_VIEW");
-            btnCalculo.Enabled = controller.TienePermiso("NOM_VIEW");
+            btnCalculo.Enabled = controller.TienePermiso("NOM_EDIT");
             btnReporte.Enabled = controller.TienePermiso("NOM_HIST");
             btnSeguridad.Enabled = controller.TienePermiso("USR_VIEW");
+            btnConfig.Enabled = controller.TienePermiso("CNF_SIST");
+            if (controller.TienePermiso("AUDIT_VIEW")||controller.TienePermiso("AUDIT_AUTH"))
+                btnAuditoria.Enabled = true;
+            else 
+                btnAuditoria.Enabled = false;
+            
         }
 
         private void btnLogout_Click(object sender, EventArgs e)
@@ -237,9 +243,11 @@ namespace NominaXpert.View
                 View.Forms.Login loginForm = new View.Forms.Login();
                 if (loginForm.ShowDialog() == DialogResult.OK)
                 {
+                    OpenChildForm(new Forms.frmDashboard());
                     this.Show();
                     ConfigurarPermisos();
                     Reset();
+                    
                 }
                 else
                 {

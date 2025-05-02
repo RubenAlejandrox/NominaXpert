@@ -13,12 +13,6 @@ namespace NominaXpert.View.UsersControl
         private int _idUsuarioEditar = 0;
         private int _idPersonaEditar = 0;
 
-        public UC_UsuariosAlta(int idUsuario) : this() 
-        {
-            _idUsuarioEditar = idUsuario;
-            _modoEdicion = true;
-
-        }
 
         private void EstablecerModoEdicion(bool edicion)
         {
@@ -41,13 +35,6 @@ namespace NominaXpert.View.UsersControl
             dtpFechaNacimiento.Value = DateTime.Now;
         }
 
-        private void UC_UsuariosAlta_Load(object sender, EventArgs e)
-        {
-            if (!_modoEdicion)
-                EstablecerModoEdicion(false);
-        }
-
-
         private void ConfigurarPermisos()
         {
             var controller = new UsuariosController();
@@ -61,7 +48,6 @@ namespace NominaXpert.View.UsersControl
                 //key , value
                 {1, "Activo"},
                 {0, "Baja"},
-                {2, "Baja Temporal"}
             };
             cbxEstatus.DataSource = new BindingSource(list_estatus, null);
             cbxEstatus.DisplayMember = "Value"; //lo que se muestra
@@ -130,9 +116,9 @@ namespace NominaXpert.View.UsersControl
             {
                 ConfigurarPermisos();
                 ActualizarUsuario();
-            } // ya debes tener este
+            } 
             else
-                GuardarUsuario(); // tu método normal
+                GuardarUsuario(); 
         }
 
         public void ObtenerDetalleUsuario(int idUsuario)
@@ -160,27 +146,6 @@ namespace NominaXpert.View.UsersControl
                 EstablecerModoEdicion(true);
             }
         }
-        private void ReiniciarFormulario()
-        {
-            txtNomUsuario.Clear();
-            txtContraseña.Clear();
-            txtNombre.Clear();
-            txtCorreo.Clear();
-            txtTelefono.Clear();
-            txtDireccion.Clear();
-            txtCurp.Clear();
-            txtRfc.Clear();
-            dtpFechaNacimiento.Value = DateTime.Now.AddYears(-18);
-            cbxEstatus.SelectedIndex = 0;
-            cbxRoles.SelectedIndex = 0;
-
-            _modoEdicion = false;
-            _idUsuarioEditar = 0;
-            EstablecerModoEdicion(false);
-            ibtnRegresar.Visible = false;
-            _idPersonaEditar = 0;
-        }
-
 
 
         private void GuardarUsuario()
@@ -210,7 +175,7 @@ namespace NominaXpert.View.UsersControl
                     Rfc = txtRfc.Text.Trim()
                 };
 
-                Usuario estudiante = new Usuario
+                Usuario usuario = new Usuario
                 {
                     Nombre_Usuario = txtNomUsuario.Text.Trim(),
                     Contrasena = txtContraseña.Text.Trim(),
@@ -220,9 +185,9 @@ namespace NominaXpert.View.UsersControl
                 };
 
                 UsuariosController usuariosController = new UsuariosController();
-                var (idUsuario, mensaje) = usuariosController.RegistrarUsuario(estudiante);
+                var (idUsuario, mensaje) = usuariosController.RegistrarUsuario(usuario);
 
-                if (idUsuario > 0) // Cambiado a idUsuario para coincidir con la desestructuración
+                if (idUsuario > 0)
                 {
                     MessageBox.Show(mensaje, "Información del sistema",
                                   MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -233,17 +198,6 @@ namespace NominaXpert.View.UsersControl
                     MessageBox.Show(mensaje, "Información del sistema",
                                   MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                    //switch (idUsuario)
-                    //{
-                    //    case -2:
-                    //        txtCurp.Focus();
-                    //        txtCurp.SelectAll();
-                    //        break;
-                    //    case -3:
-                    //        txtNoControl.Focus();
-                    //        txtNoControl.SelectAll();
-                    //        break;
-                    //}
                 }
             }
             catch (Exception ex)
@@ -253,15 +207,6 @@ namespace NominaXpert.View.UsersControl
             }
         }
 
-        private void panel3_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
 
         private bool DatosValidos()
         {
@@ -283,11 +228,6 @@ namespace NominaXpert.View.UsersControl
             return true;
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void LimpiarFormulario()
         {
             txtNombre.Clear();
@@ -304,7 +244,26 @@ namespace NominaXpert.View.UsersControl
             cbxEstatus.SelectedValue = 1; // Activo por defecto
             ibtnRegresar.Visible = false;
         }
+        private void ReiniciarFormulario()//Se usa cuando ya se actualice el usuario
+        {
+            txtNomUsuario.Clear();
+            txtContraseña.Clear();
+            txtNombre.Clear();
+            txtCorreo.Clear();
+            txtTelefono.Clear();
+            txtDireccion.Clear();
+            txtCurp.Clear();
+            txtRfc.Clear();
+            dtpFechaNacimiento.Value = DateTime.Now.AddYears(-18);
+            cbxEstatus.SelectedIndex = 0;
+            cbxRoles.SelectedIndex = 0;
 
+            _modoEdicion = false;
+            _idUsuarioEditar = 0;
+            EstablecerModoEdicion(false);
+            ibtnRegresar.Visible = false;
+            _idPersonaEditar = 0;
+        }
         private void ActualizarUsuario()
         {
             if (DatosVacios())

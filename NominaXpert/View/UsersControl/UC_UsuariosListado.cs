@@ -37,6 +37,7 @@ namespace NominaXpert.View.UsersControl
         }
         private void ibtnEditar_Click(object sender, EventArgs e)
         {
+            //revisa que se haya seleccionado una fila en DataGridView
             if (dgvListadoUsuario.SelectedRows.Count == 0)
             {
                 MessageBox.Show("Selecciona un usuario para editar", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -45,9 +46,9 @@ namespace NominaXpert.View.UsersControl
 
             int idUsuario = Convert.ToInt32(dgvListadoUsuario.SelectedRows[0].Cells["id"].Value);
 
-            UC_UsuariosAlta ucEditar = new UC_UsuariosAlta(); // constructor vacío
+            UC_UsuariosAlta ucEditar = new UC_UsuariosAlta();
             addUsersControl(ucEditar);
-            ucEditar.ObtenerDetalleUsuario(idUsuario); // método correcto
+            ucEditar.ObtenerDetalleUsuario(idUsuario); 
         }
 
         private void ibtnBajaUsuario_Click(object sender, EventArgs e)
@@ -66,19 +67,8 @@ namespace NominaXpert.View.UsersControl
 
 
         }
-        private void btnEditar_Click_2(object sender, EventArgs e)
-        {
-            // Obtener la fila seleccionada
-
-        }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-
-        private void dtgListadoUsuario_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }
