@@ -99,10 +99,10 @@ namespace NominaXpert.View.UsersControl
                     );
                 }
 
-                if (bonificaciones.Count == 0)
-                {
-                    MessageBox.Show("No hay percepciones registradas.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                //if (bonificaciones.Count == 0)
+                //{
+                //    MessageBox.Show("No hay percepciones registradas.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //}
             }
             catch (Exception ex)
             {
@@ -231,20 +231,20 @@ namespace NominaXpert.View.UsersControl
                 LimpiarCampos();
                 CargarBonificaciones();
 
-                // Liberar el siguiente UserControl (en este caso, se podría redirigir a otro UC)
-                Control parent = this.Parent;
-                if (parent != null)
-                {
-                    parent.Controls.Remove(this);  // Remover el UC actual
+                //// Liberar el siguiente UserControl (en este caso, se podría redirigir a otro UC)
+                //Control parent = this.Parent;
+                //if (parent != null)
+                //{
+                //    parent.Controls.Remove(this);  // Remover el UC actual
 
-                    // Crear una nueva instancia del siguiente UserControl
-                    UC_NominaDeducciones ucDeducciones = new UC_NominaDeducciones(this.IdNomina);
-                    ucDeducciones.Dock = DockStyle.Fill;
+                //    // Crear una nueva instancia del siguiente UserControl
+                //    UC_NominaDeducciones ucDeducciones = new UC_NominaDeducciones(this.IdNomina);
+                //    ucDeducciones.Dock = DockStyle.Fill;
 
-                    // Agregar el nuevo UserControl al contenedor
-                    parent.Controls.Add(ucDeducciones);
-                    parent.Controls.SetChildIndex(ucDeducciones, 0);  // Ponerlo al frente
-                }
+                //    // Agregar el nuevo UserControl al contenedor
+                //    parent.Controls.Add(ucDeducciones);
+                //    parent.Controls.SetChildIndex(ucDeducciones, 0);  // Ponerlo al frente
+                //}
             }
             catch (Exception ex)
             {
@@ -311,45 +311,54 @@ namespace NominaXpert.View.UsersControl
             if (DataGridViewPercepciones.SelectedRows.Count > 0)
             {
                 var row = DataGridViewPercepciones.SelectedRows[0];
-                var idBonificacion = Convert.ToInt32(row.Cells["id"].Value);  // Obtener ID de la bonificación
-                var tipo = row.Cells["Tipo"].Value.ToString();
-                var monto = Convert.ToDecimal(row.Cells["Monto"].Value);
 
-                // Mostrar los valores antes de proceder
-                MessageBox.Show($"Modificando bonificación: ID: {idBonificacion}, Tipo: {tipo}, Monto: {monto}");
-
-
-                // Cargar los datos de la bonificación seleccionada en los campos
-                cboTipo.SelectedItem = tipo;  // Puede necesitar mapeo para la selección correcta
-                txtMonto.Text = monto.ToString();
-
-                // Crear la bonificación para la actualización
-                var bonificacion = new Bonificacion
+                // Verificar que las celdas tengan valores
+                if (row.Cells["id"].Value != null && row.Cells["Tipo"].Value != null && row.Cells["Monto"].Value != null)
                 {
-                    Id = idBonificacion,
-                    IdNomina = this.IdNomina,  // Usamos la ID de la nómina pasada
-                    IdTipo = Convert.ToInt32(cboTipo.SelectedValue),
-                    Monto = Convert.ToDecimal(txtMonto.Text)
-                };
+                    var idBonificacion = Convert.ToInt32(row.Cells["id"].Value);  // Obtener ID de la bonificación
+                    var tipo = row.Cells["Tipo"].Value.ToString();
+                    var monto = Convert.ToDecimal(row.Cells["Monto"].Value);
 
-                try
-                {
-                    // Llamamos al controlador para actualizar la bonificación
-                    var rowsAffected = _bonificacionController.ActualizarBonificacion(bonificacion);
-                    if (rowsAffected > 0)
+                    // Mostrar los valores antes de proceder
+                    MessageBox.Show($"Modificando bonificación: ID: {idBonificacion}, Tipo: {tipo}, Monto: {monto}");
+
+
+                    // Cargar los datos de la bonificación seleccionada en los campos
+                    cboTipo.SelectedItem = tipo;  // Puede necesitar mapeo para la selección correcta
+                    txtMonto.Text = monto.ToString();
+
+                    // Crear la bonificación para la actualización
+                    var bonificacion = new Bonificacion
                     {
-                        MessageBox.Show("Bonificación actualizada correctamente.", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        CargarBonificaciones(); // Recargar las bonificaciones
-                        LimpiarCampos(); // Limpiar los campos después de modificar
+                        Id = idBonificacion,
+                        IdNomina = this.IdNomina,  // Usamos la ID de la nómina pasada
+                        IdTipo = Convert.ToInt32(cboTipo.SelectedValue),
+                        Monto = Convert.ToDecimal(txtMonto.Text)
+                    };
+
+                    try
+                    {
+                        // Llamamos al controlador para actualizar la bonificación
+                        var rowsAffected = _bonificacionController.ActualizarBonificacion(bonificacion);
+                        if (rowsAffected > 0)
+                        {
+                            MessageBox.Show("Bonificación actualizada correctamente.", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            CargarBonificaciones(); // Recargar las bonificaciones
+                            LimpiarCampos(); // Limpiar los campos después de modificar
+                        }
+                        else
+                        {
+                            MessageBox.Show("No se pudo actualizar la bonificación.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        MessageBox.Show("No se pudo actualizar la bonificación.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show($"Error al actualizar la bonificación: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show($"Error al actualizar la bonificación: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Algunas celdas están vacías. Por favor, verifique los datos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
