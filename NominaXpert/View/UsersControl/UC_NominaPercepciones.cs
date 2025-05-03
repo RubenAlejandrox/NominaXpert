@@ -92,6 +92,7 @@ namespace NominaXpert.View.UsersControl
                 foreach (var b in bonificaciones)
                 {
                     DataGridViewPercepciones.Rows.Add(
+                        b.Id,
                         b.IdNomina,
                         _tiposPercepciones[b.IdTipo],
                         b.Monto
@@ -280,7 +281,7 @@ namespace NominaXpert.View.UsersControl
                 {
                     try
                     {
-                        // Llamamos al controlador para eliminar la bonificación
+                        // Llamar controlador para eliminar la bonificación
                         var rowsAffected = _bonificacionController.EliminarBonificacion(idBonificacion, IdNomina);
                         if (rowsAffected > 0)
                         {

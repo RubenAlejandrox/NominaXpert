@@ -45,11 +45,12 @@
             label2 = new Label();
             label1 = new Label();
             DataGridViewPercepciones = new DataGridView();
+            panel3 = new Panel();
+            btnSiguiente = new FontAwesome.Sharp.IconButton();
+            id = new DataGridViewTextBoxColumn();
             Id_nomina = new DataGridViewTextBoxColumn();
             Tipo = new DataGridViewTextBoxColumn();
             Monto = new DataGridViewTextBoxColumn();
-            panel3 = new Panel();
-            btnSiguiente = new FontAwesome.Sharp.IconButton();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             groupBox1.SuspendLayout();
@@ -277,36 +278,12 @@
             // DataGridViewPercepciones
             // 
             DataGridViewPercepciones.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            DataGridViewPercepciones.Columns.AddRange(new DataGridViewColumn[] { Id_nomina, Tipo, Monto });
+            DataGridViewPercepciones.Columns.AddRange(new DataGridViewColumn[] { id, Id_nomina, Tipo, Monto });
             DataGridViewPercepciones.Location = new Point(32, 32);
             DataGridViewPercepciones.Name = "DataGridViewPercepciones";
             DataGridViewPercepciones.RowHeadersWidth = 51;
             DataGridViewPercepciones.Size = new Size(579, 345);
             DataGridViewPercepciones.TabIndex = 0;
-            // 
-            // Id_nomina
-            // 
-            Id_nomina.HeaderText = "Id_nomina";
-            Id_nomina.MinimumWidth = 6;
-            Id_nomina.Name = "Id_nomina";
-            Id_nomina.ReadOnly = true;
-            Id_nomina.Width = 125;
-            // 
-            // Tipo
-            // 
-            Tipo.HeaderText = "Tipo";
-            Tipo.MinimumWidth = 6;
-            Tipo.Name = "Tipo";
-            Tipo.ReadOnly = true;
-            Tipo.Width = 220;
-            // 
-            // Monto
-            // 
-            Monto.HeaderText = "Monto";
-            Monto.MinimumWidth = 6;
-            Monto.Name = "Monto";
-            Monto.ReadOnly = true;
-            Monto.Width = 180;
             // 
             // panel3
             // 
@@ -341,6 +318,37 @@
             btnSiguiente.UseVisualStyleBackColor = false;
             btnSiguiente.Click += btnSiguiente_Click;
             // 
+            // id
+            // 
+            id.HeaderText = "Id";
+            id.MinimumWidth = 6;
+            id.Name = "id";
+            id.Width = 125;
+            // 
+            // Id_nomina
+            // 
+            Id_nomina.HeaderText = "Id_nomina";
+            Id_nomina.MinimumWidth = 6;
+            Id_nomina.Name = "Id_nomina";
+            Id_nomina.ReadOnly = true;
+            Id_nomina.Width = 125;
+            // 
+            // Tipo
+            // 
+            Tipo.HeaderText = "Tipo";
+            Tipo.MinimumWidth = 6;
+            Tipo.Name = "Tipo";
+            Tipo.ReadOnly = true;
+            Tipo.Width = 220;
+            // 
+            // Monto
+            // 
+            Monto.HeaderText = "Monto";
+            Monto.MinimumWidth = 6;
+            Monto.Name = "Monto";
+            Monto.ReadOnly = true;
+            Monto.Width = 180;
+            // 
             // UC_NominaPercepciones
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -370,9 +378,6 @@
         private Panel panel2;
         private Panel panel3;
         private DataGridView DataGridViewPercepciones;
-        private DataGridViewTextBoxColumn Id_nomina;
-        private DataGridViewTextBoxColumn Tipo;
-        private DataGridViewTextBoxColumn Monto;
         private GroupBox groupBox1;
         private TextBox txtMonto;
         private Label label2;
@@ -386,5 +391,9 @@
         private Label label3;
         private TextBox txtIdNomina;
         private Label label4;
+        private DataGridViewTextBoxColumn id;
+        private DataGridViewTextBoxColumn Id_nomina;
+        private DataGridViewTextBoxColumn Tipo;
+        private DataGridViewTextBoxColumn Monto;
     }
 }
