@@ -128,22 +128,25 @@ namespace NominaXpert.Data
         }
 
         // Eliminar Bonificación
-        public int EliminarBonificacion(int idBonificacion)
+        public int EliminarBonificacion(int idBonificacion, int idNomina)
         {
-            string query = "DELETE FROM nomina.bonificaciones WHERE id = @id";
-
+            string query = @"
+                DELETE FROM nomina.bonificaciones
+                WHERE id = @id AND id_nomina = @idNomina"; //  id_nomina
             try
             {
                 // Validar si el ID de la bonificación es válido
-                if (idBonificacion <= 0)
+                if (idBonificacion <= 0 || idNomina <= 0)
                 {
                     throw new ArgumentException("El ID de la bonificación es inválido.");
                 }
 
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
                 {
-                    _dbAccess.CreateParameter("@id", idBonificacion)
-                };
+                    _dbAccess.CreateParameter("@id", idBonificacion),
+                    _dbAccess.CreateParameter("@idNomina", idNomina) // validación por id_nomina
+                 };
+                ;
 
                 _dbAccess.Connect();
                 int rowsAffected = _dbAccess.ExecuteNonQuery(query, parameters);
@@ -167,7 +170,7 @@ namespace NominaXpert.Data
             string query = @"
                 UPDATE nomina.bonificaciones
                 SET id_tipo = @idTipo, monto = @monto
-                WHERE id = @id";
+                WHERE id = @id AND id_nomina = @idNomina"; ;
 
             try
             {
@@ -180,9 +183,10 @@ namespace NominaXpert.Data
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
                 {
                     _dbAccess.CreateParameter("@id", bonificacion.Id),
+                    _dbAccess.CreateParameter("@idNomina", bonificacion.IdNomina), // validación por id_nomina
                     _dbAccess.CreateParameter("@idTipo", bonificacion.IdTipo),
                     _dbAccess.CreateParameter("@monto", bonificacion.Monto)
-                };
+                        };
 
                 _dbAccess.Connect();
                 int rowsAffected = _dbAccess.ExecuteNonQuery(query, parameters);

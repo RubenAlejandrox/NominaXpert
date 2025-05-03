@@ -73,14 +73,14 @@ namespace NominaXpert.Controller
         }
 
         // Método para eliminar una bonificación
-        public int EliminarBonificacion(int idBonificacion)
+        public int EliminarBonificacion(int idBonificacion, int idNomina)
         {
             _logger.Info($"Iniciando la eliminación de la bonificación ID: {idBonificacion}");
 
             try
             {
                 _logger.Info($"Eliminando la bonificación ID: {idBonificacion}");
-                return _bonificacionDataAccess.EliminarBonificacion(idBonificacion);
+                return _bonificacionDataAccess.EliminarBonificacion(idBonificacion,idNomina);
                 
             }
             catch (Exception ex)

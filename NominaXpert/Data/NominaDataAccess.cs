@@ -198,7 +198,7 @@ namespace NominaXpert.Data
         {
             string query = @"
                 SELECT id
-                FROM nomina.nominas
+                FROM nomina.nomina
                 WHERE id_empleado = @idEmpleado
                 ORDER BY fecha_creacion DESC
                 LIMIT 1"; // Asegura que traes la última nómina generada

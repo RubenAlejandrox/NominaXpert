@@ -20,90 +20,100 @@ namespace NominaXpert.View.UsersControl
         public int IdNomina { get; set; }
 
         private readonly BonificacionController _bonificacionController; // Controlador de empleados
+        private readonly DetalleNominaController _detalleNominaController;
+        private readonly Dictionary<int, string> _tiposPercepciones;
 
 
-        public UC_NominaPercepciones()
+        /// <summary>
+        /// CONSTRUCTOR - Recibe el ID de nómina al crear la ventana
+        /// </summary>
+        /// <param name="idNomina"></param>
+        public UC_NominaPercepciones(int idNomina)
         {
+            if (idNomina <= 0)
+                throw new ArgumentException("La ID de nómina debe ser mayor a 0.");
             InitializeComponent();
             _bonificacionController = new BonificacionController();
-        }
+            _detalleNominaController = new DetalleNominaController();
 
-        private void UC_NominaPercepciones_Load(object sender, EventArgs e)
-        {
-            
-        }
+            _tiposPercepciones = new Dictionary<int, string>
+    {
+        { 1, "Horas Extras" },
+        { 2, "Comisión" },
+        { 3, "Incentivo" },
+        { 4, "Asistencia" },
+        { 5, "Puntualidad" },
+        { 6, "Retroactivo" },
+        { 7, "Otros" }
+    };
 
-        public void InicializaVentana()
-        {
+            this.IdNomina = idNomina;
+            txtIdNomina.Text = idNomina.ToString();
+
             PoblaComboTipo();
-
+            CargarBonificaciones();
         }
+
+        // Bloquear constructor vacío
+        private UC_NominaPercepciones()
+        {
+            throw new InvalidOperationException("Debes usar el constructor que recibe ID de nómina.");
+        }
+        private void PoblaComboTipo()
+        {
+            // Asignar el diccionario al combo
+            cboTipo.DropDownStyle = ComboBoxStyle.DropDownList;   // Solo permitir seleccionar opciones (no escribir texto)
+                                                                  // Asignar el diccionario al combo
+            cboTipo.DataSource = new BindingSource(_tiposPercepciones, null);
+            cboTipo.DisplayMember = "Value";
+            cboTipo.ValueMember = "Key";
+            cboTipo.SelectedValue = 1; // Horas extra por defecto
+                                       // Validación adicional (por si el valor 1 no existiera en el diccionario)
+            if (cboTipo.SelectedValue == null && cboTipo.Items.Count > 0)
+            {
+                cboTipo.SelectedIndex = 0; // Por seguridad, seleccionar el primer valor
+            }
+        }
+
 
         public void CargarBonificaciones()
         {
-            // Asegúrate de que el valor de la ID de la nómina es correcto
-            int idNomina = 0;
-            if (int.TryParse(txtIdNomina.Text, out idNomina))
+            if (this.IdNomina <= 0)
             {
-                this.IdNomina = idNomina;
-            }
-            else
-            {
-                MessageBox.Show("La ID de la nómina es inválida o no ha sido pasada correctamente.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("ID de nómina no válida.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            if (idNomina <= 0)
-            {
-                MessageBox.Show("La ID de la nómina es inválida o no ha sido pasada correctamente.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return; // No continuar si la ID de la nómina no es válida
-            }
-
-            // Usar esa ID para cargar las bonificaciones asociadas a la nómina
             try
             {
-                List<Bonificacion> bonificaciones = _bonificacionController.ObtenerBonificacionesPorNomina(idNomina);
+                DataGridViewPercepciones.Rows.Clear();
+                var bonificaciones = _bonificacionController.ObtenerBonificacionesPorNomina(this.IdNomina);
 
-                // Verificar si no se obtuvieron bonificaciones
-                if (bonificaciones.Count == 0)
+                foreach (var b in bonificaciones)
                 {
-                    MessageBox.Show("No se encontraron bonificaciones asociadas a esta nómina.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DataGridViewPercepciones.Rows.Add(
+                        b.IdNomina,
+                        _tiposPercepciones[b.IdTipo],
+                        b.Monto
+                    );
                 }
 
-                // Poblar el DataGridView con las bonificaciones obtenidas
-                foreach (var bonificacion in bonificaciones)
+                if (bonificaciones.Count == 0)
                 {
-                    DataGridViewPercepciones.Rows.Add(bonificacion.IdNomina, bonificacion.IdTipo, bonificacion.Monto);
+                    MessageBox.Show("No hay percepciones registradas.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar las bonificaciones: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al cargar percepciones: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void PoblaComboTipo()
+        private void LimpiarCampos()
         {
-            //Crear un diccionario de valores
-            Dictionary<int, string> list_estatus = new Dictionary<int, string>
-            {
-                { 1, "Horas Extras" },
-                { 2, "Comisión" },
-                { 3, "Incentivo" },
-                { 4, "Asistencia" },
-                { 5, "Puntualidad" },
-                { 6, "Retroactivo" },
-                { 7, "Otros" }
-            };
-            //Asignar el diccionario al combo
-            cboTipo.DataSource = new BindingSource(list_estatus, null);
-            cboTipo.DisplayMember = "Value";
-            cboTipo.ValueMember = "Key";
-
-            cboTipo.SelectedValue = 1;
+            txtMonto.Clear();
+            cboTipo.SelectedValue = 1;// Establecer el valor por defecto del ComboBox
         }
-
-
         private void btnSiguiente_Click(object sender, EventArgs e)
         {
             // Crear un formulario de notificación temporal
@@ -145,7 +155,7 @@ namespace NominaXpert.View.UsersControl
                         parent.Controls.Remove(this);
 
                         // Crear una nueva instancia de UC_NominaDeducciones
-                        UC_NominaDeducciones ucRecibo = new UC_NominaDeducciones();
+                        UC_NominaDeducciones ucRecibo = new UC_NominaDeducciones(this.IdNomina);
                         ucRecibo.Dock = DockStyle.Fill;
 
                         // Agregar el nuevo UserControl al mismo contenedor
@@ -155,12 +165,6 @@ namespace NominaXpert.View.UsersControl
                 });
             };
             timer.Start();
-        }
-
-        private void LimpiarCampos()
-        {
-            txtMonto.Clear();
-            cboTipo.SelectedValue = 1; // Establecer el valor por defecto del ComboBox
         }
 
         private void btnGuardar_Click(object sender, EventArgs e)
@@ -217,14 +221,14 @@ namespace NominaXpert.View.UsersControl
                 };
 
                 // Registrar el detalle de la nómina
-                var detalleNominaController = new DetalleNominaController();
-                detalleNominaController.RegistrarDetalleNomina(detalleNomina);
+                _detalleNominaController.RegistrarDetalleNomina(detalleNomina);
 
                 // Si el proceso fue exitoso, se muestra un mensaje y se limpia el formulario
                 MessageBox.Show("Bonificación guardada correctamente y detalle registrado.", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 // Limpiar los campos después de guardar
                 LimpiarCampos();
+                CargarBonificaciones();
 
                 // Liberar el siguiente UserControl (en este caso, se podría redirigir a otro UC)
                 Control parent = this.Parent;
@@ -233,7 +237,7 @@ namespace NominaXpert.View.UsersControl
                     parent.Controls.Remove(this);  // Remover el UC actual
 
                     // Crear una nueva instancia del siguiente UserControl
-                    UC_NominaDeducciones ucDeducciones = new UC_NominaDeducciones();
+                    UC_NominaDeducciones ucDeducciones = new UC_NominaDeducciones(this.IdNomina);
                     ucDeducciones.Dock = DockStyle.Fill;
 
                     // Agregar el nuevo UserControl al contenedor
@@ -268,7 +272,7 @@ namespace NominaXpert.View.UsersControl
             if (DataGridViewPercepciones.SelectedRows.Count > 0)
             {
                 var row = DataGridViewPercepciones.SelectedRows[0];
-                var idBonificacion = Convert.ToInt32(row.Cells["Id_nomina"].Value); // Obtener ID de la bonificación
+                var idBonificacion = Convert.ToInt32(row.Cells["id"].Value);  // Obtener ID de la bonificación
 
                 // Confirmar la eliminación
                 var result = MessageBox.Show("¿Estás seguro de que deseas eliminar esta bonificación?", "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
@@ -277,7 +281,7 @@ namespace NominaXpert.View.UsersControl
                     try
                     {
                         // Llamamos al controlador para eliminar la bonificación
-                        var rowsAffected = _bonificacionController.EliminarBonificacion(idBonificacion);
+                        var rowsAffected = _bonificacionController.EliminarBonificacion(idBonificacion, IdNomina);
                         if (rowsAffected > 0)
                         {
                             MessageBox.Show("Bonificación eliminada correctamente.", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -306,9 +310,13 @@ namespace NominaXpert.View.UsersControl
             if (DataGridViewPercepciones.SelectedRows.Count > 0)
             {
                 var row = DataGridViewPercepciones.SelectedRows[0];
-                var idBonificacion = Convert.ToInt32(row.Cells["Id_nomina"].Value); // Obtener ID de la bonificación
+                var idBonificacion = Convert.ToInt32(row.Cells["id"].Value);  // Obtener ID de la bonificación
                 var tipo = row.Cells["Tipo"].Value.ToString();
                 var monto = Convert.ToDecimal(row.Cells["Monto"].Value);
+
+                // Mostrar los valores antes de proceder
+                MessageBox.Show($"Modificando bonificación: ID: {idBonificacion}, Tipo: {tipo}, Monto: {monto}");
+
 
                 // Cargar los datos de la bonificación seleccionada en los campos
                 cboTipo.SelectedItem = tipo;  // Puede necesitar mapeo para la selección correcta
@@ -351,8 +359,12 @@ namespace NominaXpert.View.UsersControl
 
         private void UC_NominaPercepciones_Load_1(object sender, EventArgs e)
         {
-            InicializaVentana();
-            CargarBonificaciones();
+
+        }
+
+        private void txtIdNomina_TextChanged(object sender, EventArgs e)
+        {
+            txtIdNomina.Text = this.IdNomina.ToString();
         }
     }
 }

@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
+            txtIdNomina = new TextBox();
+            label4 = new Label();
             lblDescripcionCN = new Label();
             lblHistorialNominas = new Label();
             panel2 = new Panel();
@@ -48,8 +50,6 @@
             Monto = new DataGridViewTextBoxColumn();
             panel3 = new Panel();
             btnSiguiente = new FontAwesome.Sharp.IconButton();
-            label4 = new Label();
-            txtIdNomina = new TextBox();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             groupBox1.SuspendLayout();
@@ -68,6 +68,25 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(1262, 119);
             panel1.TabIndex = 2;
+            // 
+            // txtIdNomina
+            // 
+            txtIdNomina.Location = new Point(752, 70);
+            txtIdNomina.Name = "txtIdNomina";
+            txtIdNomina.ReadOnly = true;
+            txtIdNomina.Size = new Size(115, 27);
+            txtIdNomina.TabIndex = 22;
+            txtIdNomina.TextChanged += txtIdNomina_TextChanged;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.ForeColor = Color.White;
+            label4.Location = new Point(662, 73);
+            label4.Name = "label4";
+            label4.Size = new Size(84, 20);
+            label4.TabIndex = 5;
+            label4.Text = "ID Nomina:";
             // 
             // lblDescripcionCN
             // 
@@ -321,24 +340,6 @@
             btnSiguiente.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnSiguiente.UseVisualStyleBackColor = false;
             btnSiguiente.Click += btnSiguiente_Click;
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.ForeColor = Color.White;
-            label4.Location = new Point(662, 73);
-            label4.Name = "label4";
-            label4.Size = new Size(84, 20);
-            label4.TabIndex = 5;
-            label4.Text = "ID Nomina:";
-            // 
-            // txtIdNomina
-            // 
-            txtIdNomina.Location = new Point(752, 70);
-            txtIdNomina.Name = "txtIdNomina";
-            txtIdNomina.ReadOnly = true;
-            txtIdNomina.Size = new Size(115, 27);
-            txtIdNomina.TabIndex = 22;
             // 
             // UC_NominaPercepciones
             // 

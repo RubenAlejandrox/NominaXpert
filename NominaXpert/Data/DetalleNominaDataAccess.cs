@@ -20,6 +20,23 @@ namespace NominaXpert.Data
         // Instancia del acceso a datos de PostgreSQL
         private readonly PostgresSQLDataAccess _dbAccess;
 
+        // Constructor (aquí inicializas la conexión de acceso a datos)
+        public DetalleNominaDataAccess()
+        {
+            try
+            {
+                // Obtiene la instancia única de PostgresSQLDataAccess (patrón Singleton)
+                _dbAccess = PostgresSQLDataAccess.GetInstance();
+
+                _logger.Info("Instancia de DetalleNominaDataAccess creada correctamente.");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al inicializar DetalleNominaDataAccess");
+                throw;
+            }
+        }
+
         /// <summary>
         /// Funcion de clase DetalleNominaDataAccess
         /// </summary>
@@ -33,6 +50,11 @@ namespace NominaXpert.Data
 
             try
             {
+                if (string.IsNullOrWhiteSpace(detalleNomina.Tipo))
+                {
+                    detalleNomina.Tipo = "Ingreso";
+                }
+                // Verificar si los parámetros son válidos
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
                 {
                 _dbAccess.CreateParameter("@idNomina", detalleNomina.IdNomina),

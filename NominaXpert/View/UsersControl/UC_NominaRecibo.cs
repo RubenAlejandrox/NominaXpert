@@ -97,12 +97,12 @@ namespace NominaXpert.View.UsersControl
                         parent.Controls.Remove(this);
 
                         // Crear una nueva instancia de UC_NominaRecibo
-                        UC_NominaDeducciones ucRecibo = new UC_NominaDeducciones();
-                        ucRecibo.Dock = DockStyle.Fill;
+                        //UC_NominaDeducciones ucRecibo = new UC_NominaDeducciones();
+                        //ucRecibo.Dock = DockStyle.Fill;
 
-                        // Agregar el nuevo UserControl al mismo contenedor
-                        parent.Controls.Add(ucRecibo);
-                        parent.Controls.SetChildIndex(ucRecibo, 0); // Ponerlo al frente
+                        //// Agregar el nuevo UserControl al mismo contenedor
+                        //parent.Controls.Add(ucRecibo);
+                        //parent.Controls.SetChildIndex(ucRecibo, 0); // Ponerlo al frente
                     }
                 });
             };

@@ -1,4 +1,6 @@
-﻿using NominaXpert.Data;
+﻿using ControlEscolar.Utilities;
+using NLog;
+using NominaXpert.Data;
 using NominaXpert.Model;
 using System;
 using System.Collections.Generic;
@@ -11,6 +13,10 @@ namespace NominaXpert.Controller
     public class DetalleNominaController
     {
         private readonly DetalleNominaDataAccess _detalleNominaDataAccess;
+        // Logger para la clase
+        private static readonly Logger _logger = LoggingManager.GetLogger("NominaXpert.Controller.DetalleNominaControler");
+
+
 
         public DetalleNominaController()
         {

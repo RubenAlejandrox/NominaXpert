@@ -11,15 +11,21 @@ namespace NominaXpert.Model
         public int Id { get; set; }
         public int IdNomina { get; set; }
         public string Descripcion { get; set; }
-        public string Tipo { get; set; }
+        private string _tipo = "Ingreso";
+        public string Tipo
+        {
+            get => string.IsNullOrWhiteSpace(_tipo) ? "Ingreso" : _tipo;
+            set => _tipo = string.IsNullOrWhiteSpace(value) ? "Ingreso" : value;
+        }
         public decimal Monto { get; set; }
+
 
         // Constructor predeterminado
         public DetalleNomina()
         {
             IdNomina = 0;
             Descripcion = string.Empty;
-            Tipo = string.Empty; // Dejarlo vacío o usar un valor por defecto que puede ser asignado dinámicamente
+            Tipo = "Ingreso"; // Dejarlo vacío o usar un valor por defecto que puede ser asignado dinámicamente
             Monto = 0.00m;
         }
 
@@ -41,6 +47,7 @@ namespace NominaXpert.Model
             Tipo = tipo;
             Monto = monto;
         }
+
     }
 
 

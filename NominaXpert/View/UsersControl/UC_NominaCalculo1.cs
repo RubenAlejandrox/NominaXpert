@@ -137,6 +137,12 @@ namespace NominaXpert.View.UsersControl
 
                     // Obtener el ID de la nómina recién creada
                     int idNominaGenerada = _nominasController.ObtenerUltimaNominaGenerada(idEmpleado); // Aquí obtenemos la ID de la nómina
+                                                                                                       // VALIDAR QUE SE OBTUVO UNA NÓMINA VÁLIDA
+                    if (idNominaGenerada <= 0)
+                    {
+                        MessageBox.Show("Error: No se pudo obtener el ID de la nómina generada. No se puede continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
 
                     // Redirigir a otro UserControl o pantalla después de generar la nómina
                     Control parent = this.Parent;
@@ -144,11 +150,8 @@ namespace NominaXpert.View.UsersControl
                     {
                         parent.Controls.Remove(this);
 
-                        UC_NominaPercepciones ucPercepciones = new UC_NominaPercepciones();
+                        UC_NominaPercepciones ucPercepciones = new UC_NominaPercepciones(idNominaGenerada);
                         ucPercepciones.Dock = DockStyle.Fill;
-
-                        // Pasar la ID de la nómina a UC_NominaPercepciones
-                        ucPercepciones.IdNomina = idNominaGenerada;
 
                         parent.Controls.Add(ucPercepciones);
                         parent.Controls.SetChildIndex(ucPercepciones, 0); // Ponerlo al frente

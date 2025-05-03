@@ -12,9 +12,12 @@ namespace NominaXpert.View.UsersControl
 {
     public partial class UC_NominaDeducciones : UserControl
     {
-        public UC_NominaDeducciones()
+        public int IdNomina { get; set; }
+
+        public UC_NominaDeducciones(int idNomina)
         {
             InitializeComponent();
+            this.IdNomina = idNomina;
         }
 
         private void btnRegresar_Click(object sender, EventArgs e)
@@ -58,7 +61,7 @@ namespace NominaXpert.View.UsersControl
                         parent.Controls.Remove(this);
 
                         // Crear una nueva instancia de UC_NominaRecibo
-                        UC_NominaPercepciones ucRecibo = new UC_NominaPercepciones();
+                        UC_NominaPercepciones ucRecibo = new UC_NominaPercepciones(this.IdNomina);
                         ucRecibo.Dock = DockStyle.Fill;
 
                         // Agregar el nuevo UserControl al mismo contenedor
