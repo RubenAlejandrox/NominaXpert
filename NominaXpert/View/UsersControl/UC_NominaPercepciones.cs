@@ -54,11 +54,6 @@ namespace NominaXpert.View.UsersControl
             CargarBonificaciones();
         }
 
-        // Bloquear constructor vacío
-        private UC_NominaPercepciones()
-        {
-            throw new InvalidOperationException("Debes usar el constructor que recibe ID de nómina.");
-        }
         private void PoblaComboTipo()
         {
             // Asignar el diccionario al combo
@@ -99,7 +94,7 @@ namespace NominaXpert.View.UsersControl
                     );
                 }
 
-                //if (bonificaciones.Count == 0)
+                //if (deducciones.Count == 0)
                 //{
                 //    MessageBox.Show("No hay percepciones registradas.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 //}

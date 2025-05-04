@@ -45,11 +45,13 @@ namespace NominaXpert.Controller
             try
             {
                 // Llamamos al acceso a datos para obtener los detalles de la nómina
+                _logger.Info($"DetallesNomina obtenidas para la nómina ID: {idNomina}.");
                 return _detalleNominaDataAccess.ObtenerDetallesPorNomina(idNomina);
             }
             catch (Exception ex)
             {
                 // Si ocurre un error, lanzamos una excepción personalizada
+                _logger.Error(ex, $"Error al obtener los DetallesNominaController para la nómina ID: {idNomina}.");
                 throw new ApplicationException("Error al obtener los detalles de la nómina.", ex);
             }
         }

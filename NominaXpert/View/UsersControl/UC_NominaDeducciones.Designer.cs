@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
+            label4 = new Label();
+            txtIdNomina = new TextBox();
             lblDescripcionCN = new Label();
             lblHistorialNominas = new Label();
             panel2 = new Panel();
@@ -42,7 +44,8 @@
             txtMonto = new TextBox();
             label2 = new Label();
             label1 = new Label();
-            dataGridView1 = new DataGridView();
+            dataGridViewDeducciones = new DataGridView();
+            Id = new DataGridViewTextBoxColumn();
             Id_nomina = new DataGridViewTextBoxColumn();
             Tipo = new DataGridViewTextBoxColumn();
             Monto = new DataGridViewTextBoxColumn();
@@ -51,11 +54,13 @@
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewDeducciones).BeginInit();
             SuspendLayout();
             // 
             // panel1
             // 
+            panel1.Controls.Add(label4);
+            panel1.Controls.Add(txtIdNomina);
             panel1.Controls.Add(lblDescripcionCN);
             panel1.Controls.Add(lblHistorialNominas);
             panel1.Dock = DockStyle.Top;
@@ -63,6 +68,24 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(1262, 119);
             panel1.TabIndex = 3;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.ForeColor = Color.White;
+            label4.Location = new Point(648, 76);
+            label4.Name = "label4";
+            label4.Size = new Size(84, 20);
+            label4.TabIndex = 24;
+            label4.Text = "ID Nomina:";
+            // 
+            // txtIdNomina
+            // 
+            txtIdNomina.Location = new Point(738, 73);
+            txtIdNomina.Name = "txtIdNomina";
+            txtIdNomina.ReadOnly = true;
+            txtIdNomina.Size = new Size(115, 27);
+            txtIdNomina.TabIndex = 23;
             // 
             // lblDescripcionCN
             // 
@@ -90,7 +113,7 @@
             panel2.Controls.Add(btnEliminar);
             panel2.Controls.Add(btnModificar);
             panel2.Controls.Add(groupBox1);
-            panel2.Controls.Add(dataGridView1);
+            panel2.Controls.Add(dataGridViewDeducciones);
             panel2.Dock = DockStyle.Top;
             panel2.Location = new Point(0, 119);
             panel2.Name = "panel2";
@@ -118,6 +141,7 @@
             btnEliminar.TextAlign = ContentAlignment.MiddleRight;
             btnEliminar.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnEliminar.UseVisualStyleBackColor = false;
+            btnEliminar.Click += btnEliminar_Click;
             // 
             // btnModificar
             // 
@@ -140,6 +164,7 @@
             btnModificar.TextAlign = ContentAlignment.MiddleRight;
             btnModificar.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnModificar.UseVisualStyleBackColor = false;
+            btnModificar.Click += btnModificar_Click;
             // 
             // groupBox1
             // 
@@ -198,6 +223,7 @@
             btnLimpiar.TextAlign = ContentAlignment.MiddleRight;
             btnLimpiar.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnLimpiar.UseVisualStyleBackColor = false;
+            btnLimpiar.Click += btnLimpiar_Click;
             // 
             // btnGuardar
             // 
@@ -220,6 +246,7 @@
             btnGuardar.TextAlign = ContentAlignment.MiddleRight;
             btnGuardar.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnGuardar.UseVisualStyleBackColor = false;
+            btnGuardar.Click += btnGuardar_Click;
             // 
             // txtMonto
             // 
@@ -246,15 +273,22 @@
             label1.TabIndex = 0;
             label1.Text = "Tipo: ";
             // 
-            // dataGridView1
+            // dataGridViewDeducciones
             // 
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Id_nomina, Tipo, Monto });
-            dataGridView1.Location = new Point(32, 32);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(579, 345);
-            dataGridView1.TabIndex = 0;
+            dataGridViewDeducciones.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewDeducciones.Columns.AddRange(new DataGridViewColumn[] { Id, Id_nomina, Tipo, Monto });
+            dataGridViewDeducciones.Location = new Point(32, 32);
+            dataGridViewDeducciones.Name = "dataGridViewDeducciones";
+            dataGridViewDeducciones.RowHeadersWidth = 51;
+            dataGridViewDeducciones.Size = new Size(579, 345);
+            dataGridViewDeducciones.TabIndex = 0;
+            // 
+            // Id
+            // 
+            Id.HeaderText = "Id";
+            Id.MinimumWidth = 6;
+            Id.Name = "Id";
+            Id.Width = 125;
             // 
             // Id_nomina
             // 
@@ -344,7 +378,7 @@
             panel2.ResumeLayout(false);
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewDeducciones).EndInit();
             ResumeLayout(false);
         }
 
@@ -362,13 +396,16 @@
         private TextBox txtMonto;
         private Label label2;
         private Label label1;
-        private DataGridView dataGridView1;
-        private DataGridViewTextBoxColumn Id_nomina;
-        private DataGridViewTextBoxColumn Tipo;
-        private DataGridViewTextBoxColumn Monto;
+        private DataGridView dataGridViewDeducciones;
         private FontAwesome.Sharp.IconButton btnSiguiente;
         private FontAwesome.Sharp.IconButton btnRegresar;
         private ComboBox cboTipo;
         private Label label3;
+        private TextBox txtIdNomina;
+        private Label label4;
+        private DataGridViewTextBoxColumn Id;
+        private DataGridViewTextBoxColumn Id_nomina;
+        private DataGridViewTextBoxColumn Tipo;
+        private DataGridViewTextBoxColumn Monto;
     }
 }
