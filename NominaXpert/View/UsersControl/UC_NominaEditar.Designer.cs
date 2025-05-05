@@ -255,7 +255,7 @@
             gBoxEditarEstatus.Size = new Size(1111, 325);
             gBoxEditarEstatus.TabIndex = 8;
             gBoxEditarEstatus.TabStop = false;
-            gBoxEditarEstatus.Text = "Editar estatus de nómina";
+            gBoxEditarEstatus.Text = "Estatus de nómina";
             // 
             // btnVisualizarNomina
             // 

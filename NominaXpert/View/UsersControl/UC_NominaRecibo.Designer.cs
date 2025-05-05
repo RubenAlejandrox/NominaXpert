@@ -54,7 +54,7 @@
             label1 = new Label();
             gBoxVPCalculoNom = new GroupBox();
             cboMetodoPago = new ComboBox();
-            label10 = new Label();
+            lblMetodoPago = new Label();
             btnGenerarNómina = new FontAwesome.Sharp.IconButton();
             lblMontoLetras = new Label();
             lblTotalDeducciones = new Label();
@@ -347,7 +347,7 @@
             // gBoxVPCalculoNom
             // 
             gBoxVPCalculoNom.Controls.Add(cboMetodoPago);
-            gBoxVPCalculoNom.Controls.Add(label10);
+            gBoxVPCalculoNom.Controls.Add(lblMetodoPago);
             gBoxVPCalculoNom.Controls.Add(btnGenerarNómina);
             gBoxVPCalculoNom.Controls.Add(btnPDFReciboNomina);
             gBoxVPCalculoNom.Controls.Add(lblMontoLetras);
@@ -378,16 +378,16 @@
             cboMetodoPago.Size = new Size(151, 31);
             cboMetodoPago.TabIndex = 29;
             // 
-            // label10
+            // lblMetodoPago
             // 
-            label10.AutoSize = true;
-            label10.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label10.ForeColor = Color.White;
-            label10.Location = new Point(617, 102);
-            label10.Name = "label10";
-            label10.Size = new Size(132, 20);
-            label10.TabIndex = 28;
-            label10.Text = "Método de Pago: ";
+            lblMetodoPago.AutoSize = true;
+            lblMetodoPago.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblMetodoPago.ForeColor = Color.White;
+            lblMetodoPago.Location = new Point(617, 102);
+            lblMetodoPago.Name = "lblMetodoPago";
+            lblMetodoPago.Size = new Size(132, 20);
+            lblMetodoPago.TabIndex = 28;
+            lblMetodoPago.Text = "Método de Pago: ";
             // 
             // btnGenerarNómina
             // 
@@ -609,7 +609,7 @@
         private Label lblFechaInicio;
         private FontAwesome.Sharp.IconButton btnGenerarNómina;
         private FontAwesome.Sharp.IconButton btnRegresar;
-        private Label label10;
+        private Label lblMetodoPago;
         private ComboBox cboMetodoPago;
     }
 }

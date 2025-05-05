@@ -114,6 +114,8 @@ namespace NominaXpert.View.UsersControl
                     // Deshabilitar botones si ya está pagada
                     btnGenerarNómina.Visible = false;
                     btnRegresar.Visible = false;
+                    lblMetodoPago.Visible = false;
+                    cboMetodoPago.Visible = false;
                     // btnPDFReciboNomina.Enabled = true;
                 }
                 else

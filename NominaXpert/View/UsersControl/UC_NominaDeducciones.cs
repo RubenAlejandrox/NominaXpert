@@ -14,13 +14,21 @@ namespace NominaXpert.View.UsersControl
 {
     public partial class UC_NominaDeducciones : UserControl
     {
+        // Propiedad para almacenar la ID de la nómina
         public int IdNomina { get; set; }
 
         private readonly DeduccionController _deduccionController; // Controlador de empleados
-        private readonly DetalleNominaController _detalleNominaController;
-        private readonly Dictionary<int, string> _tiposDeducciones;
+        private readonly DetalleNominaController _detalleNominaController; // Controlador de nómina
+        private readonly Dictionary<int, string> _tiposDeducciones; // Diccionario para tipos de deducciones
 
+        // Variable global para saber cuál deducción se está editando actualmente
+        private int idDeduccionEditar = -1;
 
+        /// <summary>
+        /// Constructor de la clase UC_NominaDeducciones
+        /// </summary>
+        /// <param name="idNomina"></param>
+        /// <exception cref="ArgumentException"></exception>
         public UC_NominaDeducciones(int idNomina)
         {
             if (idNomina <= 0)
@@ -46,6 +54,7 @@ namespace NominaXpert.View.UsersControl
             PoblaComboTipo();
             CargarDeducciones();
         }
+
         private void PoblaComboTipo()
         {
             // Asignar el diccionario al combo
@@ -204,6 +213,12 @@ namespace NominaXpert.View.UsersControl
             timer.Start();
         }
 
+
+        /// <summary>
+        /// Evento que se ejecuta al hacer clic en el botón "Guardar"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnGuardar_Click(object sender, EventArgs e)
         {
             // Validación de campos
@@ -329,63 +344,87 @@ namespace NominaXpert.View.UsersControl
         private void btnModificar_Click(object sender, EventArgs e)
         {
 
-            // Verificar si se ha seleccionado una fila
-            if (dataGridViewDeducciones.SelectedRows.Count > 0)
+            // Si el texto del botón es "Modificar", quiere decir que es MODO SELECCIONAR
+            if (btnModificar.Text == "Modificar")
             {
-                var row = dataGridViewDeducciones.SelectedRows[0];
-
-                // Verificar que las celdas tengan valores
-                if (row.Cells["id"].Value != null && row.Cells["Tipo"].Value != null && row.Cells["Monto"].Value != null)
+                // Validar que haya una fila seleccionada
+                if (dataGridViewDeducciones.SelectedRows.Count > 0)
                 {
-                    var idDeduccion = Convert.ToInt32(row.Cells["id"].Value);  // Obtener ID de la deducción
-                    var tipo = row.Cells["Tipo"].Value.ToString();
-                    var monto = Convert.ToDecimal(row.Cells["Monto"].Value);
+                    var row = dataGridViewDeducciones.SelectedRows[0];
 
-                    //// Mostrar los valores antes de proceder
-                    //MessageBox.Show($"Modificando deducción: ID: {idDeduccion}, Tipo: {tipo}, Monto: {monto}");
-
-
-                    // Cargar los datos de la deducción seleccionada en los campos
-                    cboTipo.SelectedItem = tipo;  // Puede necesitar mapeo para la selección correcta
-                    txtMonto.Text = monto.ToString();
-
-                    // Crear la deducción para la actualización
-                    var deduccion = new Deduccion
+                    // Validar que las celdas tengan valores
+                    if (row.Cells["id"].Value != null && row.Cells["Tipo"].Value != null && row.Cells["Monto"].Value != null)
                     {
-                        Id = idDeduccion,
-                        IdNomina = this.IdNomina,  // Usamos la ID de la nómina pasada
-                        IdTipo = Convert.ToInt32(cboTipo.SelectedValue),
-                        Monto = Convert.ToDecimal(txtMonto.Text)
-                    };
+                        // Obtener valores de la deducción
+                        idDeduccionEditar = Convert.ToInt32(row.Cells["id"].Value);
+                        var tipo = row.Cells["Tipo"].Value.ToString();
+                        var monto = Convert.ToDecimal(row.Cells["Monto"].Value);
 
-                    try
-                    {
-                        // Llamamos al controlador para actualizar la dedicción
-                        var rowsAffected = _deduccionController.ActualizarDeduccion(deduccion);
-                        if (rowsAffected > 0)
-                        {
-                            MessageBox.Show("Deducción actualizada correctamente.", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            CargarDeducciones(); // Recargar las deducciones
-                            LimpiarCampos(); // Limpiar los campos después de modificar
-                        }
-                        else
-                        {
-                            MessageBox.Show("No se pudo actualizar la deducción.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Error al actualizar la deducción: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        // Cargar los valores al ComboBox y TextBox
+                        cboTipo.SelectedIndex = cboTipo.FindStringExact(tipo); // Seleccionar tipo en el Combo
+                        txtMonto.Text = monto.ToString(); // Mostrar monto en el textbox
+
+                        // Cambiar el texto del botón para pasar al modo "Guardar Cambios"
+                        btnModificar.Text = "Guardar Cambios";
+
+                        MessageBox.Show("Modifica el monto o tipo y presiona Guardar Cambios para actualizar.");
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Algunas celdas están vacías. Por favor, verifique los datos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Por favor, selecciona una deducción para modificar.", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
-            else
+            else // Si ya está en modo "Guardar Cambios"
             {
-                MessageBox.Show("Por favor, selecciona una deducción para modificar.", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                // Validar que se haya seleccionado una deducción previamente
+                if (idDeduccionEditar <= 0)
+                {
+                    MessageBox.Show("No hay deducción seleccionada para actualizar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Validar que el monto ingresado sea válido
+                if (!decimal.TryParse(txtMonto.Text, out decimal monto) || monto <= 0)
+                {
+                    MessageBox.Show("Ingrese un monto válido mayor a 0.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Crear objeto deducción para actualizar en base de datos
+                var deduccion = new Deduccion
+                {
+                    Id = idDeduccionEditar,
+                    IdNomina = this.IdNomina,
+                    IdTipo = Convert.ToInt32(cboTipo.SelectedValue),
+                    Monto = monto
+                };
+
+                try
+                {
+                    // Llamar controlador para actualizar la deducción
+                    var rowsAffected = _deduccionController.ActualizarDeduccion(deduccion);
+                    if (rowsAffected > 0)
+                    {
+                        MessageBox.Show("Deducción actualizada correctamente.", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // Recargar las deducciones para actualizar la tabla
+                        CargarDeducciones();
+
+                        // Limpiar campos y regresar botón a su estado normal
+                        LimpiarCampos();
+                        btnModificar.Text = "Modificar";
+                        idDeduccionEditar = -1;
+                    }
+                    else
+                    {
+                        MessageBox.Show("No se pudo actualizar la deducción.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al actualizar la deducción: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 

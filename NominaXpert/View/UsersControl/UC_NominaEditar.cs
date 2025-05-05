@@ -98,11 +98,17 @@ namespace NominaXpert.View.UsersControl
                 {
                     btnActualizarCambios.Visible = false;
                     btnModificar.Visible = false;
+                    cBoxEstatusNomina.Visible = false;
+                    lblEstatusNomina.Visible = false;
+                    lblDatosObligatorios.Visible =false;
                 }
                 else
                 {
                     btnActualizarCambios.Visible = true;
                     btnModificar.Visible = true;
+                    cBoxEstatusNomina.Visible = true;
+                    lblEstatusNomina.Visible = true;
+                    lblDatosObligatorios.Visible = true;
                 }
 
                 // Asignar el ID de la nómina y el ID del empleado

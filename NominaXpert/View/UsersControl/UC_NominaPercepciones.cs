@@ -18,6 +18,7 @@ namespace NominaXpert.View.UsersControl
 
         // Propiedad pública para almacenar la ID de la nómina
         public int IdNomina { get; set; }
+        private int idBonificacionEditar = -1; // ID global para edición
 
         private readonly BonificacionController _bonificacionController; // Controlador de empleados
         private readonly DetalleNominaController _detalleNominaController;
@@ -305,63 +306,81 @@ namespace NominaXpert.View.UsersControl
 
         private void btnModificar_Click(object sender, EventArgs e)
         {
-            // Verificar si se ha seleccionado una fila
-            if (DataGridViewPercepciones.SelectedRows.Count > 0)
+            if (btnModificar.Text == "Modificar")
             {
-                var row = DataGridViewPercepciones.SelectedRows[0];
+                // MODO: Seleccionar para editar
 
-                // Verificar que las celdas tengan valores
-                if (row.Cells["id"].Value != null && row.Cells["Tipo"].Value != null && row.Cells["Monto"].Value != null)
+                if (DataGridViewPercepciones.SelectedRows.Count > 0)
                 {
-                    var idBonificacion = Convert.ToInt32(row.Cells["id"].Value);  // Obtener ID de la bonificación
-                    var tipo = row.Cells["Tipo"].Value.ToString();
-                    var monto = Convert.ToDecimal(row.Cells["Monto"].Value);
+                    var row = DataGridViewPercepciones.SelectedRows[0];
 
-                    // Mostrar los valores antes de proceder
-                    MessageBox.Show($"Modificando bonificación: ID: {idBonificacion}, Tipo: {tipo}, Monto: {monto}");
-
-
-                    // Cargar los datos de la bonificación seleccionada en los campos
-                    cboTipo.SelectedItem = tipo;  // Puede necesitar mapeo para la selección correcta
-                    txtMonto.Text = monto.ToString();
-
-                    // Crear la bonificación para la actualización
-                    var bonificacion = new Bonificacion
+                    if (row.Cells["id"].Value != null && row.Cells["Tipo"].Value != null && row.Cells["Monto"].Value != null)
                     {
-                        Id = idBonificacion,
-                        IdNomina = this.IdNomina,  // Usamos la ID de la nómina pasada
-                        IdTipo = Convert.ToInt32(cboTipo.SelectedValue),
-                        Monto = Convert.ToDecimal(txtMonto.Text)
-                    };
+                        idBonificacionEditar = Convert.ToInt32(row.Cells["id"].Value);
+                        var tipo = row.Cells["Tipo"].Value.ToString();
+                        var monto = Convert.ToDecimal(row.Cells["Monto"].Value);
 
-                    try
-                    {
-                        // Llamamos al controlador para actualizar la bonificación
-                        var rowsAffected = _bonificacionController.ActualizarBonificacion(bonificacion);
-                        if (rowsAffected > 0)
-                        {
-                            MessageBox.Show("Bonificación actualizada correctamente.", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            CargarBonificaciones(); // Recargar las bonificaciones
-                            LimpiarCampos(); // Limpiar los campos después de modificar
-                        }
-                        else
-                        {
-                            MessageBox.Show("No se pudo actualizar la bonificación.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Error al actualizar la bonificación: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        // Cargar valores
+                        cboTipo.SelectedIndex = cboTipo.FindStringExact(tipo);
+                        txtMonto.Text = monto.ToString();
+
+                        // Cambiar el texto del botón a Guardar Cambios
+                        btnModificar.Text = "Guardar Cambios";
+
+                        MessageBox.Show("Modifica el monto o tipo y presiona Guardar Cambios para actualizar.");
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Algunas celdas están vacías. Por favor, verifique los datos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Por favor, selecciona una bonificación para modificar.", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             else
             {
-                MessageBox.Show("Por favor, selecciona una bonificación para modificar.", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                // MODO: Guardar Cambios
+
+                if (idBonificacionEditar <= 0)
+                {
+                    MessageBox.Show("No hay bonificación seleccionada para actualizar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (!decimal.TryParse(txtMonto.Text, out decimal monto) || monto <= 0)
+                {
+                    MessageBox.Show("Ingrese un monto válido mayor a 0.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                var bonificacion = new Bonificacion
+                {
+                    Id = idBonificacionEditar,
+                    IdNomina = this.IdNomina,
+                    IdTipo = Convert.ToInt32(cboTipo.SelectedValue),
+                    Monto = monto
+                };
+
+                try
+                {
+                    var rowsAffected = _bonificacionController.ActualizarBonificacion(bonificacion);
+                    if (rowsAffected > 0)
+                    {
+                        MessageBox.Show("Bonificación actualizada correctamente.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        CargarBonificaciones();
+                        LimpiarCampos();
+
+                        // Reiniciar botón
+                        btnModificar.Text = "Modificar";
+                        idBonificacionEditar = -1;
+                    }
+                    else
+                    {
+                        MessageBox.Show("No se pudo actualizar la bonificación.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al actualizar la bonificación: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
