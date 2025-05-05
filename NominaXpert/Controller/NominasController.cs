@@ -154,6 +154,7 @@ namespace NominaXpert.Controller
         {
             try
             {
+                _logger.Info($"NominasController -> ActualizarEstadoPago ejecutado para nómina {idNomina} nuevo estado: {nuevoEstado}");
                 return _nominaDataAccess.ActualizarEstadoPago(idNomina, nuevoEstado);
             }
             catch (Exception ex)

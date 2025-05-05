@@ -93,6 +93,18 @@ namespace NominaXpert.View.UsersControl
                 txtNombreEmpleado.Text = nomina.NombreEmpleado;
                 txtEstadoDePago.Text = nomina.EstadoPago;
 
+                // Deshabilitar opciones si la nómina ya está pagada
+                if (nomina.EstadoPago == "Pagado")
+                {
+                    btnActualizarCambios.Visible = false;
+                    btnModificar.Visible = false;
+                }
+                else
+                {
+                    btnActualizarCambios.Visible = true;
+                    btnModificar.Visible = true;
+                }
+
                 // Asignar el ID de la nómina y el ID del empleado
                 this.IdNomina = nomina.IdNomina;
                 this.IdEmpleado = nomina.IdEmpleado;
@@ -100,6 +112,8 @@ namespace NominaXpert.View.UsersControl
                 // Seleccionar el estado actual en el combo
                 cBoxEstatusNomina.SelectedIndex = cBoxEstatusNomina.FindStringExact(nomina.EstadoPago);
             }
+
+
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al buscar la nómina: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

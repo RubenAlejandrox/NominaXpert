@@ -411,6 +411,7 @@
             btnGenerarNómina.TextAlign = ContentAlignment.MiddleRight;
             btnGenerarNómina.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnGenerarNómina.UseVisualStyleBackColor = false;
+            btnGenerarNómina.Click += btnGenerarNómina_Click;
             // 
             // lblMontoLetras
             // 
