@@ -36,16 +36,16 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             flowLayoutPanel1 = new FlowLayoutPanel();
             gBoxVPDatosEmp = new GroupBox();
-            label12 = new Label();
-            lblfechaInicio = new Label();
-            lblfechaFin = new Label();
+            lblEstado = new Label();
+            lblFechaFin = new Label();
+            lblFechaInicio = new Label();
             label9 = new Label();
             label8 = new Label();
             label7 = new Label();
-            lblID = new Label();
+            lblIdEmpleado = new Label();
             lblRFC = new Label();
             lblDepartamento = new Label();
-            lblName = new Label();
+            lblNombreEmpleado = new Label();
             label6 = new Label();
             label5 = new Label();
             label4 = new Label();
@@ -53,12 +53,14 @@
             label2 = new Label();
             label1 = new Label();
             gBoxVPCalculoNom = new GroupBox();
+            cboMetodoPago = new ComboBox();
+            label10 = new Label();
             btnGenerarNómina = new FontAwesome.Sharp.IconButton();
-            lblLetraPagado = new Label();
-            lblTotalDeduccionNum = new Label();
+            lblMontoLetras = new Label();
+            lblTotalDeducciones = new Label();
             lblTotalNeto = new Label();
             lblSueldoBase = new Label();
-            lblTotalPercepcionNum = new Label();
+            lblTotalPercepciones = new Label();
             lblMontoletra = new Label();
             lblNetoPagadoletra = new Label();
             lblTotalNetoletra = new Label();
@@ -66,8 +68,6 @@
             lblTotalPercepcionletra = new Label();
             btnRegresar = new FontAwesome.Sharp.IconButton();
             toolTip1 = new ToolTip(components);
-            label10 = new Label();
-            cboMetodoPago = new ComboBox();
             panel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
@@ -159,16 +159,16 @@
             // 
             // gBoxVPDatosEmp
             // 
-            gBoxVPDatosEmp.Controls.Add(label12);
-            gBoxVPDatosEmp.Controls.Add(lblfechaInicio);
-            gBoxVPDatosEmp.Controls.Add(lblfechaFin);
+            gBoxVPDatosEmp.Controls.Add(lblEstado);
+            gBoxVPDatosEmp.Controls.Add(lblFechaFin);
+            gBoxVPDatosEmp.Controls.Add(lblFechaInicio);
             gBoxVPDatosEmp.Controls.Add(label9);
             gBoxVPDatosEmp.Controls.Add(label8);
             gBoxVPDatosEmp.Controls.Add(label7);
-            gBoxVPDatosEmp.Controls.Add(lblID);
+            gBoxVPDatosEmp.Controls.Add(lblIdEmpleado);
             gBoxVPDatosEmp.Controls.Add(lblRFC);
             gBoxVPDatosEmp.Controls.Add(lblDepartamento);
-            gBoxVPDatosEmp.Controls.Add(lblName);
+            gBoxVPDatosEmp.Controls.Add(lblNombreEmpleado);
             gBoxVPDatosEmp.Controls.Add(label6);
             gBoxVPDatosEmp.Controls.Add(label5);
             gBoxVPDatosEmp.Controls.Add(label4);
@@ -184,35 +184,35 @@
             gBoxVPDatosEmp.TabStop = false;
             gBoxVPDatosEmp.Text = "Resumen General:";
             // 
-            // label12
+            // lblEstado
             // 
-            label12.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label12.ForeColor = Color.GreenYellow;
-            label12.Location = new Point(776, 137);
-            label12.Name = "label12";
-            label12.Size = new Size(362, 20);
-            label12.TabIndex = 41;
-            label12.Text = "Pendiente a Pagar";
+            lblEstado.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblEstado.ForeColor = Color.GreenYellow;
+            lblEstado.Location = new Point(776, 137);
+            lblEstado.Name = "lblEstado";
+            lblEstado.Size = new Size(362, 20);
+            lblEstado.TabIndex = 41;
+            lblEstado.Text = "Pendiente a Pagar";
             // 
-            // lblfechaInicio
+            // lblFechaFin
             // 
-            lblfechaInicio.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblfechaInicio.ForeColor = Color.White;
-            lblfechaInicio.Location = new Point(776, 106);
-            lblfechaInicio.Name = "lblfechaInicio";
-            lblfechaInicio.Size = new Size(362, 20);
-            lblfechaInicio.TabIndex = 40;
-            lblfechaInicio.Text = "---";
+            lblFechaFin.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblFechaFin.ForeColor = Color.White;
+            lblFechaFin.Location = new Point(776, 106);
+            lblFechaFin.Name = "lblFechaFin";
+            lblFechaFin.Size = new Size(362, 20);
+            lblFechaFin.TabIndex = 40;
+            lblFechaFin.Text = "---";
             // 
-            // lblfechaFin
+            // lblFechaInicio
             // 
-            lblfechaFin.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblfechaFin.ForeColor = Color.White;
-            lblfechaFin.Location = new Point(776, 76);
-            lblfechaFin.Name = "lblfechaFin";
-            lblfechaFin.Size = new Size(362, 20);
-            lblfechaFin.TabIndex = 39;
-            lblfechaFin.Text = "---";
+            lblFechaInicio.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblFechaInicio.ForeColor = Color.White;
+            lblFechaInicio.Location = new Point(776, 76);
+            lblFechaInicio.Name = "lblFechaInicio";
+            lblFechaInicio.Size = new Size(362, 20);
+            lblFechaInicio.TabIndex = 39;
+            lblFechaInicio.Text = "---";
             // 
             // label9
             // 
@@ -244,15 +244,15 @@
             label7.TabIndex = 36;
             label7.Text = "Fecha Inicio:";
             // 
-            // lblID
+            // lblIdEmpleado
             // 
-            lblID.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblID.ForeColor = Color.White;
-            lblID.Location = new Point(165, 167);
-            lblID.Name = "lblID";
-            lblID.Size = new Size(362, 20);
-            lblID.TabIndex = 35;
-            lblID.Text = "---";
+            lblIdEmpleado.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblIdEmpleado.ForeColor = Color.White;
+            lblIdEmpleado.Location = new Point(165, 167);
+            lblIdEmpleado.Name = "lblIdEmpleado";
+            lblIdEmpleado.Size = new Size(362, 20);
+            lblIdEmpleado.TabIndex = 35;
+            lblIdEmpleado.Text = "---";
             // 
             // lblRFC
             // 
@@ -274,15 +274,15 @@
             lblDepartamento.TabIndex = 33;
             lblDepartamento.Text = "---";
             // 
-            // lblName
+            // lblNombreEmpleado
             // 
-            lblName.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblName.ForeColor = Color.White;
-            lblName.Location = new Point(165, 76);
-            lblName.Name = "lblName";
-            lblName.Size = new Size(362, 20);
-            lblName.TabIndex = 32;
-            lblName.Text = "---";
+            lblNombreEmpleado.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblNombreEmpleado.ForeColor = Color.White;
+            lblNombreEmpleado.Location = new Point(165, 76);
+            lblNombreEmpleado.Name = "lblNombreEmpleado";
+            lblNombreEmpleado.Size = new Size(362, 20);
+            lblNombreEmpleado.TabIndex = 32;
+            lblNombreEmpleado.Text = "---";
             // 
             // label6
             // 
@@ -350,11 +350,11 @@
             gBoxVPCalculoNom.Controls.Add(label10);
             gBoxVPCalculoNom.Controls.Add(btnGenerarNómina);
             gBoxVPCalculoNom.Controls.Add(btnPDFReciboNomina);
-            gBoxVPCalculoNom.Controls.Add(lblLetraPagado);
-            gBoxVPCalculoNom.Controls.Add(lblTotalDeduccionNum);
+            gBoxVPCalculoNom.Controls.Add(lblMontoLetras);
+            gBoxVPCalculoNom.Controls.Add(lblTotalDeducciones);
             gBoxVPCalculoNom.Controls.Add(lblTotalNeto);
             gBoxVPCalculoNom.Controls.Add(lblSueldoBase);
-            gBoxVPCalculoNom.Controls.Add(lblTotalPercepcionNum);
+            gBoxVPCalculoNom.Controls.Add(lblTotalPercepciones);
             gBoxVPCalculoNom.Controls.Add(lblMontoletra);
             gBoxVPCalculoNom.Controls.Add(lblNetoPagadoletra);
             gBoxVPCalculoNom.Controls.Add(lblTotalNetoletra);
@@ -369,6 +369,25 @@
             gBoxVPCalculoNom.TabIndex = 9;
             gBoxVPCalculoNom.TabStop = false;
             gBoxVPCalculoNom.Text = "Vista previa de cálculos de Nómina";
+            // 
+            // cboMetodoPago
+            // 
+            cboMetodoPago.FormattingEnabled = true;
+            cboMetodoPago.Location = new Point(776, 97);
+            cboMetodoPago.Name = "cboMetodoPago";
+            cboMetodoPago.Size = new Size(151, 31);
+            cboMetodoPago.TabIndex = 29;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label10.ForeColor = Color.White;
+            label10.Location = new Point(617, 102);
+            label10.Name = "label10";
+            label10.Size = new Size(132, 20);
+            label10.TabIndex = 28;
+            label10.Text = "Método de Pago: ";
             // 
             // btnGenerarNómina
             // 
@@ -393,26 +412,26 @@
             btnGenerarNómina.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnGenerarNómina.UseVisualStyleBackColor = false;
             // 
-            // lblLetraPagado
+            // lblMontoLetras
             // 
-            lblLetraPagado.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblLetraPagado.ForeColor = Color.White;
-            lblLetraPagado.Location = new Point(31, 175);
-            lblLetraPagado.Name = "lblLetraPagado";
-            lblLetraPagado.Size = new Size(588, 20);
-            lblLetraPagado.TabIndex = 26;
-            lblLetraPagado.Text = "PESOS 0/100 M.N,";
+            lblMontoLetras.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblMontoLetras.ForeColor = Color.White;
+            lblMontoLetras.Location = new Point(31, 175);
+            lblMontoLetras.Name = "lblMontoLetras";
+            lblMontoLetras.Size = new Size(588, 20);
+            lblMontoLetras.TabIndex = 26;
+            lblMontoLetras.Text = "PESOS 0/100 M.N,";
             // 
-            // lblTotalDeduccionNum
+            // lblTotalDeducciones
             // 
-            lblTotalDeduccionNum.AutoSize = true;
-            lblTotalDeduccionNum.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTotalDeduccionNum.ForeColor = Color.White;
-            lblTotalDeduccionNum.Location = new Point(475, 46);
-            lblTotalDeduccionNum.Name = "lblTotalDeduccionNum";
-            lblTotalDeduccionNum.Size = new Size(31, 20);
-            lblTotalDeduccionNum.TabIndex = 25;
-            lblTotalDeduccionNum.Text = ".00";
+            lblTotalDeducciones.AutoSize = true;
+            lblTotalDeducciones.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTotalDeducciones.ForeColor = Color.White;
+            lblTotalDeducciones.Location = new Point(475, 46);
+            lblTotalDeducciones.Name = "lblTotalDeducciones";
+            lblTotalDeducciones.Size = new Size(31, 20);
+            lblTotalDeducciones.TabIndex = 25;
+            lblTotalDeducciones.Text = ".00";
             // 
             // lblTotalNeto
             // 
@@ -436,16 +455,16 @@
             lblSueldoBase.TabIndex = 23;
             lblSueldoBase.Text = ".00";
             // 
-            // lblTotalPercepcionNum
+            // lblTotalPercepciones
             // 
-            lblTotalPercepcionNum.AutoSize = true;
-            lblTotalPercepcionNum.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTotalPercepcionNum.ForeColor = Color.White;
-            lblTotalPercepcionNum.Location = new Point(199, 46);
-            lblTotalPercepcionNum.Name = "lblTotalPercepcionNum";
-            lblTotalPercepcionNum.Size = new Size(31, 20);
-            lblTotalPercepcionNum.TabIndex = 22;
-            lblTotalPercepcionNum.Text = ".00";
+            lblTotalPercepciones.AutoSize = true;
+            lblTotalPercepciones.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTotalPercepciones.ForeColor = Color.White;
+            lblTotalPercepciones.Location = new Point(199, 46);
+            lblTotalPercepciones.Name = "lblTotalPercepciones";
+            lblTotalPercepciones.Size = new Size(31, 20);
+            lblTotalPercepciones.TabIndex = 22;
+            lblTotalPercepciones.Text = ".00";
             // 
             // lblMontoletra
             // 
@@ -526,25 +545,6 @@
             btnRegresar.UseVisualStyleBackColor = false;
             btnRegresar.Click += btnRegresar_Click;
             // 
-            // label10
-            // 
-            label10.AutoSize = true;
-            label10.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label10.ForeColor = Color.White;
-            label10.Location = new Point(617, 102);
-            label10.Name = "label10";
-            label10.Size = new Size(132, 20);
-            label10.TabIndex = 28;
-            label10.Text = "Método de Pago: ";
-            // 
-            // cboMetodoPago
-            // 
-            cboMetodoPago.FormattingEnabled = true;
-            cboMetodoPago.Location = new Point(776, 97);
-            cboMetodoPago.Name = "cboMetodoPago";
-            cboMetodoPago.Size = new Size(151, 31);
-            cboMetodoPago.TabIndex = 29;
-            // 
             // UC_NominaRecibo
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -584,9 +584,9 @@
         private Label lblTotalDeduccionletra;
         private Label lblTotalPercepcionletra;
         private Label lblMontoletra;
-        private Label lblTotalPercepcionNum;
-        private Label lblLetraPagado;
-        private Label lblTotalDeduccionNum;
+        private Label lblTotalPercepciones;
+        private Label lblMontoLetras;
+        private Label lblTotalDeducciones;
         private Label lblTotalNeto;
         private Label lblSueldoBase;
         private ToolTip toolTip1;
@@ -595,17 +595,17 @@
         private Label label9;
         private Label label8;
         private Label label7;
-        private Label lblID;
+        private Label lblIdEmpleado;
         private Label lblRFC;
         private Label lblDepartamento;
-        private Label lblName;
+        private Label lblNombreEmpleado;
         private Label label6;
         private Label label5;
         private Label label4;
         private Label label3;
-        private Label label12;
-        private Label lblfechaInicio;
-        private Label lblfechaFin;
+        private Label lblEstado;
+        private Label lblFechaFin;
+        private Label lblFechaInicio;
         private FontAwesome.Sharp.IconButton btnGenerarNómina;
         private FontAwesome.Sharp.IconButton btnRegresar;
         private Label label10;

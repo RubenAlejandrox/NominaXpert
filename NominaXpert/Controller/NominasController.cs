@@ -44,24 +44,24 @@ namespace NominaXpert.Controller
         {
             try
             {
-                // 1. Verificar que el empleado esté activo
+                // Verificar que el empleado esté activo
                 bool empleadoActivo = _empleadosDataAccess.VerificarEmpleadoActivo(idEmpleado);
                 if (!empleadoActivo)
                 {
                     throw new Exception("El empleado no está activo.");
                 }
 
-                // 2. Consultar el total de horas trabajadas
+                //  Consultar el total de horas trabajadas
                 decimal totalHoras = _registroJornadaController.ConsultarTotalHorasTrabajadas(idEmpleado, periodoInicio, periodoFin, idUsuario);
                 if (totalHoras == 0)
                 {
                     throw new Exception("Las horas trabajadas son 0. No se puede generar la nómina.");
                 }
 
-                // 3. Registrar la nómina en la base de datos y obtener la ID generada
+                //  Registrar la nómina en la base de datos y obtener la ID generada
                 int idNominaGenerada = _nominaDataAccess.RegistrarNomina(idEmpleado, idUsuario, periodoInicio, periodoFin);  // Aquí obtenemos la ID generada
 
-                // 4. Registrar la auditoría de la acción de alta de la nómina
+                // Registrar la auditoría de la acción de alta de la nómina
                 string detalleAccion = $"Se creó una nómina para el empleado con ID {idEmpleado} en el periodo {periodoInicio.ToShortDateString()} - {periodoFin.ToShortDateString()} con un total de {totalHoras} horas trabajadas.";
                 _auditoriaDataAccess.RegistrarAuditoria(idUsuario, "alta nómina", detalleAccion);
 
@@ -96,16 +96,71 @@ namespace NominaXpert.Controller
             }
         }
 
-        // Propiedad estática para almacenar el valor de totalHoras
+        // Propiedad para almacenar el valor de totalHoras
         public static decimal TotalHoras { get; set; }
 
-        // Método para calcular las horas trabajadas y almacenarlas en la propiedad estática
+        // Calcular las horas trabajadas y almacenarlas en la propiedad TotalHoras
         public void CalcularTotalHoras(int idEmpleado, DateTime fechaInicio, DateTime fechaFin, int idUsuario)
         {
             decimal totalHoras = _registroJornadaController.ConsultarTotalHorasTrabajadas(idEmpleado, fechaInicio, fechaFin, idUsuario);
 
             // Almacenamos el valor de las horas trabajadas en la propiedad estática
             TotalHoras = totalHoras;
+        }
+
+        /// <summary>
+        /// Busca una nómina por su ID.
+        /// </summary>
+        /// <param name="idNomina"></param>
+        /// <returns></returns>
+        public NominaConsulta BuscarNominaPorId(int idNomina)
+        {
+            try
+            {
+                // Buscar la nómina por ID en la base de datos
+                var nomina = _nominaDataAccess.BuscarNominaPorId(idNomina);
+
+                if (nomina == null)
+                {
+                    _logger.Warn($"No se encontró la nómina con ID: {idNomina}");
+                    return null;
+                }
+
+                // Si encontró la nómina, ahora obtenemos los datos del empleado relacionado
+                var empleadosDataAccess = new EmpleadosDataAccess();
+                var empleado = empleadosDataAccess.ObtenerEmpleadoPorId(nomina.IdEmpleado);
+
+                // Asignar el objeto del empleado a la nómina
+                nomina.DatosEmpleado = empleado;
+
+                // Regresar la nómina con los datos completos
+                return nomina;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Error al obtener la nómina ID {idNomina}");
+                throw;
+            }
+        }
+
+
+        /// <summary>
+        /// Actualiza el estado de pago de una nómina.
+        /// </summary>
+        /// <param name="idNomina"></param>
+        /// <param name="nuevoEstado"></param>
+        /// <returns></returns>
+        public int ActualizarEstadoPago(int idNomina, string nuevoEstado)
+        {
+            try
+            {
+                return _nominaDataAccess.ActualizarEstadoPago(idNomina, nuevoEstado);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al actualizar el estado de pago.");
+                return 0;
+            }
         }
 
     }

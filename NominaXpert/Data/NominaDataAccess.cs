@@ -194,6 +194,11 @@ namespace NominaXpert.Data
             }
         }
 
+        /// <summary>
+        /// Método para obtener la última nómina generada para un empleado específico
+        /// </summary>
+        /// <param name="idEmpleado"></param>
+        /// <returns></returns>
         public int ObtenerUltimaNominaGenerada(int idEmpleado)
         {
             string query = @"
@@ -201,7 +206,7 @@ namespace NominaXpert.Data
                 FROM nomina.nomina
                 WHERE id_empleado = @idEmpleado
                 ORDER BY fecha_creacion DESC
-                LIMIT 1"; // Asegura que traes la última nómina generada
+                LIMIT 1"; // Asegura la última nómina generada
             try
             {
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
@@ -224,6 +229,112 @@ namespace NominaXpert.Data
             catch (Exception ex)
             {
                 _logger.Error(ex, "Error al obtener la última nómina generada.");
+                return 0;
+            }
+            finally
+            {
+                _dbAccess.Disconnect();
+            }
+        }
+
+
+        /// <summary>
+        /// Método para buscar una nómina por su ID
+        /// </summary>
+        /// <param name="idNomina"></param>
+        /// <returns></returns>
+        public NominaConsulta BuscarNominaPorId(int idNomina)
+        {
+            string query = @"
+        SELECT n.id AS IdNomina, e.id AS IdEmpleado, p.nombre_completo AS NombreEmpleado, 
+               e.departamento AS Departamento, e.sueldo AS SueldoBase, p.rfc AS RFCEmpleado, 
+               n.estado_pago AS EstadoPago
+        FROM nomina.nomina n
+        INNER JOIN nomina.empleados e ON n.id_empleado = e.id
+        INNER JOIN seguridad.personas p ON e.id_persona = p.id
+        WHERE n.id = @idNomina;";
+
+            try
+            {
+                if (idNomina <= 0)
+                    throw new ArgumentException("La ID de la nómina no es válida.");
+
+                var parametros = new NpgsqlParameter[]
+                {
+            _dbAccess.CreateParameter("@idNomina", idNomina)
+                };
+
+                _dbAccess.Connect();
+                DataTable dt = _dbAccess.ExecuteQuery_Reader(query, parametros);
+
+                if (dt.Rows.Count == 0)
+                    return null;
+
+                var row = dt.Rows[0];
+
+                return new NominaConsulta
+                {
+                    IdNomina = Convert.ToInt32(row["IdNomina"]),
+                    IdEmpleado = Convert.ToInt32(row["IdEmpleado"]),
+                    EstadoPago = row["EstadoPago"].ToString(),
+                    DatosEmpleado = new Empleado
+                    {
+                        Id = Convert.ToInt32(row["IdEmpleado"]),
+                        Departamento = row["Departamento"].ToString(),
+                        Sueldo = Convert.ToDecimal(row["SueldoBase"]),
+                        DatosPersonales = new Persona
+                        {
+                            NombreCompleto = row["NombreEmpleado"].ToString(),
+                            Rfc = row["RFCEmpleado"].ToString()
+                        }
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al buscar la nómina por ID.");
+                throw;
+            }
+            finally
+            {
+                _dbAccess.Disconnect();
+            }
+        }
+
+
+        /// <summary>
+        ///Actualizar solo el estado de pago de una nómina
+        /// </summary>
+        /// <param name="idNomina"></param>
+        /// <param name="nuevoEstado"></param>
+        /// <returns></returns>
+        public int ActualizarEstadoPago(int idNomina, string nuevoEstado)
+        {
+            string query = @"
+        UPDATE nomina.nomina
+        SET estado_pago = @nuevoEstado
+        WHERE id = @idNomina";
+
+            try
+            {
+                if (idNomina <= 0)
+                    throw new ArgumentException("ID de nómina inválido.");
+
+                var parametros = new NpgsqlParameter[]
+                {
+            _dbAccess.CreateParameter("@idNomina", idNomina),
+            _dbAccess.CreateParameter("@nuevoEstado", nuevoEstado)
+                };
+
+                _dbAccess.Connect();
+                int rowsAffected = _dbAccess.ExecuteNonQuery(query, parametros);
+
+                _logger.Info($"Estado de la nómina ID {idNomina} actualizado a '{nuevoEstado}'. Filas afectadas: {rowsAffected}");
+                return rowsAffected;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al actualizar el estado de pago de la nómina.");
                 return 0;
             }
             finally

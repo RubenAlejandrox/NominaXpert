@@ -86,6 +86,7 @@
             txtIdNomina.ReadOnly = true;
             txtIdNomina.Size = new Size(115, 27);
             txtIdNomina.TabIndex = 23;
+            txtIdNomina.TextChanged += txtIdNomina_TextChanged;
             // 
             // lblDescripcionCN
             // 

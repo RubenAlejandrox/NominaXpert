@@ -407,6 +407,47 @@ namespace NominaXpert.Data
                 _dbAccess.Disconnect();
             }
         }
+
+        /// <summary>
+        /// Obtiene un empleado por su ID
+        /// </summary>
+        /// <param name="idEmpleado"></param>
+        /// <returns></returns>
+        public Empleado ObtenerEmpleadoPorId(int idEmpleado)
+        {
+            try
+            {
+                string query = @"
+            SELECT e.id, e.id_persona, e.puesto, e.departamento, e.sueldo, 
+                   e.tipo_contrato, e.fecha_ingreso, e.fecha_baja, e.salario_fijo, e.estatus,
+                   p.nombre_completo, p.correo, p.telefono, p.fecha_nacimiento, p.curp, p.rfc, p.direccion
+            FROM nomina.empleados e
+            INNER JOIN seguridad.personas p ON e.id_persona = p.id
+            WHERE e.id = @idEmpleado";
+
+                NpgsqlParameter param = _dbAccess.CreateParameter("@idEmpleado", idEmpleado);
+
+                _dbAccess.Connect();
+                DataTable result = _dbAccess.ExecuteQuery_Reader(query, param);
+
+                if (result.Rows.Count > 0)
+                {
+                    return MapearEmpleado(result.Rows[0]);
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al obtener el empleado por ID.");
+                throw;
+            }
+            finally
+            {
+                _dbAccess.Disconnect();
+            }
+        }
+
     }
 }
 

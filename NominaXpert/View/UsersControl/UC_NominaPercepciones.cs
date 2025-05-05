@@ -31,7 +31,10 @@ namespace NominaXpert.View.UsersControl
         public UC_NominaPercepciones(int idNomina)
         {
             if (idNomina <= 0)
-                throw new ArgumentException("La ID de nómina debe ser mayor a 0.");
+            {
+                MessageBox.Show("No se ha proporcionado un ID de nómina válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return; // Salirte sin seguir inicializando
+            }
             InitializeComponent();
             _bonificacionController = new BonificacionController();
             _detalleNominaController = new DetalleNominaController();

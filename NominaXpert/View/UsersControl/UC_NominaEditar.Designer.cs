@@ -43,7 +43,7 @@
             lblNoNomina = new Label();
             btnBuscar = new FontAwesome.Sharp.IconButton();
             panel4 = new Panel();
-            textBox2 = new TextBox();
+            txtNombreEmpleado = new TextBox();
             lblNombreCompleto = new Label();
             gBoxEditarEstatus = new GroupBox();
             btnVisualizarNomina = new FontAwesome.Sharp.IconButton();
@@ -214,21 +214,21 @@
             // 
             // panel4
             // 
-            panel4.Controls.Add(textBox2);
+            panel4.Controls.Add(txtNombreEmpleado);
             panel4.Controls.Add(lblNombreCompleto);
             panel4.Location = new Point(23, 97);
             panel4.Name = "panel4";
             panel4.Size = new Size(752, 42);
             panel4.TabIndex = 10;
             // 
-            // textBox2
+            // txtNombreEmpleado
             // 
-            textBox2.Location = new Point(205, 3);
-            textBox2.MaxLength = 100;
-            textBox2.Name = "textBox2";
-            textBox2.ReadOnly = true;
-            textBox2.Size = new Size(544, 30);
-            textBox2.TabIndex = 4;
+            txtNombreEmpleado.Location = new Point(205, 3);
+            txtNombreEmpleado.MaxLength = 100;
+            txtNombreEmpleado.Name = "txtNombreEmpleado";
+            txtNombreEmpleado.ReadOnly = true;
+            txtNombreEmpleado.Size = new Size(544, 30);
+            txtNombreEmpleado.TabIndex = 4;
             // 
             // lblNombreCompleto
             // 
@@ -279,6 +279,7 @@
             btnVisualizarNomina.TextAlign = ContentAlignment.MiddleRight;
             btnVisualizarNomina.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnVisualizarNomina.UseVisualStyleBackColor = false;
+            btnVisualizarNomina.Click += btnVisualizarNomina_Click;
             // 
             // btnModificar
             // 
@@ -432,5 +433,7 @@
         private Label label1;
         private FontAwesome.Sharp.IconButton btnModificar;
         private FontAwesome.Sharp.IconButton btnVisualizarNomina;
+        private TextBox txtNombre;
+        private TextBox txtNombreEmpleado;
     }
 }

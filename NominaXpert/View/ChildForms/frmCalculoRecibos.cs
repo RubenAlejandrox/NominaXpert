@@ -16,6 +16,7 @@ namespace NominaXpert.View.Forms
 {
     public partial class frmCalculoRecibos : Form
     {
+        public int IdNomina { get; set; }
         public frmCalculoRecibos()
         {
             InitializeComponent();
@@ -48,9 +49,9 @@ namespace NominaXpert.View.Forms
 
         private void btnEstatusNomina_Click(object sender, EventArgs e)
         {
-            //UC_NominaEditar uce = new UC_NominaEditar();
+            UC_NominaEditar uce = new UC_NominaEditar(this.IdNomina);
             Utilities.Formas.ActivateButton(sender, Formas.RGBColors.ChangeColor);
-            //addUsersControl(uce);
+            addUsersControl(uce);
         }
         private void ConfigurarPermisos()
         {

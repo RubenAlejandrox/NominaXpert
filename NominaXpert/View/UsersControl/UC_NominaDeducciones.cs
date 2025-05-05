@@ -73,9 +73,9 @@ namespace NominaXpert.View.UsersControl
             try
             {
                 dataGridViewDeducciones.Rows.Clear();
-                var bonificaciones = _deduccionController.ObtenerDeduccionesPorNomina(this.IdNomina);
+                var deducciones = _deduccionController.ObtenerDeduccionesPorNomina(this.IdNomina);
 
-                foreach (var b in bonificaciones)
+                foreach (var b in deducciones)
                 {
                     dataGridViewDeducciones.Rows.Add(
                         b.Id,
@@ -84,11 +84,6 @@ namespace NominaXpert.View.UsersControl
                         b.Monto
                     );
                 }
-
-                //if (bonificaciones.Count == 0)
-                //{
-                //    MessageBox.Show("No hay percepciones registradas.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //}
             }
             catch (Exception ex)
             {
@@ -196,8 +191,9 @@ namespace NominaXpert.View.UsersControl
                         parent.Controls.Remove(this);
 
                         // Crear una nueva instancia de UC_NominaRecibo
-                        UC_NominaRecibo ucRecibo = new UC_NominaRecibo();
+                        UC_NominaRecibo ucRecibo = new UC_NominaRecibo(this.IdNomina);
                         ucRecibo.Dock = DockStyle.Fill;
+
 
                         // Agregar el nuevo UserControl al mismo contenedor
                         parent.Controls.Add(ucRecibo);
@@ -345,8 +341,8 @@ namespace NominaXpert.View.UsersControl
                     var tipo = row.Cells["Tipo"].Value.ToString();
                     var monto = Convert.ToDecimal(row.Cells["Monto"].Value);
 
-                    // Mostrar los valores antes de proceder
-                    MessageBox.Show($"Modificando deducción: ID: {idDeduccion}, Tipo: {tipo}, Monto: {monto}");
+                    //// Mostrar los valores antes de proceder
+                    //MessageBox.Show($"Modificando deducción: ID: {idDeduccion}, Tipo: {tipo}, Monto: {monto}");
 
 
                     // Cargar los datos de la deducción seleccionada en los campos
@@ -391,6 +387,11 @@ namespace NominaXpert.View.UsersControl
             {
                 MessageBox.Show("Por favor, selecciona una deducción para modificar.", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        private void txtIdNomina_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
