@@ -45,21 +45,18 @@ namespace NominaXpert.View.UsersControl
             if (idRol != 1 && idRol != 2)
             {
                 MessageBox.Show("Lo siento, no tienes permisos suficientes para generar nómina.", "Error de acceso", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return; // Bloqueamos el acceso si el rol no es ADMIN (1) ni OPERADOR (2)
+                return; // Bloqueamos el acceso
             }
 
             // Si el usuario tiene permisos, se continúa con el proceso de carga de la vista
         }
 
-        //<<<<<<< HEAD
-        //=======
+  
         public void InicializaVentanaCalculoRecibos()
         {
             ConfigurarPermisos();
         }
       
-//>>>>>>> cf12ca5dbc54bea98854cc904d94ae907283d55d
-
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
