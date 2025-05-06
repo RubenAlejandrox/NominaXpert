@@ -367,6 +367,7 @@ namespace NominaXpert.View.UsersControl
                         // Cambiar el texto del botón para pasar al modo "Guardar Cambios"
                         btnModificar.Text = "Guardar Cambios";
 
+                        btnGuardar.Visible = false;
                         MessageBox.Show("Modifica el monto o tipo y presiona Guardar Cambios para actualizar.");
                     }
                 }
@@ -410,9 +411,11 @@ namespace NominaXpert.View.UsersControl
 
                         // Recargar las deducciones para actualizar la tabla
                         CargarDeducciones();
+                        
 
                         // Limpiar campos y regresar botón a su estado normal
                         LimpiarCampos();
+                        btnGuardar.Visible = true;
                         btnModificar.Text = "Modificar";
                         idDeduccionEditar = -1;
                     }
