@@ -326,8 +326,9 @@ namespace NominaXpert.View.UsersControl
 
                         // Cambiar el texto del botón a Guardar Cambios
                         btnModificar.Text = "Guardar Cambios";
-
+                        btnGuardar.Visible = false;
                         MessageBox.Show("Modifica el monto o tipo y presiona Guardar Cambios para actualizar.");
+
                     }
                 }
                 else
@@ -367,6 +368,7 @@ namespace NominaXpert.View.UsersControl
                         MessageBox.Show("Bonificación actualizada correctamente.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         CargarBonificaciones();
                         LimpiarCampos();
+                        btnGuardar.Visible = true;
 
                         // Reiniciar botón
                         btnModificar.Text = "Modificar";
@@ -382,6 +384,7 @@ namespace NominaXpert.View.UsersControl
                     MessageBox.Show($"Error al actualizar la bonificación: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+            
         }
 
         private void UC_NominaPercepciones_Load_1(object sender, EventArgs e)
