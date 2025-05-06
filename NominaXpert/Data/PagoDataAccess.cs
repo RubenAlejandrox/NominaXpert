@@ -104,5 +104,40 @@ namespace NominaXpert.Data
             }
         }
 
+        public decimal ContarMontoTotalMesActual()
+        {
+            string query = @"
+        SELECT SUM(monto_total) AS MontoTotalMes
+        FROM nomina.pagos
+        WHERE EXTRACT(MONTH FROM fecha_pago) = EXTRACT(MONTH FROM CURRENT_DATE)
+        AND EXTRACT(YEAR FROM fecha_pago) = EXTRACT(YEAR FROM CURRENT_DATE);";
+
+            try
+            {
+                _dbAccess.Connect();
+                DataTable resultado = _dbAccess.ExecuteQuery_Reader(query);
+
+                decimal montoTotalMes = 0;
+
+                if (resultado.Rows.Count > 0)
+                {
+                    montoTotalMes = Convert.ToDecimal(resultado.Rows[0]["MontoTotalMes"]);
+                }
+
+                _logger.Info($"El monto total de los pagos realizados en el mes actual es: {montoTotalMes}");
+                return montoTotalMes;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al contar los montos totales del mes actual.");
+                throw;
+            }
+            finally
+            {
+                _dbAccess.Disconnect();
+            }
+        }
+
+
     }
 }

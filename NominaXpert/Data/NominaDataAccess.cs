@@ -343,5 +343,43 @@ namespace NominaXpert.Data
             }
         }
 
+        // Método para contar las nóminas con estado de pago "Pendiente" y "Pagado"
+        public (int pendientes, int pagados) ContarNominasPorEstado()
+        {
+            string query = @"
+                SELECT
+                    COUNT(CASE WHEN estado_pago = 'Pendiente' THEN 1 END) AS Pendientes,
+                    COUNT(CASE WHEN estado_pago = 'Pagado' THEN 1 END) AS Pagados
+                FROM nomina.nomina";
+
+            try
+            {
+                _dbAccess.Connect();
+                DataTable resultado = _dbAccess.ExecuteQuery_Reader(query);
+
+                int pendientes = 0;
+                int pagados = 0;
+
+                if (resultado.Rows.Count > 0)
+                {
+                    // Obtener los valores de los recuentos
+                    pendientes = Convert.ToInt32(resultado.Rows[0]["Pendientes"]);
+                    pagados = Convert.ToInt32(resultado.Rows[0]["Pagados"]);
+                }
+
+                _logger.Info($"Se encontraron {pendientes} nóminas pendientes y {pagados} nóminas pagadas.");
+                return (pendientes, pagados);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al contar las nóminas por estado de pago.");
+                throw;
+            }
+            finally
+            {
+                _dbAccess.Disconnect();
+            }
+        }
+
     }
 }

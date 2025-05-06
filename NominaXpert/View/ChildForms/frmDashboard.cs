@@ -16,7 +16,7 @@ namespace NominaXpert.View.Forms
     {
         public frmDashboard()
         {
-            InitializeComponent();  
+            InitializeComponent();
         }
 
         private void horaFecha_Tick_1(object sender, EventArgs e)
@@ -28,6 +28,8 @@ namespace NominaXpert.View.Forms
         {
             InicializarDashboard();
             CargarEmpleadosActivosYInactivos();
+            CargarNominasPagadasYPendientes();
+            CargarCostoTotalMensual();  
         }
 
         public void InicializarDashboard()
@@ -65,6 +67,47 @@ namespace NominaXpert.View.Forms
             {
                 MessageBox.Show("Error al cargar el número de empleados: " + ex.Message);
             }
+        }
+
+        private void CargarNominasPagadasYPendientes()
+        {
+            try
+            {
+                NominaDataAccess nominasDataAccess = new NominaDataAccess();
+
+                // Llamamos al método que cuenta las nóminas por estado
+                var (nominasPendientes, nominasPagas) = nominasDataAccess.ContarNominasPorEstado();
+
+                // Mostrar los resultados en los Labels con el texto solicitado
+                lblNominasPagadas.Text = $"PAGADAS: {nominasPagas}";
+                lblNominasPendientes.Text = $"PENDIENTES: {nominasPendientes}";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar el número de nóminas: " + ex.Message);
+            }
+
+
+        }
+
+        private void CargarCostoTotalMensual()
+        {
+            try
+            {
+                PagoDataAccess pagoDataAccess = new PagoDataAccess();
+                // Llamamos al método que obtiene el costo total mensual
+                decimal costoTotalMensual = pagoDataAccess.ContarMontoTotalMesActual();
+                // Mostrar el resultado en el Label con el texto solicitado
+                lblCostoTotalMensual.Text = $" {costoTotalMensual:C}";
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar el costo total mensual: " + ex.Message);
+            }
+
+
+
         }
 
     }

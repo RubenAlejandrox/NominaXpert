@@ -54,7 +54,7 @@
             panel15 = new Panel();
             iconPn2 = new FontAwesome.Sharp.IconPictureBox();
             panel13 = new Panel();
-            lblPagosEnSemana = new Label();
+            lblNominasPagadas = new Label();
             label11 = new Label();
             panel17 = new Panel();
             iconPn4 = new FontAwesome.Sharp.IconPictureBox();
@@ -309,7 +309,7 @@
             label9.Name = "label9";
             label9.Size = new Size(394, 32);
             label9.TabIndex = 4;
-            label9.Text = "Nóminas Pendientes Semanal";
+            label9.Text = "Nóminas Pendientes ";
             // 
             // panel16
             // 
@@ -397,7 +397,7 @@
             // panel13
             // 
             panel13.BackColor = Color.FromArgb(48, 51, 59);
-            panel13.Controls.Add(lblPagosEnSemana);
+            panel13.Controls.Add(lblNominasPagadas);
             panel13.Controls.Add(label11);
             panel13.Controls.Add(panel17);
             panel13.Dock = DockStyle.Fill;
@@ -406,16 +406,16 @@
             panel13.Size = new Size(403, 133);
             panel13.TabIndex = 3;
             // 
-            // lblPagosEnSemana
+            // lblNominasPagadas
             // 
-            lblPagosEnSemana.Dock = DockStyle.Top;
-            lblPagosEnSemana.Font = new Font("Segoe UI", 19.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblPagosEnSemana.ForeColor = Color.White;
-            lblPagosEnSemana.Location = new Point(0, 77);
-            lblPagosEnSemana.Name = "lblPagosEnSemana";
-            lblPagosEnSemana.Size = new Size(403, 42);
-            lblPagosEnSemana.TabIndex = 5;
-            lblPagosEnSemana.Text = "000";
+            lblNominasPagadas.Dock = DockStyle.Top;
+            lblNominasPagadas.Font = new Font("Segoe UI", 19.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblNominasPagadas.ForeColor = Color.White;
+            lblNominasPagadas.Location = new Point(0, 77);
+            lblNominasPagadas.Name = "lblNominasPagadas";
+            lblNominasPagadas.Size = new Size(403, 42);
+            lblNominasPagadas.TabIndex = 5;
+            lblNominasPagadas.Text = "000";
             // 
             // label11
             // 
@@ -426,7 +426,7 @@
             label11.Name = "label11";
             label11.Size = new Size(403, 32);
             label11.TabIndex = 4;
-            label11.Text = "Pagos en la Semana";
+            label11.Text = "Nóminas Pagadas";
             // 
             // panel17
             // 
@@ -745,7 +745,7 @@
         private Label label7;
         private Panel panel15;
         private FontAwesome.Sharp.IconPictureBox iconPn2;
-        private Label lblPagosEnSemana;
+        private Label lblNominasPagadas;
         private Label label11;
         private Panel panel17;
         private FontAwesome.Sharp.IconPictureBox iconPn4;
