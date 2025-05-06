@@ -21,6 +21,7 @@ using iText.Kernel.Font;
 using iText.Layout.Properties;
 using iText.Kernel.Exceptions;
 using iText.IO.Font.Constants;
+using NominaXpert.Utilities;
 
 namespace NominaXpert.View.UsersControl
 {
@@ -106,19 +107,53 @@ namespace NominaXpert.View.UsersControl
                 decimal totalPercepciones = percepciones.Sum(p => p.Monto);
                 decimal totalDeducciones = deducciones.Sum(d => d.Monto);
 
-                // Mostrar cálculos
+                // Consultar horas trabajadas
+                int idUsuario = UsuarioSesion.UsuarioId; // Usar UsuarioId en lugar de ObtenerIdUsuarioActual()
+
+                var jornadaController = new RegistroJornadaController();
+                decimal horasTrabajadas = jornadaController.ConsultarTotalHorasTrabajadas(
+                    nomina.IdEmpleado,
+                    nomina.FechaInicio,
+                    nomina.FechaFin,
+                    idUsuario);
+
+                // Usando la fórmula especificada
+                decimal sueldoBase = nomina.SueldoBase;
+
+                // Asegurar que tengamos horas trabajadas (si es 0, usar un valor por defecto)
+                if (horasTrabajadas <= 0)
+                {
+                    // Si no hay horas registradas, asumimos un valor predeterminado (p.ej., 8 horas diarias por 5 días)
+                    horasTrabajadas = 40;
+                    // Loguear esta situación anómala
+                    _logger.Warn($"No se encontraron horas trabajadas para la nómina {IdNomina}. Usando valor predeterminado de 40 horas.");
+                }
+
+                decimal sueldoPorDia = sueldoBase / 22m;  // 22 días laborables promedio al mes
+                decimal sueldoPorHora = sueldoPorDia / 8m; // 8 horas por día laboral
+                decimal sueldoPorHorasTrabajadas = sueldoPorHora * horasTrabajadas;
+
+                // Nuevo cálculo del total neto
+                decimal totalNeto = sueldoPorHorasTrabajadas + totalPercepciones - totalDeducciones;
+
+                // Actualizar los controles de la interfaz
                 lblTotalPercepciones.Text = totalPercepciones.ToString("C");
                 lblTotalDeducciones.Text = totalDeducciones.ToString("C");
-                lblSueldoBase.Text = nomina.SueldoBase.ToString("C");
-                //lblHorasTrabajadas.Text = nomina.HorasTrabajadas.ToString();
-
-                decimal totalNeto = (nomina.SueldoBase + totalPercepciones) - totalDeducciones;
+                lblSueldoBase.Text = sueldoBase.ToString("C");
+                lblSueldoPorHorasTrabajadas.Text = sueldoPorHorasTrabajadas.ToString("C");
                 lblTotalNeto.Text = totalNeto.ToString("C");
+
+                // Imprimir valores para depuración
+                _logger.Info($"Valores del cálculo: Sueldo Base={sueldoBase}, Horas={horasTrabajadas}, " +
+                            $"Sueldo/Día={sueldoPorDia}, Sueldo/Hora={sueldoPorHora}, " +
+                            $"Sueldo por Horas={sueldoPorHorasTrabajadas}, " +
+                            $"Percepciones={totalPercepciones}, Deducciones={totalDeducciones}, " +
+                            $"Total Neto={totalNeto}");
 
                 // Monto en letras
                 lblMontoLetras.Text = NominaNegocio.ConvertirNumeroALetras(totalNeto);
 
-                // --- Validar estado de nómina ---
+                // Validar estado de nómina
                 if (nomina.EstadoPago == "Pagado")
                 {
                     // Deshabilitar botones si ya está pagada
@@ -126,18 +161,17 @@ namespace NominaXpert.View.UsersControl
                     btnRegresar.Visible = false;
                     lblMetodoPago.Visible = false;
                     cboMetodoPago.Visible = false;
-                    // btnPDFReciboNomina.Enabled = true;
                 }
                 else
                 {
-                    // Habilitar != pagado
+                    // Habilitar si no está pagada
                     btnGenerarNómina.Enabled = true;
                     btnRegresar.Enabled = true;
                 }
-
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error al cargar el recibo de nómina");
                 MessageBox.Show($"Error al cargar el recibo: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -331,69 +365,86 @@ namespace NominaXpert.View.UsersControl
 
         private void btnGenerarNómina_Click(object sender, EventArgs e)
         {
+            try
             {
-                try
+                PagoController pagoController = new PagoController();
+
+                // Validar que NO EXISTA PAGO ya para esta nómina
+                if (pagoController.ExistePago(this.IdNomina))
                 {
-                    PagoController pagoController = new PagoController();
-
-                    // Validar que NO EXISTA PAGO ya para esta nómina
-                    if (pagoController.ExistePago(this.IdNomina))
-                    {
-                        MessageBox.Show("Esta nómina ya fue pagada. No es posible generar otro pago.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        return;
-                    }
-
-                    // Validar método de pago
-                    if (cboMetodoPago.SelectedItem == null || string.IsNullOrWhiteSpace(cboMetodoPago.Text))
-                    {
-                        MessageBox.Show("Debe seleccionar un método de pago.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-
-                    // Obtener valores del recibo
-                    decimal sueldoBase = decimal.Parse(lblSueldoBase.Text, System.Globalization.NumberStyles.Currency);
-                    decimal totalPercepciones = decimal.Parse(lblTotalPercepciones.Text, System.Globalization.NumberStyles.Currency);
-                    decimal totalDeducciones = decimal.Parse(lblTotalDeducciones.Text, System.Globalization.NumberStyles.Currency);
-                    decimal totalNeto = decimal.Parse(lblTotalNeto.Text, System.Globalization.NumberStyles.Currency);
-
-                    // Crear objeto pago
-                    Pago nuevoPago = new Pago
-                    {
-                        IdNomina = this.IdNomina,
-                        FechaPago = DateTime.Now,
-                        MontoTotal = totalNeto,
-                        MontoLetras = NominaNegocio.ConvertirNumeroALetras(totalNeto),
-                        MetodoPago = cboMetodoPago.Text,
-                        Referencia = "Pago automático generado desde recibo de nómina"
-                    };
-
-                    // Registrar pago en la base de datos
-                    bool resultado = pagoController.RegistrarPago(nuevoPago);
-
-                    if (resultado)
-                    {
-                        // Actualizar estado de nómina a "Pagada"
-                        _logger.Info($"UC_NominaRecibo -> Se actualizará el estado de la nómina {this.IdNomina} a Pagado");
-                        _nominasController.ActualizarEstadoPago(this.IdNomina, "Pagado");
-                        _logger.Info($"UC_NominaRecibo -> Finalizó la actualización de la nómina {this.IdNomina} a Pagado");
-
-                        // Refrescar la información visual del recibo para reflejar "Pagada"
-                        CargarRecibo();
-
-                        MessageBox.Show("El pago ha sido registrado correctamente. La nómina ha sido marcada como pagada.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-
-                    }
-                    else
-                    {
-                        MessageBox.Show("Ocurrió un error al registrar el pago.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    MessageBox.Show("Esta nómina ya fue pagada. No es posible generar otro pago.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
                 }
-                catch (Exception ex)
+
+                // Validar método de pago
+                if (cboMetodoPago.SelectedItem == null || string.IsNullOrWhiteSpace(cboMetodoPago.Text))
                 {
-                    MessageBox.Show($"Error al generar la nómina: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Debe seleccionar un método de pago.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
+
+                // Obtener la nómina completa
+                var nomina = _nominasController.BuscarNominaPorId(IdNomina);
+
+                // Consultar horas trabajadas
+                var jornadaController = new RegistroJornadaController();
+                decimal horasTrabajadas = jornadaController.ConsultarTotalHorasTrabajadas(
+                    nomina.IdEmpleado,
+                    nomina.FechaInicio,
+                    nomina.FechaFin,
+                    UsuarioSesion.ObtenerIdUsuarioActual());
+
+                // Obtener percepciones y deducciones
+                var percepciones = _bonificacionController.ObtenerBonificacionesPorNomina(IdNomina);
+                var deducciones = _deduccionController.ObtenerDeduccionesPorNomina(IdNomina);
+                decimal totalPercepciones = percepciones.Sum(p => p.Monto);
+                decimal totalDeducciones = deducciones.Sum(d => d.Monto);
+
+                // Calcular según la fórmula
+                decimal sueldoBase = nomina.SueldoBase;
+                decimal sueldoPorDia = sueldoBase / 22m;
+                decimal sueldoPorHora = sueldoPorDia / 8m;
+                decimal sueldoPorHorasTrabajadas = sueldoPorHora * horasTrabajadas;
+
+                // Nuevo cálculo del total neto
+                decimal totalNeto = sueldoPorHorasTrabajadas + totalPercepciones - totalDeducciones;
+
+                // Crear objeto pago
+                Pago nuevoPago = new Pago
+                {
+                    IdNomina = this.IdNomina,
+                    FechaPago = DateTime.Now,
+                    MontoTotal = totalNeto,
+                    MontoLetras = NominaNegocio.ConvertirNumeroALetras(totalNeto),
+                    MetodoPago = cboMetodoPago.Text,
+                    Referencia = "Pago automático generado desde recibo de nómina"
+                };
+
+                // Registrar pago en la base de datos
+                bool resultado = pagoController.RegistrarPago(nuevoPago);
+
+                if (resultado)
+                {
+                    // Actualizar estado de nómina a "Pagada"
+                    _logger.Info($"UC_NominaRecibo -> Se actualizará el estado de la nómina {this.IdNomina} a Pagado");
+                    _nominasController.ActualizarEstadoPago(this.IdNomina, "Pagado");
+                    _logger.Info($"UC_NominaRecibo -> Finalizó la actualización de la nómina {this.IdNomina} a Pagado");
+
+                    // Refrescar la información visual del recibo para reflejar "Pagada"
+                    CargarRecibo();
+
+                    MessageBox.Show("El pago ha sido registrado correctamente. La nómina ha sido marcada como pagada.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Ocurrió un error al registrar el pago.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al generar la nómina: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
+    
 }
