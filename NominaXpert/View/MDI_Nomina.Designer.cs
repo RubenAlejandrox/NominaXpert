@@ -119,7 +119,7 @@
             btnAuditoria.FlatStyle = FlatStyle.Flat;
             btnAuditoria.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnAuditoria.ForeColor = Color.White;
-            btnAuditoria.IconChar = FontAwesome.Sharp.IconChar.SignOutAlt;
+            btnAuditoria.IconChar = FontAwesome.Sharp.IconChar.UsersViewfinder;
             btnAuditoria.IconColor = Color.FromArgb(12, 215, 253);
             btnAuditoria.IconFont = FontAwesome.Sharp.IconFont.Auto;
             btnAuditoria.IconSize = 32;
@@ -129,7 +129,7 @@
             btnAuditoria.Padding = new Padding(10, 0, 20, 0);
             btnAuditoria.Size = new Size(220, 60);
             btnAuditoria.TabIndex = 7;
-            btnAuditoria.Text = "Auditoria";
+            btnAuditoria.Text = "Reportes de auditoría";
             btnAuditoria.TextAlign = ContentAlignment.MiddleLeft;
             btnAuditoria.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnAuditoria.UseVisualStyleBackColor = false;

@@ -7,11 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 using NominaXpert.Controller;
 using NominaXpert.Business;
 using NominaXpert.Model;
 using ControlEscolar.Utilities;
 using NLog;
+
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Kernel.Font;
+using iText.Layout.Properties;
+using iText.Kernel.Exceptions;
+using iText.IO.Font.Constants;
 
 namespace NominaXpert.View.UsersControl
 {
@@ -101,6 +110,7 @@ namespace NominaXpert.View.UsersControl
                 lblTotalPercepciones.Text = totalPercepciones.ToString("C");
                 lblTotalDeducciones.Text = totalDeducciones.ToString("C");
                 lblSueldoBase.Text = nomina.SueldoBase.ToString("C");
+                lblHorasTrabajadas.Text = nomina.HorasTrabajadas.ToString();
 
                 decimal totalNeto = (nomina.SueldoBase + totalPercepciones) - totalDeducciones;
                 lblTotalNeto.Text = totalNeto.ToString("C");
@@ -140,40 +150,130 @@ namespace NominaXpert.View.UsersControl
         private void btnPDFReciboNomina_Click(object sender, EventArgs e)
         {
 
-
-            // Crear un formulario de notificación temporal
-            Form mensajeForm = new Form
+            try
             {
-                FormBorderStyle = FormBorderStyle.FixedDialog,
-                StartPosition = FormStartPosition.CenterScreen,
-                Size = new System.Drawing.Size(350, 220),
-                Text = "Información del sistema",
-                ControlBox = false // Evita que se cierre manualmente
-            };
-
-            Label lblMensaje = new Label
-            {
-                Text = "Generando Excel de la Nómina del Empleado...",
-                AutoSize = false,
-                TextAlign = System.Drawing.ContentAlignment.MiddleCenter,
-                Dock = DockStyle.Fill
-            };
-
-            mensajeForm.Controls.Add(lblMensaje);
-            mensajeForm.Show();
-
-            // Configurar el temporizador para cerrar la ventana después de 2 segundos
-            System.Timers.Timer timer = new System.Timers.Timer(2000);
-            timer.Elapsed += (s, ev) =>
-            {
-                timer.Stop();
-                mensajeForm.Invoke((MethodInvoker)delegate
+                // Mostrar el cuadro de diálogo para guardar el archivo
+                SaveFileDialog saveFileDialog = new SaveFileDialog
                 {
-                    mensajeForm.Close(); // Solo cierra el formulario de mensaje
-                });
-                timer.Dispose(); // Liberar recursos del Timer
-            };
-            timer.Start();
+                    Filter = "PDF Files (*.pdf)|*.pdf", // Filtro para archivos PDF
+                    Title = "Guardar Recibo de Nómina",
+                    FileName = "ReciboNomina_" + IdNomina + ".pdf" // Nombre predeterminado
+                };
+
+                // Si el usuario selecciona una ubicación y un nombre, se genera el PDF
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string path = saveFileDialog.FileName; // Ruta seleccionada por el usuario
+
+                    // Crear un escritor para el PDF
+                    using (PdfWriter writer = new PdfWriter(path))
+                    {
+                        // Crear un documento PDF
+                        using (PdfDocument pdf = new PdfDocument(writer))
+                        {
+                            Document document = new Document(pdf);
+
+                            // Usar una fuente estándar sin necesidad de especificar un archivo TTF
+                            PdfFont boldFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
+                            PdfFont regularFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+
+                            // Título del documento
+                            document.Add(new Paragraph("Recibo de Nómina - NominaXpert")
+                                .SetTextAlignment(TextAlignment.CENTER)
+                                .SetFont(boldFont) // Usamos la fuente en negrita
+                                .SetFontSize(18)
+                                .SetMarginTop(10));
+
+                            // Salto de línea
+                            document.Add(new Paragraph("\n"));
+
+                            // Información de la nómina
+                            document.Add(new Paragraph("Empleado: " + lblNombreEmpleado.Text).SetFont(regularFont));
+                            document.Add(new Paragraph("Departamento: " + lblDepartamento.Text).SetFont(regularFont));
+                            document.Add(new Paragraph("RFC: " + lblRFC.Text).SetFont(regularFont));
+                            document.Add(new Paragraph("ID: " + lblIdEmpleado.Text).SetFont(regularFont));
+                            document.Add(new Paragraph("Fecha Inicio: " + lblFechaInicio.Text).SetFont(regularFont));
+                            document.Add(new Paragraph("Fecha Fin: " + lblFechaFin.Text).SetFont(regularFont));
+                            document.Add(new Paragraph("Estado de Pago: " + lblEstado.Text).SetFont(regularFont));
+                            document.Add(new Paragraph("\n"));
+
+                            // Obtener las bonificaciones y deducciones
+                            var percepciones = _bonificacionController.ObtenerBonificacionesPorNomina(IdNomina);
+                            var deducciones = _deduccionController.ObtenerDeduccionesPorNomina(IdNomina);
+
+                            // Agregar las tablas de percepciones
+                            if (percepciones.Any())
+                            {
+                                document.Add(new Paragraph("Percepciones")
+                                    .SetFont(boldFont) // Usamos la fuente en negrita
+                                    .SetFontSize(14));
+
+                                Table table = new Table(2);
+                                table.AddHeaderCell("Concepto");
+                                table.AddHeaderCell("Monto");
+
+                                foreach (var percepcion in percepciones)
+                                {
+                                    table.AddCell(percepcion.IdTipo.ToString()); // Puedes mostrar el tipo si es necesario
+                                    table.AddCell(percepcion.Monto.ToString("C"));
+                                }
+
+                                document.Add(table);
+                            }
+
+                            document.Add(new Paragraph("\n"));
+
+                            // Agregar las tablas de deducciones
+                            if (deducciones.Any())
+                            {
+                                document.Add(new Paragraph("Deducciones")
+                                    .SetFont(boldFont) // Usamos la fuente en negrita
+                                    .SetFontSize(14));
+
+                                Table tableDeducciones = new Table(2);
+                                tableDeducciones.AddHeaderCell("Concepto");
+                                tableDeducciones.AddHeaderCell("Monto");
+
+                                foreach (var deduccion in deducciones)
+                                {
+                                    tableDeducciones.AddCell(deduccion.IdTipo.ToString()); // Puedes mostrar el tipo si es necesario
+                                    tableDeducciones.AddCell(deduccion.Monto.ToString("C"));
+                                }
+
+                                document.Add(tableDeducciones);
+                            }
+
+                            document.Add(new Paragraph("\n"));
+
+                            // Cálculos de totales
+                            decimal totalPercepciones = percepciones.Sum(p => p.Monto);
+                            decimal totalDeducciones = deducciones.Sum(d => d.Monto);
+                            decimal sueldoBase = decimal.Parse(lblSueldoBase.Text, System.Globalization.NumberStyles.Currency);
+                            decimal totalNeto = (sueldoBase + totalPercepciones) - totalDeducciones;
+
+                            document.Add(new Paragraph($"Total Percepciones: {totalPercepciones:C}").SetFont(regularFont));
+                            document.Add(new Paragraph($"Total Deducciones: {totalDeducciones:C}").SetFont(regularFont));
+                            document.Add(new Paragraph($"Sueldo Base: {sueldoBase:C}").SetFont(regularFont));
+                            document.Add(new Paragraph($"Total Neto: {totalNeto:C}").SetFont(regularFont));
+                            document.Add(new Paragraph($"Monto en Letras: {NominaNegocio.ConvertirNumeroALetras(totalNeto)}").SetFont(regularFont));
+
+                            // Cerrar el documento
+                            document.Close();
+                        }
+                    }
+
+                    MessageBox.Show("El recibo de nómina ha sido generado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (PdfException pdfEx)
+            {
+                MessageBox.Show($"Error al generar el PDF: {pdfEx.Message}", "PDF Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error inesperado: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
 
         private void btnRegresar_Click(object sender, EventArgs e)
