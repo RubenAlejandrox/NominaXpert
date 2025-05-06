@@ -164,5 +164,30 @@ namespace NominaXpert.Controller
             }
         }
 
+        public int ObtenerRolUsuario(int idUsuario)
+        {
+            try
+            {
+                // Obtener el usuario con el idUsuario (suponiendo que tienes un método para obtenerlo)
+                var usuario = _usuariosDataAccess.ObtenerUsuarioPorId(idUsuario);
+
+                // Si no existe el usuario, retornar -1 o un valor predeterminado para indicar error
+                if (usuario == null)
+                {
+                    _logger.Warn($"No se encontró el usuario con ID {idUsuario}");
+                    return -1;
+                }
+
+                // Retornar el id_rol del usuario
+                return usuario.IdRol;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Error al obtener el rol del usuario con ID {idUsuario}");
+                return -1; // En caso de error, retorna -1
+            }
+        }
+
+
     }
 }

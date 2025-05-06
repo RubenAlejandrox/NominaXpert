@@ -28,19 +28,31 @@ namespace NominaXpert.View.UsersControl
 
         private void UC_NominaAlta_Load(object sender, EventArgs e)
         {
-            // 1. Verificar que el usuario tenga permisos
-            int idUsuario = 1;
-            var usuarioAutorizado = _nominasController.VerificarPermisosUsuario(idUsuario);
+            // 1. Obtener dinámicamente el idUsuario
+            int idUsuario = UsuarioSesion.UsuarioId;
 
-            if (!usuarioAutorizado)
+            // 2. Obtener el id_rol del usuario
+            int idRol = _nominasController.ObtenerRolUsuario(idUsuario);
+
+            // Verificar si el rol es válido (por ejemplo, si no es -1)
+            if (idRol == -1)
+            {
+                MessageBox.Show("No se pudo obtener el rol del usuario.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return; // Bloqueamos el acceso si no se obtiene el rol
+            }
+
+            // 3. Verificar que el usuario tenga permisos para generar la nómina (solo roles 1 o 2)
+            if (idRol != 1 && idRol != 2)
             {
                 MessageBox.Show("Lo siento, no tienes permisos suficientes para generar nómina.", "Error de acceso", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return; // Bloqueamos el acceso a la vista si no tiene permisos
+                return; // Bloqueamos el acceso si el rol no es ADMIN (1) ni OPERADOR (2)
             }
+
+            // Si el usuario tiene permisos, se continúa con el proceso de carga de la vista
         }
 
-//<<<<<<< HEAD
-//=======
+        //<<<<<<< HEAD
+        //=======
         public void InicializaVentanaCalculoRecibos()
         {
             ConfigurarPermisos();
@@ -125,11 +137,11 @@ namespace NominaXpert.View.UsersControl
                 DateTime fechaInicio = dtpFechaInicioNomina.Value;
                 DateTime fechaFin = dtpFechaFinNomina.Value;
 
-                // Para pruebas, el idUsuario puede ser nulo
-                int? idUsuario = null;
+                // Obtener el idUsuario dinámicamente (aquí podrías obtenerlo desde la sesión)
+                int idUsuario = UsuarioSesion.ObtenerIdUsuarioActual(); 
 
                 // Llamar al controlador para registrar la nómina y obtener la ID generada
-                bool resultado = _nominasController.CrearNomina(idEmpleado, idUsuario ?? 1, fechaInicio, fechaFin);
+                bool resultado = _nominasController.CrearNomina(idEmpleado, idUsuario, fechaInicio, fechaFin);
 
                 if (resultado)
                 {

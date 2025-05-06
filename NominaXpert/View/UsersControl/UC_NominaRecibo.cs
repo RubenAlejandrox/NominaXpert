@@ -110,7 +110,7 @@ namespace NominaXpert.View.UsersControl
                 lblTotalPercepciones.Text = totalPercepciones.ToString("C");
                 lblTotalDeducciones.Text = totalDeducciones.ToString("C");
                 lblSueldoBase.Text = nomina.SueldoBase.ToString("C");
-                lblHorasTrabajadas.Text = nomina.HorasTrabajadas.ToString();
+                //lblHorasTrabajadas.Text = nomina.HorasTrabajadas.ToString();
 
                 decimal totalNeto = (nomina.SueldoBase + totalPercepciones) - totalDeducciones;
                 lblTotalNeto.Text = totalNeto.ToString("C");

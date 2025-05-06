@@ -56,8 +56,8 @@
             panel3 = new Panel();
             btnBuscar = new FontAwesome.Sharp.IconButton();
             label6 = new Label();
-            dtpFechaFinNomina = new NominaXpert.Utilities.NominaDatePicker();
-            dtpFechaInicioNomina = new NominaXpert.Utilities.NominaDatePicker();
+            dtpFechaFinNomina = new Utilities.NominaDatePicker();
+            dtpFechaInicioNomina = new Utilities.NominaDatePicker();
             btnCalculoNomina1 = new FontAwesome.Sharp.IconButton();
             lblDatosObligatorios = new Label();
             panel7 = new Panel();

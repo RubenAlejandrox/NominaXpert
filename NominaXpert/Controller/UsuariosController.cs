@@ -228,5 +228,32 @@ namespace NominaXpert.Controller
                 return new List<string>(); // Retorna lista vacía en caso de error
             }
         }
+
+        public int ObtenerRolDeUsuario(int idUsuario)
+{
+    try
+    {
+        _logger.Debug($"Solicitando ID del rol para el usuario con ID: {idUsuario}");
+        
+        // Obtenemos los detalles del usuario por su ID
+        Usuario? usuario = _usuariosData.ObtenerUsuarioPorId(idUsuario);
+        
+        // Verificamos si el usuario existe
+        if (usuario == null)
+        {
+            _logger.Warn($"No se encontró un usuario con ID {idUsuario}");
+            return -1; // Valor que indica que no se encontró el usuario
+        }
+
+        // Si el usuario existe, retornamos el id_rol
+        return usuario.IdRol;
+    }
+    catch (Exception ex)
+    {
+        _logger.Error(ex, $"Error al obtener el ID del rol del usuario con ID: {idUsuario}");
+        return -1; // Retorna -1 en caso de error
+    }
+}
+
     }
 }

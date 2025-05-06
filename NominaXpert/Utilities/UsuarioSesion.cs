@@ -30,5 +30,18 @@ namespace NominaXpert.Utilities
             RolNombre = null;
             Permisos = null;
         }
+
+        // Método estático para obtener el idUsuario del usuario autenticado
+        public static int ObtenerIdUsuarioActual()
+        {
+            // Si el id del usuario no está establecido, significa que no hay usuario autenticado
+            if (UsuarioSesion.UsuarioId == 0)
+            {
+                return -1; // Retorna -1 si no hay un usuario autenticado
+            }
+
+            // Si el usuario está autenticado, retorna su id
+            return UsuarioSesion.UsuarioId;
+        }
     }
 }
