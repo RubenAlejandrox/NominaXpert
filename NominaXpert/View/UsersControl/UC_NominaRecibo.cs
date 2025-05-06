@@ -386,13 +386,23 @@ namespace NominaXpert.View.UsersControl
                 // Obtener la nómina completa
                 var nomina = _nominasController.BuscarNominaPorId(IdNomina);
 
-                // Consultar horas trabajadas
+                // Consultar horas trabajadas usando el ID de usuario correcto
+                int idUsuario = UsuarioSesion.UsuarioId;
+
                 var jornadaController = new RegistroJornadaController();
                 decimal horasTrabajadas = jornadaController.ConsultarTotalHorasTrabajadas(
                     nomina.IdEmpleado,
                     nomina.FechaInicio,
                     nomina.FechaFin,
-                    UsuarioSesion.ObtenerIdUsuarioActual());
+                    idUsuario);
+
+                // Si no hay horas registradas, usar un valor predeterminado
+                if (horasTrabajadas <= 0)
+                {
+                    // Usamos 40 horas como valor por defecto (8 horas por 5 días)
+                    horasTrabajadas = 40;
+                    _logger.Warn($"No se encontraron horas trabajadas para la nómina {IdNomina}. Usando valor predeterminado de 40 horas.");
+                }
 
                 // Obtener percepciones y deducciones
                 var percepciones = _bonificacionController.ObtenerBonificacionesPorNomina(IdNomina);
@@ -400,7 +410,7 @@ namespace NominaXpert.View.UsersControl
                 decimal totalPercepciones = percepciones.Sum(p => p.Monto);
                 decimal totalDeducciones = deducciones.Sum(d => d.Monto);
 
-                // Calcular según la fórmula
+                // Calcular según la fórmula correcta
                 decimal sueldoBase = nomina.SueldoBase;
                 decimal sueldoPorDia = sueldoBase / 22m;
                 decimal sueldoPorHora = sueldoPorDia / 8m;
@@ -409,7 +419,14 @@ namespace NominaXpert.View.UsersControl
                 // Nuevo cálculo del total neto
                 decimal totalNeto = sueldoPorHorasTrabajadas + totalPercepciones - totalDeducciones;
 
-                // Crear objeto pago
+                // Log para depuración
+                _logger.Info($"Generación de pago: Sueldo Base={sueldoBase}, Horas={horasTrabajadas}, " +
+                            $"Sueldo/Día={sueldoPorDia}, Sueldo/Hora={sueldoPorHora}, " +
+                            $"Sueldo por Horas={sueldoPorHorasTrabajadas}, " +
+                            $"Percepciones={totalPercepciones}, Deducciones={totalDeducciones}, " +
+                            $"Total Neto={totalNeto}");
+
+                // Crear objeto pago con el nuevo total calculado
                 Pago nuevoPago = new Pago
                 {
                     IdNomina = this.IdNomina,
@@ -425,7 +442,7 @@ namespace NominaXpert.View.UsersControl
 
                 if (resultado)
                 {
-                    // Actualizar estado de nómina a "Pagada"
+                    // Actualizar estado de nómina a "Pagado"
                     _logger.Info($"UC_NominaRecibo -> Se actualizará el estado de la nómina {this.IdNomina} a Pagado");
                     _nominasController.ActualizarEstadoPago(this.IdNomina, "Pagado");
                     _logger.Info($"UC_NominaRecibo -> Finalizó la actualización de la nómina {this.IdNomina} a Pagado");
@@ -442,6 +459,7 @@ namespace NominaXpert.View.UsersControl
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error al generar la nómina");
                 MessageBox.Show($"Error al generar la nómina: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
