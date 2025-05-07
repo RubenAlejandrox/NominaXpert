@@ -43,33 +43,33 @@
             label8 = new Label();
             label7 = new Label();
             lblIdEmpleado = new Label();
+            lblSueldoBase = new Label();
             lblRFC = new Label();
             lblDepartamento = new Label();
             lblNombreEmpleado = new Label();
             label6 = new Label();
+            lblTotalNetoletra = new Label();
             label5 = new Label();
             label4 = new Label();
             label3 = new Label();
             label2 = new Label();
             label1 = new Label();
             gBoxVPCalculoNom = new GroupBox();
+            lblSueldoPorHorasTrabajadas = new Label();
+            label10 = new Label();
             cboMetodoPago = new ComboBox();
             lblMetodoPago = new Label();
             btnGenerarNómina = new FontAwesome.Sharp.IconButton();
             lblMontoLetras = new Label();
             lblTotalDeducciones = new Label();
             lblTotalNeto = new Label();
-            lblSueldoBase = new Label();
             lblTotalPercepciones = new Label();
             lblMontoletra = new Label();
             lblNetoPagadoletra = new Label();
-            lblTotalNetoletra = new Label();
             lblTotalDeduccionletra = new Label();
             lblTotalPercepcionletra = new Label();
             btnRegresar = new FontAwesome.Sharp.IconButton();
             toolTip1 = new ToolTip(components);
-            label10 = new Label();
-            lblHorasTrabajadas = new Label();
             panel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
@@ -258,6 +258,17 @@
             lblIdEmpleado.TabIndex = 35;
             lblIdEmpleado.Text = "---";
             // 
+            // lblSueldoBase
+            // 
+            lblSueldoBase.AutoSize = true;
+            lblSueldoBase.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblSueldoBase.ForeColor = Color.White;
+            lblSueldoBase.Location = new Point(776, 167);
+            lblSueldoBase.Name = "lblSueldoBase";
+            lblSueldoBase.Size = new Size(31, 20);
+            lblSueldoBase.TabIndex = 23;
+            lblSueldoBase.Text = ".00";
+            // 
             // lblRFC
             // 
             lblRFC.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -297,6 +308,17 @@
             label6.Size = new Size(128, 20);
             label6.TabIndex = 31;
             label6.Text = "ID:";
+            // 
+            // lblTotalNetoletra
+            // 
+            lblTotalNetoletra.AutoSize = true;
+            lblTotalNetoletra.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTotalNetoletra.ForeColor = Color.White;
+            lblTotalNetoletra.Location = new Point(629, 167);
+            lblTotalNetoletra.Name = "lblTotalNetoletra";
+            lblTotalNetoletra.Size = new Size(93, 20);
+            lblTotalNetoletra.TabIndex = 19;
+            lblTotalNetoletra.Text = "Sueldo Base";
             // 
             // label5
             // 
@@ -350,7 +372,7 @@
             // 
             // gBoxVPCalculoNom
             // 
-            gBoxVPCalculoNom.Controls.Add(lblHorasTrabajadas);
+            gBoxVPCalculoNom.Controls.Add(lblSueldoPorHorasTrabajadas);
             gBoxVPCalculoNom.Controls.Add(label10);
             gBoxVPCalculoNom.Controls.Add(cboMetodoPago);
             gBoxVPCalculoNom.Controls.Add(lblMetodoPago);
@@ -373,6 +395,28 @@
             gBoxVPCalculoNom.TabIndex = 9;
             gBoxVPCalculoNom.TabStop = false;
             gBoxVPCalculoNom.Text = "Vista previa de cálculos de Nómina";
+            // 
+            // lblSueldoPorHorasTrabajadas
+            // 
+            lblSueldoPorHorasTrabajadas.AutoSize = true;
+            lblSueldoPorHorasTrabajadas.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblSueldoPorHorasTrabajadas.ForeColor = Color.White;
+            lblSueldoPorHorasTrabajadas.Location = new Point(259, 87);
+            lblSueldoPorHorasTrabajadas.Name = "lblSueldoPorHorasTrabajadas";
+            lblSueldoPorHorasTrabajadas.Size = new Size(31, 20);
+            lblSueldoPorHorasTrabajadas.TabIndex = 43;
+            lblSueldoPorHorasTrabajadas.Text = ".00";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label10.ForeColor = Color.White;
+            label10.Location = new Point(31, 87);
+            label10.Name = "label10";
+            label10.Size = new Size(208, 20);
+            label10.TabIndex = 42;
+            label10.Text = "Sueldo por Horas Trabajadas";
             // 
             // cboMetodoPago
             // 
@@ -449,17 +493,6 @@
             lblTotalNeto.TabIndex = 24;
             lblTotalNeto.Text = ".00";
             // 
-            // lblSueldoBase
-            // 
-            lblSueldoBase.AutoSize = true;
-            lblSueldoBase.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblSueldoBase.ForeColor = Color.White;
-            lblSueldoBase.Location = new Point(776, 167);
-            lblSueldoBase.Name = "lblSueldoBase";
-            lblSueldoBase.Size = new Size(31, 20);
-            lblSueldoBase.TabIndex = 23;
-            lblSueldoBase.Text = ".00";
-            // 
             // lblTotalPercepciones
             // 
             lblTotalPercepciones.AutoSize = true;
@@ -492,17 +525,6 @@
             lblNetoPagadoletra.Size = new Size(87, 20);
             lblNetoPagadoletra.TabIndex = 20;
             lblNetoPagadoletra.Text = "Total NETO";
-            // 
-            // lblTotalNetoletra
-            // 
-            lblTotalNetoletra.AutoSize = true;
-            lblTotalNetoletra.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTotalNetoletra.ForeColor = Color.White;
-            lblTotalNetoletra.Location = new Point(629, 167);
-            lblTotalNetoletra.Name = "lblTotalNetoletra";
-            lblTotalNetoletra.Size = new Size(93, 20);
-            lblTotalNetoletra.TabIndex = 19;
-            lblTotalNetoletra.Text = "Sueldo Base";
             // 
             // lblTotalDeduccionletra
             // 
@@ -549,28 +571,6 @@
             btnRegresar.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnRegresar.UseVisualStyleBackColor = false;
             btnRegresar.Click += btnRegresar_Click;
-            // 
-            // label10
-            // 
-            label10.AutoSize = true;
-            label10.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label10.ForeColor = Color.White;
-            label10.Location = new Point(31, 87);
-            label10.Name = "label10";
-            label10.Size = new Size(208, 20);
-            label10.TabIndex = 42;
-            label10.Text = "Sueldo por Horas Trabajadas";
-            // 
-            // lblHorasTrabajadas
-            // 
-            lblHorasTrabajadas.AutoSize = true;
-            lblHorasTrabajadas.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblHorasTrabajadas.ForeColor = Color.White;
-            lblHorasTrabajadas.Location = new Point(259, 87);
-            lblHorasTrabajadas.Name = "lblHorasTrabajadas";
-            lblHorasTrabajadas.Size = new Size(31, 20);
-            lblHorasTrabajadas.TabIndex = 43;
-            lblHorasTrabajadas.Text = ".00";
             // 
             // UC_NominaRecibo
             // 
@@ -640,5 +640,6 @@
         private ComboBox cboMetodoPago;
         private Label lblHorasTrabajadas;
         private Label label10;
+        private Label lblSueldoPorHorasTrabajadas;
     }
 }
