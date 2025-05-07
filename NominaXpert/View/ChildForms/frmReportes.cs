@@ -1,6 +1,7 @@
 ﻿using NominaXpert.Business;
 using NominaXpert.Controller;
 using NominaXpert.Model;
+using NominaXpert.View.UsersControl;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,10 +16,16 @@ namespace NominaXpert.View.Forms
 {
     public partial class frmReportes : Form
     {
+        public int IdNomina { get; set; }
+
+        private readonly NominasController _nominasController;
+
+
         public frmReportes()
         {
             InitializeComponent();
             ConfigurarPermisos();
+            _nominasController = new NominasController();
         }
 
         private void frmReportes_Load(object sender, EventArgs e)
@@ -31,7 +38,7 @@ namespace NominaXpert.View.Forms
         {
         }
 
-        
+
         private void btnPDFReciboNomina_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtMatricula.Text)) //si esto esta vacio, mandamos el sig msj
@@ -129,7 +136,7 @@ namespace NominaXpert.View.Forms
                 }
 
                 // Actualizar el total de registros
-                lblTotaldeRegistros.Text = $"Total de Registros: {dataGridView1.Rows.Count-1}";
+                lblTotaldeRegistros.Text = $"Total de Registros: {dataGridView1.Rows.Count - 1}";
             }
             else
             {
@@ -181,7 +188,6 @@ namespace NominaXpert.View.Forms
         private void ConfigurarPermisos()
         {
             var controller = new UsuariosController();
-            btnCancelarNomina.Enabled = controller.TienePermiso("NOM_EDIT");
             btnDatalleNomina.Enabled = controller.TienePermiso("NOM_VIEW");
             btnExportarPDF.Enabled = controller.TienePermiso("EXP_DATS");
             btnEsportarExcel.Enabled = controller.TienePermiso("EXP_DATS");
@@ -189,7 +195,38 @@ namespace NominaXpert.View.Forms
         }
         private void btnDatalleNomina_Click(object sender, EventArgs e)
         {
+            try
+            {
+                // Verificar si se ha seleccionado alguna fila en el DataGridView
+                if (dataGridView1.SelectedRows.Count == 0)
+                {
+                    MessageBox.Show("Por favor, seleccione una nómina para ver el detalle.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
+                // Obtener el IdNomina de la fila seleccionada
+                int idNomina = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["Id_Nomina"].Value);
+
+                // Navegar a UC_NominaRecibo y pasar el IdNomina
+                UC_NominaRecibo ucRecibo = new UC_NominaRecibo(idNomina); // Usamos el idNomina de la fila seleccionada
+                ucRecibo.Dock = DockStyle.Fill; // Aseguramos que el UserControl ocupe todo el espacio disponible
+
+                // Obtener el contenedor principal del UserControl actual
+                Control parent = this.Parent;
+                if (parent != null)
+                {
+                    // Remover el UserControl actual
+                    parent.Controls.Remove(this);
+
+                    // Agregar el nuevo UserControl al mismo contenedor
+                    parent.Controls.Add(ucRecibo);
+                    parent.Controls.SetChildIndex(ucRecibo, 0); // Ponerlo al frente
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cambiar de vista: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void CargarNominasPorDefecto()
@@ -225,7 +262,7 @@ namespace NominaXpert.View.Forms
                     }
 
                     // Actualizar el texto del total de registros
-                    lblTotaldeRegistros.Text = $"Total de Registros: {dataGridView1.Rows.Count-1}";  // Actualizamos el total de registros
+                    lblTotaldeRegistros.Text = $"Total de Registros: {dataGridView1.Rows.Count - 1}";  // Actualizamos el total de registros
 
                 }
                 else
@@ -238,6 +275,7 @@ namespace NominaXpert.View.Forms
                 MessageBox.Show($"Error al cargar las nóminas: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+       
+        
     }
 }

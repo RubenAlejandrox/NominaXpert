@@ -444,7 +444,9 @@ namespace NominaXpert.View.UsersControl
                 {
                     // Actualizar estado de nómina a "Pagado"
                     _logger.Info($"UC_NominaRecibo -> Se actualizará el estado de la nómina {this.IdNomina} a Pagado");
-                    _nominasController.ActualizarEstadoPago(this.IdNomina, "Pagado");
+                   
+                    // Llamar al método con todos los parámetros
+                    _nominasController.ActualizarEstadoPago(this.IdNomina, "Pagado", idUsuario);
                     _logger.Info($"UC_NominaRecibo -> Finalizó la actualización de la nómina {this.IdNomina} a Pagado");
 
                     // Refrescar la información visual del recibo para reflejar "Pagada"

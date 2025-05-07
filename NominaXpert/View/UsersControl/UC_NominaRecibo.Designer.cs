@@ -307,7 +307,7 @@
             label6.Name = "label6";
             label6.Size = new Size(128, 20);
             label6.TabIndex = 31;
-            label6.Text = "ID:";
+            label6.Text = "ID empleado:";
             // 
             // lblTotalNetoletra
             // 

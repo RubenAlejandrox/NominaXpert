@@ -15,6 +15,8 @@ namespace NominaXpert.Model
         public DateTime Fecha { get; set; }
         public string IpAcceso { get; set; }
         public string NombreEquipo { get; set; }
+        public TimeSpan Hora { get; set; }
+
 
         // Relación con Usuario (quien realizó la acción)
         public Usuario DatosUsuario { get; set; }

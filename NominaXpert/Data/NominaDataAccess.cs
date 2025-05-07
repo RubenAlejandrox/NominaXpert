@@ -169,24 +169,23 @@ namespace NominaXpert.Data
         // Eliminar (baja lógica) una nómina
         public int EliminarNomina(int idNomina)
         {
-            string query = "UPDATE nomina.nomina SET estado_pago = 'Eliminado' WHERE id = @idNomina";
+            string query = "UPDATE nomina.nomina SET estado_pago = 'Eliminada' WHERE id = @idNomina";
 
             try
             {
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
                 {
-                    _dbAccess.CreateParameter("@idNomina", idNomina)
+            _dbAccess.CreateParameter("@idNomina", idNomina)
                 };
 
                 _dbAccess.Connect();
                 int rowsAffected = _dbAccess.ExecuteNonQuery(query, parameters);
-                _logger.Info($"Nómina con ID {idNomina} eliminada correctamente. Filas afectadas: {rowsAffected}");
-                return rowsAffected;
+                return rowsAffected; // Retorna el número de filas afectadas
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, $"Error al eliminar la nómina con ID {idNomina}");
-                return 0;
+                return 0; // En caso de error
             }
             finally
             {

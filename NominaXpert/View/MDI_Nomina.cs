@@ -12,6 +12,7 @@ using System.Xml;
 using FontAwesome.Sharp; // Librería para los iconos
 using NominaXpert.Business;
 using NominaXpert.Controller;
+
 namespace NominaXpert.View
 {
     public partial class MDI_Nomina : Form
@@ -205,7 +206,8 @@ namespace NominaXpert.View
 
         private void btnAuditoria_Click(object sender, EventArgs e)
         {
-           
+            ActivateButton(sender, RGBColors.changeColor);
+            OpenChildForm(new ChildForms.frmReporteAuditorias());
         }
 
         private void ConfigurarPermisos()

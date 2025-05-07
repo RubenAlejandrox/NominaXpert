@@ -243,6 +243,23 @@ namespace NominaXpert.Controller
                 throw;
             }
         }
+
+        public bool EliminarNomina(int idNomina)
+        {
+            try
+            {
+                // Llamar al DataAccess para eliminar la nómina de la base de datos
+                int resultado = _nominaDataAccess.EliminarNomina(idNomina);
+                return resultado > 0; // Si se afectaron filas, la eliminación fue exitosa
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al eliminar la nómina.");
+                return false;
+            }
+        }
+
+
     }
-   
+
 }

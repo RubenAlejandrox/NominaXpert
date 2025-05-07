@@ -47,9 +47,9 @@
             btnEsportarExcel = new FontAwesome.Sharp.IconButton();
             label7 = new Label();
             panel3 = new Panel();
+            lblTotaldeRegistros = new Label();
             gBoxMatricula = new GroupBox();
             btnDatalleNomina = new FontAwesome.Sharp.IconButton();
-            btnCancelarNomina = new FontAwesome.Sharp.IconButton();
             label6 = new Label();
             label5 = new Label();
             DTPFechaFinNomina = new Utilities.NominaDatePicker();
@@ -65,7 +65,6 @@
             MontoLetra = new DataGridViewTextBoxColumn();
             toolTip1 = new ToolTip(components);
             Selección = new DataGridViewCheckBoxColumn();
-            lblTotaldeRegistros = new Label();
             panel1.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             panel2.SuspendLayout();
@@ -280,10 +279,20 @@
             panel3.Size = new Size(244, 73);
             panel3.TabIndex = 1;
             // 
+            // lblTotaldeRegistros
+            // 
+            lblTotaldeRegistros.AutoSize = true;
+            lblTotaldeRegistros.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTotaldeRegistros.ForeColor = Color.FromArgb(12, 215, 253);
+            lblTotaldeRegistros.Location = new Point(19, 33);
+            lblTotaldeRegistros.Name = "lblTotaldeRegistros";
+            lblTotaldeRegistros.Size = new Size(163, 23);
+            lblTotaldeRegistros.TabIndex = 8;
+            lblTotaldeRegistros.Text = "Total de Registros: ";
+            // 
             // gBoxMatricula
             // 
             gBoxMatricula.Controls.Add(btnDatalleNomina);
-            gBoxMatricula.Controls.Add(btnCancelarNomina);
             gBoxMatricula.Controls.Add(label6);
             gBoxMatricula.Controls.Add(panel3);
             gBoxMatricula.Controls.Add(label5);
@@ -321,28 +330,6 @@
             btnDatalleNomina.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnDatalleNomina.UseVisualStyleBackColor = false;
             btnDatalleNomina.Click += btnDatalleNomina_Click;
-            // 
-            // btnCancelarNomina
-            // 
-            btnCancelarNomina.BackColor = Color.Black;
-            btnCancelarNomina.Cursor = Cursors.Hand;
-            btnCancelarNomina.FlatAppearance.BorderColor = Color.Red;
-            btnCancelarNomina.FlatAppearance.BorderSize = 2;
-            btnCancelarNomina.FlatStyle = FlatStyle.Flat;
-            btnCancelarNomina.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnCancelarNomina.ForeColor = Color.Azure;
-            btnCancelarNomina.IconChar = FontAwesome.Sharp.IconChar.UserXmark;
-            btnCancelarNomina.IconColor = Color.Red;
-            btnCancelarNomina.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            btnCancelarNomina.IconSize = 32;
-            btnCancelarNomina.Location = new Point(672, 29);
-            btnCancelarNomina.Name = "btnCancelarNomina";
-            btnCancelarNomina.Size = new Size(182, 40);
-            btnCancelarNomina.TabIndex = 13;
-            btnCancelarNomina.Text = "Cancelar Nómina";
-            btnCancelarNomina.TextAlign = ContentAlignment.MiddleRight;
-            btnCancelarNomina.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnCancelarNomina.UseVisualStyleBackColor = false;
             // 
             // label6
             // 
@@ -493,17 +480,6 @@
             Selección.Name = "Selección";
             Selección.Width = 125;
             // 
-            // lblTotaldeRegistros
-            // 
-            lblTotaldeRegistros.AutoSize = true;
-            lblTotaldeRegistros.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTotaldeRegistros.ForeColor = Color.FromArgb(12, 215, 253);
-            lblTotaldeRegistros.Location = new Point(19, 33);
-            lblTotaldeRegistros.Name = "lblTotaldeRegistros";
-            lblTotaldeRegistros.Size = new Size(163, 23);
-            lblTotaldeRegistros.TabIndex = 8;
-            lblTotaldeRegistros.Text = "Total de Registros: ";
-            // 
             // frmReportes
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -560,7 +536,6 @@
         private DataGridView dataGridView1;
         private FontAwesome.Sharp.IconPictureBox ipbMatricula;
         private ToolTip toolTip1;
-        private FontAwesome.Sharp.IconButton btnCancelarNomina;
         private FontAwesome.Sharp.IconButton btnDatalleNomina;
         private DataGridViewCheckBoxColumn Selección;
         private DataGridViewTextBoxColumn Id_Nomina;

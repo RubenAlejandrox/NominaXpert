@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -103,5 +104,124 @@ namespace NominaXpert.Data
             }
             return localIP;
         }
+
+        /// <summary>
+        /// Método para obtener todas las auditorías
+        /// </summary>
+        /// <returns></returns>
+        public List<Auditoria> ObtenerTodasLasAuditorias()
+        {
+            List<Auditoria> auditorias = new List<Auditoria>();
+
+            string query = @"
+        SELECT id, id_usuario, accion, detalle_accion, fecha, ip_acceso, nombre_equipo, hora
+        FROM seguridad.auditorias
+        ORDER BY fecha DESC, hora DESC";
+
+            try
+            {
+                _dbAccess.Connect();
+                DataTable resultado = _dbAccess.ExecuteQuery_Reader(query);
+
+                foreach (DataRow row in resultado.Rows)
+                {
+                    // Convertir la fecha (que es un DateTime)
+                    DateTime fecha = Convert.ToDateTime(row["fecha"]);
+
+                    // Convertir la hora (que es un TimeSpan)
+                    TimeSpan hora = (TimeSpan)row["hora"]; // Asumimos que la columna hora es de tipo time sin zona horaria en PostgreSQL
+
+                    // Crear el objeto Auditoria y asignar los valores
+                    Auditoria auditoria = new Auditoria
+                    {
+                        Id = Convert.ToInt32(row["id"]),
+                        IdUsuario = Convert.ToInt32(row["id_usuario"]),
+                        Accion = row["accion"].ToString(),
+                        DetalleAccion = row["detalle_accion"].ToString(),
+                        Fecha = fecha,
+                        IpAcceso = row["ip_acceso"].ToString(),
+                        NombreEquipo = row["nombre_equipo"].ToString(),
+                        Hora = hora // Aquí asignamos el TimeSpan
+                    };
+
+                    auditorias.Add(auditoria);
+                }
+
+                _logger.Info($"Se obtuvieron {auditorias.Count} auditorías.");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al obtener todas las auditorías.");
+                throw;
+            }
+            finally
+            {
+                _dbAccess.Disconnect();
+            }
+
+            return auditorias;
+        }
+/// <summary>
+/// Método para obtener auditorías filtradas por idUsuario y acción
+/// </summary>
+/// <param name="idUsuario"></param>
+/// <param name="accion"></param>
+/// <returns></returns>
+public List<Auditoria> ObtenerAuditoriasPorFiltro(int idUsuario, string accion)
+{
+    List<Auditoria> auditorias = new List<Auditoria>();
+
+    string query = @"
+        SELECT id, id_usuario, accion, detalle_accion, fecha, ip_acceso, nombre_equipo, hora
+        FROM seguridad.auditorias
+        WHERE id_usuario = @idUsuario
+        AND accion = @accion";
+
+    try
+    {
+        NpgsqlParameter[] parameters = new NpgsqlParameter[] 
+        {
+            _dbAccess.CreateParameter("@idUsuario", idUsuario),
+            _dbAccess.CreateParameter("@accion", accion)
+        };
+
+        _dbAccess.Connect();
+        DataTable resultado = _dbAccess.ExecuteQuery_Reader(query, parameters);
+
+        foreach (DataRow row in resultado.Rows)
+        {
+            // Modificado para convertir correctamente 'hora' a TimeSpan
+            TimeSpan hora = (TimeSpan)row["hora"]; // Convertir directamente a TimeSpan
+
+            Auditoria auditoria = new Auditoria
+            {
+                Id = Convert.ToInt32(row["id"]),
+                IdUsuario = Convert.ToInt32(row["id_usuario"]),
+                Accion = row["accion"].ToString(),
+                DetalleAccion = row["detalle_accion"].ToString(),
+                Fecha = Convert.ToDateTime(row["fecha"]),  // Aquí no hay problema porque 'fecha' es de tipo DateTime
+                IpAcceso = row["ip_acceso"].ToString(),
+                NombreEquipo = row["nombre_equipo"].ToString(),
+                Hora = hora // Asignamos el TimeSpan correctamente
+            };
+            auditorias.Add(auditoria);
+        }
+
+        _logger.Info($"Se obtuvieron {auditorias.Count} auditorías filtradas por usuario {idUsuario} y acción '{accion}'.");
+        return auditorias;
+    }
+    catch (Exception ex)
+    {
+        _logger.Error(ex, "Error al obtener las auditorías filtradas.");
+        throw;
+    }
+    finally
+    {
+        _dbAccess.Disconnect();
+    }
+    
+        
+        }
+
     }
 }
