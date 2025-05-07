@@ -11,6 +11,11 @@ namespace NominaXpert.Model
         public string EstadoPago { get; set; }
         public Empleado DatosEmpleado { get; set; }
 
+        // Nuevas propiedades agregadas para el pago
+        public decimal MontoTotal { get; set; }
+        public string MontoLetras { get; set; }
+      
+
         // Constructor predeterminado
         public NominaConsulta()
         {
@@ -20,6 +25,8 @@ namespace NominaXpert.Model
             FechaFin = DateTime.Now.Date; // Fecha actual sin hora
             EstadoPago = "Pendiente"; // Estado inicial por defecto
             DatosEmpleado = null; // Relación no cargada inicialmente
+            MontoTotal = 0; // Monto inicial
+            MontoLetras = string.Empty; // Monto en letras vacío
         }
 
         // Constructor parcial (con datos clave sin relaciones)
@@ -31,10 +38,12 @@ namespace NominaXpert.Model
             FechaFin = fechaFin;
             EstadoPago = estadoPago;
             DatosEmpleado = null; // Se puede asignar después
+            MontoTotal = 0; // Monto inicial
+            MontoLetras = string.Empty; // Monto en letras vacío
         }
 
         // Constructor completo (incluyendo el objeto Empleado relacionado)
-        public NominaConsulta(int idNomina, int idEmpleado, DateTime fechaInicio, DateTime fechaFin, string estadoPago, Empleado datosEmpleado)
+        public NominaConsulta(int idNomina, int idEmpleado, DateTime fechaInicio, DateTime fechaFin, string estadoPago, Empleado datosEmpleado, decimal montoTotal, string montoLetras)
         {
             IdNomina = idNomina;
             IdEmpleado = idEmpleado;
@@ -42,12 +51,13 @@ namespace NominaXpert.Model
             FechaFin = fechaFin;
             EstadoPago = estadoPago;
             DatosEmpleado = datosEmpleado; // Se pasa el empleado relacionado
+            MontoTotal = montoTotal; // Se pasa el monto total
+            MontoLetras = montoLetras; // Se pasa el monto en letras
         }
 
         public string NombreEmpleado => DatosEmpleado?.DatosPersonales?.NombreCompleto ?? "Sin Nombre";
         public string DepartamentoEmpleado => DatosEmpleado?.Departamento ?? "Sin Departamento";
         public string RfcEmpleado => DatosEmpleado?.DatosPersonales?.Rfc ?? "Sin RFC";
         public decimal SueldoBase => DatosEmpleado?.Sueldo ?? 0;
-
     }
 }

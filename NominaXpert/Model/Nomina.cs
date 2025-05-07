@@ -16,6 +16,7 @@ namespace NominaXpert.Model
         public string EstadoPago { get; set; }
         public DateTime CreadoAt { get; set; }
 
+
         // Relación con el Empleado
         public Empleado DatosEmpleado { get; set; }
 

@@ -21,6 +21,7 @@ using iText.Kernel.Font;
 using iText.Layout.Properties;
 using iText.Kernel.Exceptions;
 using iText.IO.Font.Constants;
+using NominaXpert.Utilities;
 
 namespace NominaXpert.View.UsersControl
 {
@@ -372,17 +373,24 @@ namespace NominaXpert.View.UsersControl
 
                     if (resultado)
                     {
+                        // Obtener el idUsuario dinámicamente (desde la sesión o como lo estés manejando)
+                        int idUsuario = UsuarioSesion.ObtenerIdUsuarioActual();
+
+                        if (idUsuario == -1)
+                        {
+                            MessageBox.Show("No se pudo obtener el ID del usuario. Por favor, inicia sesión.", "Error de acceso", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return; // Bloqueamos el acceso si no se puede obtener el idUsuario
+                        }
+
                         // Actualizar estado de nómina a "Pagada"
                         _logger.Info($"UC_NominaRecibo -> Se actualizará el estado de la nómina {this.IdNomina} a Pagado");
-                        _nominasController.ActualizarEstadoPago(this.IdNomina, "Pagado");
+                        _nominasController.ActualizarEstadoPago(this.IdNomina, "Pagado", idUsuario); // Se pasa el idUsuario
                         _logger.Info($"UC_NominaRecibo -> Finalizó la actualización de la nómina {this.IdNomina} a Pagado");
 
                         // Refrescar la información visual del recibo para reflejar "Pagada"
                         CargarRecibo();
 
                         MessageBox.Show("El pago ha sido registrado correctamente. La nómina ha sido marcada como pagada.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-
                     }
                     else
                     {

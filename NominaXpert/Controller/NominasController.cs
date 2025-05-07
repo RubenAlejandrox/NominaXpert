@@ -150,17 +150,30 @@ namespace NominaXpert.Controller
         /// <param name="idNomina"></param>
         /// <param name="nuevoEstado"></param>
         /// <returns></returns>
-        public int ActualizarEstadoPago(int idNomina, string nuevoEstado)
+        public int ActualizarEstadoPago(int idNomina, string nuevoEstado, int idUsuario)
         {
             try
             {
+                // Registrar la auditoría de la acción de actualización del estado de pago
+                var nomina = _nominaDataAccess.BuscarNominaPorId(idNomina); // Obtenemos la nómina para detalles adicionales
+                if (nomina != null)
+                {
+                    string detalleAccion = $"Se actualizó el estado de la nómina del empleado [ID: {nomina.IdEmpleado}] " +
+                                           $"para el periodo {nomina.FechaInicio.ToShortDateString()} - {nomina.FechaFin.ToShortDateString()} " +
+                                           $"a {nuevoEstado}.";
+
+                    // Llamar al método de auditoría para registrar la acción, incluyendo el idUsuario
+                    _auditoriaDataAccess.RegistrarAuditoria(idUsuario, "edición de nómina", detalleAccion);
+                }
+
+                // Realizar la actualización del estado de pago en la base de datos
                 _logger.Info($"NominasController -> ActualizarEstadoPago ejecutado para nómina {idNomina} nuevo estado: {nuevoEstado}");
                 return _nominaDataAccess.ActualizarEstadoPago(idNomina, nuevoEstado);
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Error al actualizar el estado de pago.");
-                return 0;
+                return 0; // Retorna 0 en caso de error
             }
         }
 
@@ -189,5 +202,47 @@ namespace NominaXpert.Controller
         }
 
 
+        // Método para obtener todas las nóminas
+        public List<NominaConsulta> DesplegarNominas()
+        {
+            try
+            {
+                // Llamamos al método de la capa de acceso a datos para obtener las nóminas
+                List<NominaConsulta> nominas = _nominaDataAccess.DesplegarNominas();
+
+                // Verificamos si se obtuvieron nóminas
+                if (nominas.Count == 0)
+                {
+                    _logger.Warn("No se encontraron nóminas.");
+                }
+                else
+                {
+                    _logger.Info($"Se obtuvieron {nominas.Count} nóminas.");
+                }
+
+                return nominas;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al desplegar las nóminas.");
+                throw;
+            }
+
+        }
+
+        public List<NominaConsulta> BuscarNominasPorMatriculaYFechas(string matricula, DateTime fechaInicio, DateTime fechaFin)
+        {
+            try
+            {
+                // Llamar al DataAccess para obtener las nóminas filtradas
+                return _nominaDataAccess.BuscarNominasPorMatriculaYFechas(matricula, fechaInicio, fechaFin);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al buscar las nóminas por matrícula y fechas.");
+                throw;
+            }
+        }
     }
+   
 }

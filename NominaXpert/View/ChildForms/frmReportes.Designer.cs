@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             panel1 = new Panel();
             label2 = new Label();
             label1 = new Label();
@@ -47,27 +47,25 @@
             btnEsportarExcel = new FontAwesome.Sharp.IconButton();
             label7 = new Label();
             panel3 = new Panel();
-            CBoxEstatusNomina = new ComboBox();
-            label3 = new Label();
             gBoxMatricula = new GroupBox();
             btnDatalleNomina = new FontAwesome.Sharp.IconButton();
             btnCancelarNomina = new FontAwesome.Sharp.IconButton();
             label6 = new Label();
             label5 = new Label();
-            DTPFechaFinNomina = new NominaXpert.Utilities.NominaDatePicker();
-            DTPFechaInicioNomina = new NominaXpert.Utilities.NominaDatePicker();
+            DTPFechaFinNomina = new Utilities.NominaDatePicker();
+            DTPFechaInicioNomina = new Utilities.NominaDatePicker();
             gBoxHistorial = new GroupBox();
             dataGridView1 = new DataGridView();
-            chkSeleccion = new DataGridViewCheckBoxColumn();
             Id_Nomina = new DataGridViewTextBoxColumn();
             Id_empleado = new DataGridViewTextBoxColumn();
-            Empleado = new DataGridViewTextBoxColumn();
-            Id_auditoria = new DataGridViewTextBoxColumn();
             FechaInicio = new DataGridViewTextBoxColumn();
             FechaFin = new DataGridViewTextBoxColumn();
             Estado_Pago = new DataGridViewTextBoxColumn();
+            MontoTotal = new DataGridViewTextBoxColumn();
+            MontoLetra = new DataGridViewTextBoxColumn();
             toolTip1 = new ToolTip(components);
             Selección = new DataGridViewCheckBoxColumn();
+            lblTotaldeRegistros = new Label();
             panel1.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             panel2.SuspendLayout();
@@ -276,34 +274,11 @@
             // 
             // panel3
             // 
-            panel3.Controls.Add(CBoxEstatusNomina);
-            panel3.Controls.Add(label3);
+            panel3.Controls.Add(lblTotaldeRegistros);
             panel3.Location = new Point(394, 13);
             panel3.Name = "panel3";
             panel3.Size = new Size(244, 73);
             panel3.TabIndex = 1;
-            // 
-            // CBoxEstatusNomina
-            // 
-            CBoxEstatusNomina.BackColor = SystemColors.Window;
-            CBoxEstatusNomina.FlatStyle = FlatStyle.Flat;
-            CBoxEstatusNomina.ForeColor = Color.Black;
-            CBoxEstatusNomina.FormattingEnabled = true;
-            CBoxEstatusNomina.Location = new Point(3, 32);
-            CBoxEstatusNomina.Name = "CBoxEstatusNomina";
-            CBoxEstatusNomina.Size = new Size(192, 31);
-            CBoxEstatusNomina.TabIndex = 4;
-            // 
-            // label3
-            // 
-            label3.Dock = DockStyle.Top;
-            label3.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.ForeColor = Color.White;
-            label3.Location = new Point(0, 0);
-            label3.Name = "label3";
-            label3.Size = new Size(244, 29);
-            label3.TabIndex = 3;
-            label3.Text = "Estado de Pago:";
             // 
             // gBoxMatricula
             // 
@@ -434,24 +409,24 @@
             dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.BorderStyle = BorderStyle.None;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = Color.FromArgb(30, 30, 30);
-            dataGridViewCellStyle3.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            dataGridViewCellStyle3.ForeColor = Color.Cyan;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(30, 30, 30);
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = Color.Cyan;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { chkSeleccion, Id_Nomina, Id_empleado, Empleado, Id_auditoria, FechaInicio, FechaFin, Estado_Pago });
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = Color.FromArgb(45, 45, 48);
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            dataGridViewCellStyle4.ForeColor = SystemColors.ButtonHighlight;
-            dataGridViewCellStyle4.SelectionBackColor = Color.Teal;
-            dataGridViewCellStyle4.SelectionForeColor = Color.White;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
-            dataGridView1.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Id_Nomina, Id_empleado, FechaInicio, FechaFin, Estado_Pago, MontoTotal, MontoLetra });
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
+            dataGridViewCellStyle2.ForeColor = SystemColors.ButtonHighlight;
+            dataGridViewCellStyle2.SelectionBackColor = Color.Teal;
+            dataGridViewCellStyle2.SelectionForeColor = Color.White;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
             dataGridView1.EnableHeadersVisualStyles = false;
             dataGridView1.GridColor = Color.DarkCyan;
             dataGridView1.Location = new Point(6, 26);
@@ -461,13 +436,6 @@
             dataGridView1.RowTemplate.Height = 30;
             dataGridView1.Size = new Size(1226, 420);
             dataGridView1.TabIndex = 0;
-            // 
-            // chkSeleccion
-            // 
-            chkSeleccion.HeaderText = "Seleccionar";
-            chkSeleccion.MinimumWidth = 6;
-            chkSeleccion.Name = "chkSeleccion";
-            chkSeleccion.ReadOnly = true;
             // 
             // Id_Nomina
             // 
@@ -482,20 +450,6 @@
             Id_empleado.MinimumWidth = 6;
             Id_empleado.Name = "Id_empleado";
             Id_empleado.ReadOnly = true;
-            // 
-            // Empleado
-            // 
-            Empleado.HeaderText = "Nombre empleado";
-            Empleado.MinimumWidth = 6;
-            Empleado.Name = "Empleado";
-            Empleado.ReadOnly = true;
-            // 
-            // Id_auditoria
-            // 
-            Id_auditoria.HeaderText = "Id_auditoria";
-            Id_auditoria.MinimumWidth = 6;
-            Id_auditoria.Name = "Id_auditoria";
-            Id_auditoria.ReadOnly = true;
             // 
             // FechaInicio
             // 
@@ -518,12 +472,37 @@
             Estado_Pago.Name = "Estado_Pago";
             Estado_Pago.ReadOnly = true;
             // 
+            // MontoTotal
+            // 
+            MontoTotal.HeaderText = "Monto Total";
+            MontoTotal.MinimumWidth = 6;
+            MontoTotal.Name = "MontoTotal";
+            MontoTotal.ReadOnly = true;
+            // 
+            // MontoLetra
+            // 
+            MontoLetra.HeaderText = "Monto Letra";
+            MontoLetra.MinimumWidth = 6;
+            MontoLetra.Name = "MontoLetra";
+            MontoLetra.ReadOnly = true;
+            // 
             // Selección
             // 
             Selección.HeaderText = "Selección";
             Selección.MinimumWidth = 6;
             Selección.Name = "Selección";
             Selección.Width = 125;
+            // 
+            // lblTotaldeRegistros
+            // 
+            lblTotaldeRegistros.AutoSize = true;
+            lblTotaldeRegistros.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTotaldeRegistros.ForeColor = Color.FromArgb(12, 215, 253);
+            lblTotaldeRegistros.Location = new Point(19, 33);
+            lblTotaldeRegistros.Name = "lblTotaldeRegistros";
+            lblTotaldeRegistros.Size = new Size(163, 23);
+            lblTotaldeRegistros.TabIndex = 8;
+            lblTotaldeRegistros.Text = "Total de Registros: ";
             // 
             // frmReportes
             // 
@@ -547,6 +526,7 @@
             panel4.ResumeLayout(false);
             panel6.ResumeLayout(false);
             panel3.ResumeLayout(false);
+            panel3.PerformLayout();
             gBoxMatricula.ResumeLayout(false);
             gBoxHistorial.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
@@ -564,10 +544,8 @@
         private Panel panel4;
         private TextBox txtMatricula;
         private Label lblMatricula;
-        private Label label3;
         private Label label4;
         private FontAwesome.Sharp.IconButton btnExportarPDF;
-        private ComboBox CBoxEstatusNomina;
         private GroupBox gBoxMatricula;
         
         private Label label6;
@@ -587,11 +565,11 @@
         private DataGridViewCheckBoxColumn Selección;
         private DataGridViewTextBoxColumn Id_Nomina;
         private DataGridViewTextBoxColumn Id_empleado;
-        private DataGridViewTextBoxColumn Empleado;
-        private DataGridViewTextBoxColumn Id_auditoria;
         private DataGridViewTextBoxColumn FechaInicio;
         private DataGridViewTextBoxColumn FechaFin;
         private DataGridViewTextBoxColumn Estado_Pago;
-        private DataGridViewCheckBoxColumn chkSeleccion;
+        private DataGridViewTextBoxColumn MontoTotal;
+        private DataGridViewTextBoxColumn MontoLetra;
+        private Label lblTotaldeRegistros;
     }
 }

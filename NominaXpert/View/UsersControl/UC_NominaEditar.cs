@@ -9,11 +9,16 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using NominaXpert.Business;
 using NominaXpert.Controller;
+using NominaXpert.Utilities;
 
 namespace NominaXpert.View.UsersControl
 {
+
     public partial class UC_NominaEditar : UserControl
     {
+        private readonly NominasController _nominasController; // Controlador de nómina
+
+
         /// <summary>
         /// ID de la nómina a editar y el ID del empleado
         /// </summary>
@@ -23,6 +28,8 @@ namespace NominaXpert.View.UsersControl
         public UC_NominaEditar(int idNomina)
         {
             InitializeComponent();
+
+            _nominasController = new NominasController();
 
             this.IdNomina = idNomina;
 
@@ -40,6 +47,26 @@ namespace NominaXpert.View.UsersControl
         private void UC_NominaEditar_Load(object sender, EventArgs e)
         {
             PoblaEstatus();
+
+            // 1. Obtener dinámicamente el idUsuario
+            int idUsuario = UsuarioSesion.UsuarioId;
+
+            // 2. Obtener el id_rol del usuario
+            int idRol = _nominasController.ObtenerRolUsuario(idUsuario);
+
+            // Verificar si el rol es válido (por ejemplo, si no es -1)
+            if (idRol == -1)
+            {
+                MessageBox.Show("No se pudo obtener el rol del usuario.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return; // Bloqueamos el acceso si no se obtiene el rol
+            }
+
+            // 3. Verificar que el usuario tenga permisos para generar la nómina
+            if (idRol != 1 && idRol != 2 && idRol != 5)
+            {
+                MessageBox.Show("Lo siento, no tienes permisos suficientes para editar nómina.", "Error de acceso", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return; // Bloqueamos el acceso
+            }
         }
 
         private void PoblaEstatus()
@@ -141,6 +168,15 @@ namespace NominaXpert.View.UsersControl
             // Validar si el campo Nómina es valido
             string nuevoEstado = cBoxEstatusNomina.Text;
 
+            // Obtener el idUsuario dinámicamente (aquí lo obtenemos desde la sesión)
+            int idUsuario = UsuarioSesion.ObtenerIdUsuarioActual();
+
+            if (idUsuario == -1)
+            {
+                MessageBox.Show("No se pudo obtener el ID del usuario. Por favor, inicia sesión.", "Error de acceso", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return; // Bloqueamos el acceso si no se puede obtener el idUsuario
+            }
+
             // Crear un formulario de notificación temporal
             Form mensajeForm = new Form
             {
@@ -169,22 +205,23 @@ namespace NominaXpert.View.UsersControl
                 timer.Stop();
                 mensajeForm.Invoke((MethodInvoker)delegate
                 {
-                    mensajeForm.Close(); // Solo cierra el formulario de mensaje
-                    // Realizar actualización
+                    mensajeForm.Close(); // Cierra el formulario de mensaje
+
+                    // Realizar la actualización del estado de la nómina
                     var nominaController = new NominasController();
-                    var resultado = nominaController.ActualizarEstadoPago(this.IdNomina, nuevoEstado);
+                    var resultado = nominaController.ActualizarEstadoPago(this.IdNomina, nuevoEstado, idUsuario);
 
                     if (resultado > 0)
                     {
                         MessageBox.Show("Estado de pago actualizado correctamente.", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        txtEstadoDePago.Text = nuevoEstado;
+                        txtEstadoDePago.Text = nuevoEstado; // Actualizar el estado en la interfaz
                     }
                     else
                     {
                         MessageBox.Show("No se pudo actualizar el estado de pago.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 });
-                timer.Dispose();// Liberar recursos del Timer
+                timer.Dispose(); // Liberar recursos del Timer
             };
             timer.Start();
 

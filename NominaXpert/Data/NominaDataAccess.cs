@@ -381,5 +381,133 @@ namespace NominaXpert.Data
             }
         }
 
+        public List<NominaConsulta> DesplegarNominas()
+        {
+            List<NominaConsulta> nominas = new List<NominaConsulta>();
+
+            // Consulta SQL modificada para no incluir el nombre del empleado
+            string query = @"
+                            SELECT 
+                                n.id AS IdNomina,
+                                n.id_empleado AS IdEmpleado,
+                                n.fecha_inicio AS FechaInicio,
+                                n.fecha_fin AS FechaFin,
+                                n.estado_pago AS EstadoPago,
+                                pay.monto_total AS MontoTotal,
+                                pay.monto_letras AS MontoLetras
+                            FROM 
+                                nomina.nomina n
+                            JOIN 
+                                nomina.empleados e ON e.id = n.id_empleado
+                            JOIN 
+                                nomina.pagos pay ON pay.id_nomina = n.id
+                            ORDER BY 
+                                n.id DESC";  // Ordenamos por ID de la nómina
+
+            try
+            {
+                _dbAccess.Connect();
+                DataTable resultado = _dbAccess.ExecuteQuery_Reader(query);
+
+                foreach (DataRow row in resultado.Rows)
+                {
+                    // Ahora no asignamos el nombre del empleado, simplemente creamos el objeto NominaConsulta
+                    NominaConsulta nomina = new NominaConsulta
+                    {
+                        IdNomina = Convert.ToInt32(row["IdNomina"]),
+                        IdEmpleado = Convert.ToInt32(row["IdEmpleado"]),
+                        FechaInicio = Convert.ToDateTime(row["FechaInicio"]),
+                        FechaFin = Convert.ToDateTime(row["FechaFin"]),
+                        EstadoPago = row["EstadoPago"].ToString(),
+                        MontoTotal = Convert.ToDecimal(row["MontoTotal"]),
+                        MontoLetras = row["MontoLetras"].ToString()
+                    };
+
+                    nominas.Add(nomina);
+                }
+
+                _logger.Info($"Se obtuvieron {nominas.Count} nóminas.");
+                return nominas;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al desplegar las nóminas.");
+                throw;
+            }
+            finally
+            {
+                _dbAccess.Disconnect();
+            }
+        }
+
+        public List<NominaConsulta> BuscarNominasPorMatriculaYFechas(string matricula, DateTime fechaInicio, DateTime fechaFin)
+        {
+            List<NominaConsulta> nominas = new List<NominaConsulta>();
+
+            // Consulta SQL para obtener las nóminas filtradas por matrícula y fechas
+            string query = @"
+            SELECT 
+                n.id AS IdNomina,
+                n.id_empleado AS IdEmpleado,
+                n.fecha_inicio AS FechaInicio,
+                n.fecha_fin AS FechaFin,
+                n.estado_pago AS EstadoPago,
+                pay.monto_total AS MontoTotal,
+                pay.monto_letras AS MontoLetras
+            FROM 
+                nomina.nomina n
+            JOIN 
+                nomina.empleados e ON e.id = n.id_empleado
+            JOIN 
+                nomina.pagos pay ON pay.id_nomina = n.id
+            WHERE 
+                e.matricula = @matricula
+                AND n.fecha_inicio >= @fechaInicio
+                AND n.fecha_fin <= @fechaFin";
+
+            try
+            {
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
+            _dbAccess.CreateParameter("@matricula", matricula),
+            _dbAccess.CreateParameter("@fechaInicio", fechaInicio),
+            _dbAccess.CreateParameter("@fechaFin", fechaFin)
+                };
+
+                _dbAccess.Connect();
+                DataTable resultado = _dbAccess.ExecuteQuery_Reader(query, parameters);
+
+                foreach (DataRow row in resultado.Rows)
+                {
+                    // Crear un objeto NominaConsulta para almacenar la información
+                    NominaConsulta nomina = new NominaConsulta
+                    {
+                        IdNomina = Convert.ToInt32(row["IdNomina"]),
+                        IdEmpleado = Convert.ToInt32(row["IdEmpleado"]),
+                        FechaInicio = Convert.ToDateTime(row["FechaInicio"]),
+                        FechaFin = Convert.ToDateTime(row["FechaFin"]),
+                        EstadoPago = row["EstadoPago"].ToString(),
+                        MontoTotal = Convert.ToDecimal(row["MontoTotal"]),
+                        MontoLetras = row["MontoLetras"].ToString(),
+                    };
+
+                    nominas.Add(nomina);
+                }
+
+                return nominas;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al obtener las nóminas por matrícula y fechas.");
+                throw;
+            }
+            finally
+            {
+                _dbAccess.Disconnect();
+            }
+        }
+
+
+
     }
 }
