@@ -39,14 +39,10 @@ namespace NominaXpert.View.UsersControl
             }
         }
 
-//<<<<<<< HEAD
-//=======
         public void InicializaVentanaCalculoRecibos()
         {
             ConfigurarPermisos();
         }
-      
-//>>>>>>> cf12ca5dbc54bea98854cc904d94ae907283d55d
 
 
         private void btnBuscar_Click(object sender, EventArgs e)
@@ -183,7 +179,7 @@ namespace NominaXpert.View.UsersControl
 
         private void dtpFechaFinNomina_ValueChanged(object sender, EventArgs e)
         {
-            ActualizarHorasLaboradas();  
+            ActualizarHorasLaboradas();
         }
 
         // Método para calcular y actualizar los días laborados en el TextBox
@@ -242,6 +238,16 @@ namespace NominaXpert.View.UsersControl
         {
             var controller = new UsuariosController();
             btnCalculoNomina1.Enabled = controller.TienePermiso("NOM_ADD");
+        }
+
+        private void dtpFechaInicioNomina_ValueChanged_1(object sender, EventArgs e)
+        {
+            ActualizarHorasLaboradas();
+        }
+
+        private void dtpFechaFinNomina_ValueChanged_1(object sender, EventArgs e)
+        {
+            ActualizarHorasLaboradas();
         }
     }
 }

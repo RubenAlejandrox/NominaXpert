@@ -348,6 +348,7 @@
             dtpFechaFinNomina.SkinColor = Color.FromArgb(48, 51, 59);
             dtpFechaFinNomina.TabIndex = 19;
             dtpFechaFinNomina.TextColor = Color.FromArgb(12, 215, 253);
+            dtpFechaFinNomina.ValueChanged += dtpFechaFinNomina_ValueChanged_1;
             // 
             // dtpFechaInicioNomina
             // 
@@ -362,6 +363,7 @@
             dtpFechaInicioNomina.SkinColor = Color.FromArgb(48, 51, 59);
             dtpFechaInicioNomina.TabIndex = 18;
             dtpFechaInicioNomina.TextColor = Color.FromArgb(12, 215, 253);
+            dtpFechaInicioNomina.ValueChanged += dtpFechaInicioNomina_ValueChanged_1;
             // 
             // label1
             // 
