@@ -69,5 +69,28 @@ namespace NominaXpert.Controller
             }
         }
 
+        public List<Auditoria> ObtenerAuditoriasPorFechas(DateTime fechaInicio, DateTime fechaFin)
+        {
+            try
+            {
+                // Validar que las fechas sean correctas
+                if (fechaInicio > fechaFin)
+                {
+                    throw new ArgumentException("La fecha de inicio no puede ser posterior a la fecha de fin.");
+                }
+
+                // Obtener auditorías filtradas por el rango de fechas
+                List<Auditoria> auditorias = _auditoriaDataAccess.ObtenerAuditoriasPorFechas(fechaInicio, fechaFin);
+                _logger.Info($"Se obtuvieron {auditorias.Count} auditorías entre {fechaInicio.ToShortDateString()} y {fechaFin.ToShortDateString()}.");
+                return auditorias;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al obtener las auditorías filtradas por fechas.");
+                throw;
+            }
+        }
+
+
     }
 }

@@ -86,7 +86,7 @@ namespace NominaXpert.View.ChildForms
                 }
 
                 // Actualizar el label con el total de registros
-                label4.Text = $"Total de Registros: {dataGridView1.Rows.Count-1}";
+                label4.Text = $"Total de Registros: {dataGridView1.Rows.Count - 1}";
 
                 // Ajustar las columnas automáticamente para que se ajusten al contenido
                 dataGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
@@ -157,6 +157,50 @@ namespace NominaXpert.View.ChildForms
         private void btnEsportarExcel_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnFiltrarFechas_Click(object sender, EventArgs e)
+        {
+            // Obtener las fechas desde los DateTimePicker
+            DateTime fechaInicio = DTPFechaInicio.Value.Date;
+            DateTime fechaFin = DTPFechaFin.Value.Date;
+
+            // Llamar al controlador para obtener las auditorías filtradas por fechas
+            List<Auditoria> auditorias = _auditoriasController.ObtenerAuditoriasPorFechas(fechaInicio, fechaFin);
+
+            // Mostrar las auditorías en la tabla
+            MostrarAuditoriasEnTabla(auditorias);
+        }
+
+
+        private void MostrarAuditoriasEnTabla(List<Auditoria> auditorias)
+        {
+            // Limpiar las filas previas
+            dataGridView1.Rows.Clear();
+
+            // Añadir las auditorías a la tabla
+            foreach (var auditoria in auditorias)
+            {
+                DateTime fechaCompleta = auditoria.Fecha.Add(auditoria.Hora); // Combina fecha + hora
+                dataGridView1.Rows.Add(
+                    auditoria.Id,
+                    auditoria.IdUsuario,
+                    auditoria.Accion,
+                    auditoria.DetalleAccion,
+                    auditoria.Fecha.ToString("yyyy-MM-dd"),
+                    auditoria.IpAcceso,
+                    auditoria.NombreEquipo,
+                    fechaCompleta.ToString("HH:mm:ss")
+                );
+            }
+
+            // Actualizar el total de registros
+            label4.Text = $"Total de Registros: {dataGridView1.Rows.Count - 1}";
+
+            // Ajustar columnas y habilitar desplazamiento si es necesario
+            dataGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+            dataGridView1.Columns["Hora"].Width = 120;
+            dataGridView1.ScrollBars = ScrollBars.Both;
         }
     }
 }

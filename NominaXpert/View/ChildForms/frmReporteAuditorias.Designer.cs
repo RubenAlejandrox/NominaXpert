@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             panel1 = new Panel();
             label2 = new Label();
             label1 = new Label();
@@ -45,8 +45,12 @@
             panel6 = new Panel();
             btnEsportarExcel = new FontAwesome.Sharp.IconButton();
             label7 = new Label();
+            label6 = new Label();
             panel3 = new Panel();
             label4 = new Label();
+            label5 = new Label();
+            DTPFechaFin = new Utilities.NominaDatePicker();
+            DTPFechaInicio = new Utilities.NominaDatePicker();
             gBoxHistorial = new GroupBox();
             dataGridView1 = new DataGridView();
             Id_Auditoria = new DataGridViewTextBoxColumn();
@@ -57,6 +61,7 @@
             DireccionIP = new DataGridViewTextBoxColumn();
             NombreEquipo = new DataGridViewTextBoxColumn();
             Hora = new DataGridViewTextBoxColumn();
+            btnFiltrarFechas = new Button();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)iconPIcture).BeginInit();
@@ -201,8 +206,13 @@
             // 
             // gBoxMatricula
             // 
+            gBoxMatricula.Controls.Add(btnFiltrarFechas);
             gBoxMatricula.Controls.Add(panel6);
+            gBoxMatricula.Controls.Add(label6);
             gBoxMatricula.Controls.Add(panel3);
+            gBoxMatricula.Controls.Add(label5);
+            gBoxMatricula.Controls.Add(DTPFechaFin);
+            gBoxMatricula.Controls.Add(DTPFechaInicio);
             gBoxMatricula.Dock = DockStyle.Top;
             gBoxMatricula.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
             gBoxMatricula.ForeColor = Color.White;
@@ -217,7 +227,7 @@
             // 
             panel6.Controls.Add(btnEsportarExcel);
             panel6.Controls.Add(label7);
-            panel6.Location = new Point(666, 13);
+            panel6.Location = new Point(957, 13);
             panel6.Name = "panel6";
             panel6.Size = new Size(293, 73);
             panel6.TabIndex = 16;
@@ -236,7 +246,7 @@
             btnEsportarExcel.IconColor = Color.Lime;
             btnEsportarExcel.IconFont = FontAwesome.Sharp.IconFont.Solid;
             btnEsportarExcel.IconSize = 32;
-            btnEsportarExcel.Location = new Point(3, 30);
+            btnEsportarExcel.Location = new Point(3, 33);
             btnEsportarExcel.Name = "btnEsportarExcel";
             btnEsportarExcel.Size = new Size(290, 40);
             btnEsportarExcel.TabIndex = 11;
@@ -257,10 +267,20 @@
             label7.TabIndex = 3;
             label7.Text = "Exportar a Excel";
             // 
+            // label6
+            // 
+            label6.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label6.ForeColor = Color.White;
+            label6.Location = new Point(205, 26);
+            label6.Name = "label6";
+            label6.Size = new Size(118, 22);
+            label6.TabIndex = 15;
+            label6.Text = "Fecha de fin:";
+            // 
             // panel3
             // 
             panel3.Controls.Add(label4);
-            panel3.Location = new Point(394, 13);
+            panel3.Location = new Point(698, 13);
             panel3.Name = "panel3";
             panel3.Size = new Size(244, 73);
             panel3.TabIndex = 1;
@@ -275,6 +295,44 @@
             label4.Size = new Size(163, 23);
             label4.TabIndex = 8;
             label4.Text = "Total de Registros: ";
+            // 
+            // label5
+            // 
+            label5.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label5.ForeColor = Color.White;
+            label5.Location = new Point(12, 26);
+            label5.Name = "label5";
+            label5.Size = new Size(134, 22);
+            label5.TabIndex = 14;
+            label5.Text = "Fecha de inicio:";
+            // 
+            // DTPFechaFin
+            // 
+            DTPFechaFin.BorderColor = Color.FromArgb(12, 215, 253);
+            DTPFechaFin.BorderSize = 2;
+            DTPFechaFin.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            DTPFechaFin.Format = DateTimePickerFormat.Short;
+            DTPFechaFin.Location = new Point(205, 51);
+            DTPFechaFin.MinimumSize = new Size(0, 35);
+            DTPFechaFin.Name = "DTPFechaFin";
+            DTPFechaFin.Size = new Size(147, 35);
+            DTPFechaFin.SkinColor = Color.FromArgb(48, 51, 59);
+            DTPFechaFin.TabIndex = 13;
+            DTPFechaFin.TextColor = Color.FromArgb(12, 215, 253);
+            // 
+            // DTPFechaInicio
+            // 
+            DTPFechaInicio.BorderColor = Color.FromArgb(12, 215, 253);
+            DTPFechaInicio.BorderSize = 2;
+            DTPFechaInicio.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            DTPFechaInicio.Format = DateTimePickerFormat.Short;
+            DTPFechaInicio.Location = new Point(18, 51);
+            DTPFechaInicio.MinimumSize = new Size(0, 35);
+            DTPFechaInicio.Name = "DTPFechaInicio";
+            DTPFechaInicio.Size = new Size(147, 35);
+            DTPFechaInicio.SkinColor = Color.FromArgb(48, 51, 59);
+            DTPFechaInicio.TabIndex = 12;
+            DTPFechaInicio.TextColor = Color.FromArgb(12, 215, 253);
             // 
             // gBoxHistorial
             // 
@@ -294,24 +352,24 @@
             dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.BorderStyle = BorderStyle.None;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = Color.FromArgb(30, 30, 30);
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = Color.Cyan;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = Color.FromArgb(30, 30, 30);
+            dataGridViewCellStyle5.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
+            dataGridViewCellStyle5.ForeColor = Color.Cyan;
+            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
+            dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Id_Auditoria, Id_usuario, Accion, detalle_accion, Fecha, DireccionIP, NombreEquipo, Hora });
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = Color.FromArgb(45, 45, 48);
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ButtonHighlight;
-            dataGridViewCellStyle2.SelectionBackColor = Color.Teal;
-            dataGridViewCellStyle2.SelectionForeColor = Color.White;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle6.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
+            dataGridViewCellStyle6.ForeColor = SystemColors.ButtonHighlight;
+            dataGridViewCellStyle6.SelectionBackColor = Color.Teal;
+            dataGridViewCellStyle6.SelectionForeColor = Color.White;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.False;
+            dataGridView1.DefaultCellStyle = dataGridViewCellStyle6;
             dataGridView1.EnableHeadersVisualStyles = false;
             dataGridView1.GridColor = Color.DarkCyan;
             dataGridView1.Location = new Point(12, 29);
@@ -378,6 +436,20 @@
             Hora.Name = "Hora";
             Hora.ReadOnly = true;
             // 
+            // btnFiltrarFechas
+            // 
+            btnFiltrarFechas.BackColor = Color.Black;
+            btnFiltrarFechas.FlatStyle = FlatStyle.Popup;
+            btnFiltrarFechas.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnFiltrarFechas.ForeColor = Color.White;
+            btnFiltrarFechas.Location = new Point(389, 52);
+            btnFiltrarFechas.Name = "btnFiltrarFechas";
+            btnFiltrarFechas.Size = new Size(133, 29);
+            btnFiltrarFechas.TabIndex = 17;
+            btnFiltrarFechas.Text = "Filtrar fechas";
+            btnFiltrarFechas.UseVisualStyleBackColor = false;
+            btnFiltrarFechas.Click += btnFiltrarFechas_Click;
+            // 
             // frmReporteAuditorias
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -418,8 +490,12 @@
         private TextBox txtSearchTable;
         private FontAwesome.Sharp.IconPictureBox iconPIcture;
         private GroupBox gBoxMatricula;
+        private Label label6;
         private Panel panel3;
         private Label label4;
+        private Label label5;
+        private Utilities.NominaDatePicker DTPFechaFin;
+        private Utilities.NominaDatePicker DTPFechaInicio;
         private Panel panel6;
         private FontAwesome.Sharp.IconButton btnEsportarExcel;
         private Label label7;
@@ -434,5 +510,6 @@
         private DataGridViewTextBoxColumn NombreEquipo;
         private DataGridViewTextBoxColumn Hora;
         private Label label8;
+        private Button btnFiltrarFechas;
     }
 }
