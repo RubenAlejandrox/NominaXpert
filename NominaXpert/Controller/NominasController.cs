@@ -8,12 +8,19 @@ using NominaXpert.Model;
 using NLog;
 using NominaXpert.Utilities;
 using ControlEscolar.Utilities;
+using Npgsql;
+using System.Data;
+using ControlEscolar.Data;
+using Org.BouncyCastle.Asn1.X509.SigI;
 
 
 namespace NominaXpert.Controller
 {
     public class NominasController
     {
+        // Instancia del acceso a datos de PostgreSQL
+        private readonly PostgresSQLDataAccess _dbAccess;
+
 
         private readonly NominaDataAccess _nominaDataAccess;
         private readonly AuditoriaDataAccess _auditoriaDataAccess;
@@ -26,12 +33,24 @@ namespace NominaXpert.Controller
 
         public NominasController()
         {
-            // Inicialización de las clases de acceso a datos
-            _nominaDataAccess = new NominaDataAccess();
-            _auditoriaDataAccess = new AuditoriaDataAccess();
-            _empleadosDataAccess = new EmpleadosDataAccess();
-            _usuariosDataAccess = new UsuariosDataAccess(); // Para validar el rol del usuario
-            _registroJornadaController = new RegistroJornadaController(); // Inicializamos el controlador para consultar horas
+            try
+            {
+                // Obtiene la instancia única de PostgresSQLDataAccess (patrón Singleton)
+                _dbAccess = PostgresSQLDataAccess.GetInstance();
+                // Inicialización de las clases de acceso a datos
+                _nominaDataAccess = new NominaDataAccess();
+                _auditoriaDataAccess = new AuditoriaDataAccess();
+                _empleadosDataAccess = new EmpleadosDataAccess();
+                _usuariosDataAccess = new UsuariosDataAccess(); // Para validar el rol del usuario
+                _registroJornadaController = new RegistroJornadaController(); // Inicializamos el controlador para consultar horas
+                _logger.Info("Instancia de NominasDataAccess creada correctamente.");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al inicializar EmpleadosDataAccess");
+                throw;
+            }
+            
         }
 
         // Método para obtener la última nómina generada para un empleado
@@ -115,31 +134,62 @@ namespace NominaXpert.Controller
         /// <returns></returns>
         public NominaConsulta BuscarNominaPorId(int idNomina)
         {
+            string query = @"
+        SELECT n.id AS IdNomina, e.id AS IdEmpleado, p.nombre_completo AS NombreEmpleado, 
+               e.departamento AS Departamento, e.sueldo AS SueldoBase, p.rfc AS RFCEmpleado, 
+               n.estado_pago AS EstadoPago, n.fecha_inicio AS FechaInicio, n.fecha_fin AS FechaFin
+        FROM nomina.nomina n
+        INNER JOIN nomina.empleados e ON n.id_empleado = e.id
+        INNER JOIN seguridad.personas p ON e.id_persona = p.id
+        WHERE n.id = @idNomina;";
+
             try
             {
-                // Buscar la nómina por ID en la base de datos
-                var nomina = _nominaDataAccess.BuscarNominaPorId(idNomina);
+                if (idNomina <= 0)
+                    throw new ArgumentException("La ID de la nómina no es válida.");
 
-                if (nomina == null)
+                var parametros = new NpgsqlParameter[]
                 {
-                    _logger.Warn($"No se encontró la nómina con ID: {idNomina}");
+            _dbAccess.CreateParameter("@idNomina", idNomina)
+                };
+
+                _dbAccess.Connect();
+                DataTable dt = _dbAccess.ExecuteQuery_Reader(query, parametros);
+
+                if (dt.Rows.Count == 0)
                     return null;
-                }
 
-                // Si encontró la nómina, ahora obtenemos los datos del empleado relacionado
-                var empleadosDataAccess = new EmpleadosDataAccess();
-                var empleado = empleadosDataAccess.ObtenerEmpleadoPorId(nomina.IdEmpleado);
+                var row = dt.Rows[0];
 
-                // Asignar el objeto del empleado a la nómina
-                nomina.DatosEmpleado = empleado;
-
-                // Regresar la nómina con los datos completos
-                return nomina;
+                return new NominaConsulta
+                {
+                    IdNomina = Convert.ToInt32(row["IdNomina"]),
+                    IdEmpleado = Convert.ToInt32(row["IdEmpleado"]),
+                    EstadoPago = row["EstadoPago"].ToString(),
+                    // Estas dos líneas son cruciales para mostrar las fechas correctas
+                    FechaInicio = Convert.ToDateTime(row["FechaInicio"]),
+                    FechaFin = Convert.ToDateTime(row["FechaFin"]),
+                    DatosEmpleado = new Empleado
+                    {
+                        Id = Convert.ToInt32(row["IdEmpleado"]),
+                        Departamento = row["Departamento"].ToString(),
+                        Sueldo = Convert.ToDecimal(row["SueldoBase"]),
+                        DatosPersonales = new Persona
+                        {
+                            NombreCompleto = row["NombreEmpleado"].ToString(),
+                            Rfc = row["RFCEmpleado"].ToString()
+                        }
+                    }
+                };
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, $"Error al obtener la nómina ID {idNomina}");
+                _logger.Error(ex, "Error al buscar la nómina por ID.");
                 throw;
+            }
+            finally
+            {
+                _dbAccess.Disconnect();
             }
         }
 

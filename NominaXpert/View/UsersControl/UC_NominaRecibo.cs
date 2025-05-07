@@ -107,8 +107,14 @@ namespace NominaXpert.View.UsersControl
                 decimal totalPercepciones = percepciones.Sum(p => p.Monto);
                 decimal totalDeducciones = deducciones.Sum(d => d.Monto);
 
-                // Consultar horas trabajadas
-                int idUsuario = UsuarioSesion.UsuarioId; // Usar UsuarioId en lugar de ObtenerIdUsuarioActual()
+                int idUsuario = 1; // ID fijo como en UC_NominaCalculo1
+
+                // Después de obtener la nómina
+                _logger.Info($"Fechas de nómina ID {IdNomina}: Inicio={nomina.FechaInicio.ToShortDateString()}, Fin={nomina.FechaFin.ToShortDateString()}");
+                if (nomina.FechaInicio == nomina.FechaFin)
+                {
+                    _logger.Warn($"Fechas de inicio y fin son iguales: {nomina.FechaInicio.ToShortDateString()}. Esto puede causar que no se encuentren horas trabajadas.");
+                }
 
                 var jornadaController = new RegistroJornadaController();
                 decimal horasTrabajadas = jornadaController.ConsultarTotalHorasTrabajadas(
@@ -117,23 +123,34 @@ namespace NominaXpert.View.UsersControl
                     nomina.FechaFin,
                     idUsuario);
 
-                // Usando la fórmula especificada
-                decimal sueldoBase = nomina.SueldoBase;
+                // Log para depuración
+                _logger.Info($"Horas trabajadas consultadas con idUsuario=1: {horasTrabajadas} para periodo {nomina.FechaInicio.ToShortDateString()} - {nomina.FechaFin.ToShortDateString()}");
 
-                // Asegurar que tengamos horas trabajadas (si es 0, usar un valor por defecto)
+                // Si no hay horas registradas, calcular basado en días laborables
                 if (horasTrabajadas <= 0)
                 {
-                    // Si no hay horas registradas, asumimos un valor predeterminado (p.ej., 8 horas diarias por 5 días)
-                    horasTrabajadas = 40;
-                    // Loguear esta situación anómala
-                    _logger.Warn($"No se encontraron horas trabajadas para la nómina {IdNomina}. Usando valor predeterminado de 40 horas.");
+                    int diasLaborables = CalcularDiasLaborables(nomina.FechaInicio, nomina.FechaFin);
+
+                    // Si las fechas son iguales pero aún necesitamos calcular horas, asignar 8 horas (un día laboral)
+                    if (diasLaborables <= 0)
+                    {
+                        horasTrabajadas = 8; // Un día laboral completo
+                        _logger.Warn($"No hay días laborables en el periodo. Asignando 8 horas para un día de trabajo.");
+                    }
+                    else
+                    {
+                        horasTrabajadas = diasLaborables * 8;
+                        _logger.Warn($"No se encontraron horas trabajadas para la nómina {IdNomina}. Calculando basado en {diasLaborables} días laborables: {horasTrabajadas} horas.");
+                    }
                 }
 
-                decimal sueldoPorDia = sueldoBase / 22m;  // 22 días laborables promedio al mes
-                decimal sueldoPorHora = sueldoPorDia / 8m; // 8 horas por día laboral
+                // Calcular según la fórmula correcta
+                decimal sueldoBase = nomina.SueldoBase;
+                decimal sueldoPorDia = sueldoBase / 22m;
+                decimal sueldoPorHora = sueldoPorDia / 8m;
                 decimal sueldoPorHorasTrabajadas = sueldoPorHora * horasTrabajadas;
 
-                // Nuevo cálculo del total neto
+                // Cálculo del total neto
                 decimal totalNeto = sueldoPorHorasTrabajadas + totalPercepciones - totalDeducciones;
 
                 // Actualizar los controles de la interfaz
@@ -176,6 +193,19 @@ namespace NominaXpert.View.UsersControl
             }
         }
 
+        // Método auxiliar para calcular días laborables
+        private int CalcularDiasLaborables(DateTime fechaInicio, DateTime fechaFin)
+        {
+            int diasLaborables = 0;
+            for (DateTime fecha = fechaInicio; fecha <= fechaFin; fecha = fecha.AddDays(1))
+            {
+                if (fecha.DayOfWeek != DayOfWeek.Saturday && fecha.DayOfWeek != DayOfWeek.Sunday)
+                {
+                    diasLaborables++;
+                }
+            }
+            return diasLaborables;
+        }
         /// <summary>
         /// Carga el recibo de nómina y lo muestra en el control.
         /// </summary>
