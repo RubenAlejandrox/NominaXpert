@@ -13,6 +13,8 @@ namespace NominaXpert.Controller
     public class DeduccionController
     {
         private readonly DeducciónDataAccess _deduccionDataAccess;
+        private readonly AuditoriaDataAccess _auditoriaDataAccess; // Añadido para registrar auditoría
+
 
         // Logger para la clase
         private static readonly Logger _logger = LoggingManager.GetLogger("NominaXpert.Controller.DeduccionesController");
@@ -20,6 +22,7 @@ namespace NominaXpert.Controller
         public DeduccionController()
         {
             _deduccionDataAccess = new DeducciónDataAccess(); // Inicializamos el acceso a datos
+            _auditoriaDataAccess = new AuditoriaDataAccess(); // Inicializamos el acceso a datos de auditoría
         }
 
         // Método que obtiene las deducciones asociadas a una nómina específica
@@ -38,11 +41,16 @@ namespace NominaXpert.Controller
         }
 
         // Método para registrar una nueva deducción
-        public void RegistrarDeduccion(Deduccion deduccion)
+        public void RegistrarDeduccion(Deduccion deduccion, int idUsuario)
         {
             try
             {
                 _deduccionDataAccess.RegistrarDeduccion(deduccion);
+
+                // Registrar la auditoría de la acción de alta de deducción
+                string detalleAccion = $"Se registró una deducción para la nómina ID {deduccion.IdNomina}, tipo ID {deduccion.IdTipo}, monto {deduccion.Monto}.";
+                _auditoriaDataAccess.RegistrarAuditoria(idUsuario, "alta deducción", detalleAccion);
+
                 _logger.Info($"Deducción registrada correctamente: {deduccion.IdNomina}, {deduccion.IdTipo}, {deduccion.Monto}.");
             }
             catch (Exception ex)
@@ -53,11 +61,16 @@ namespace NominaXpert.Controller
         }
 
         // Método para actualizar una deducción
-        public int ActualizarDeduccion(Deduccion deduccion)
+        public int ActualizarDeduccion(Deduccion deduccion, int idUsuario)
         {
             try
             {
                 _logger.Info($"Actualizando la deducción ID: {deduccion.Id}.");
+
+                // Registrar la auditoría de la acción de actualización de deducción
+                string detalleAccion = $"Se actualizó la deducción ID {deduccion.Id} para la nómina ID {deduccion.IdNomina}, tipo ID {deduccion.IdTipo}, monto {deduccion.Monto}.";
+                _auditoriaDataAccess.RegistrarAuditoria(idUsuario, "edición deducción", detalleAccion);
+
                 return _deduccionDataAccess.ActualizarDeduccion(deduccion);
             }
             catch (Exception ex)
@@ -68,13 +81,18 @@ namespace NominaXpert.Controller
         }
 
         // Método para eliminar una deducción
-        public int EliminarDeduccion(int idDeduccion, int idNomina)
+        public int EliminarDeduccion(int idDeduccion, int idNomina, int idUsuario)
         {
             _logger.Info($"Iniciando la eliminación de la deducción ID: {idDeduccion}");
 
             try
             {
                 _logger.Info($"Eliminando la deducción ID: {idDeduccion}");
+
+                // Registrar la auditoría de la acción de eliminación de deducción
+                string detalleAccion = $"Se eliminó la deducción ID {idDeduccion} de la nómina ID {idNomina}.";
+                _auditoriaDataAccess.RegistrarAuditoria(idUsuario, "baja deducción", detalleAccion);
+
                 return _deduccionDataAccess.EliminarDeduccion(idDeduccion, idNomina);
             }
             catch (Exception ex)

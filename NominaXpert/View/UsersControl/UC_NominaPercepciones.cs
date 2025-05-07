@@ -1,6 +1,7 @@
 ﻿using NominaXpert.Controller;
 using NominaXpert.Data;
 using NominaXpert.Model;
+using NominaXpert.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -169,6 +170,9 @@ namespace NominaXpert.View.UsersControl
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
+            // Obtener el idUsuario dinámicamente
+            int idUsuario = UsuarioSesion.ObtenerIdUsuarioActual();
+
             // Validación de campos
             if (string.IsNullOrWhiteSpace(txtMonto.Text))
             {
@@ -209,7 +213,7 @@ namespace NominaXpert.View.UsersControl
             try
             {
                 // Llamamos al controlador para registrar la bonificación
-                _bonificacionController.RegistrarBonificacion(bonificacion);
+                _bonificacionController.RegistrarBonificacion(bonificacion, idUsuario);
 
                 // Guardamos el detalle de la nómina
                 var detalleNomina = new DetalleNomina
@@ -268,6 +272,9 @@ namespace NominaXpert.View.UsersControl
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
+            // Obtener el idUsuario dinámicamente
+            int idUsuario = UsuarioSesion.ObtenerIdUsuarioActual();
+
             // Verificar si se ha seleccionado una fila
             if (DataGridViewPercepciones.SelectedRows.Count > 0)
             {
@@ -281,7 +288,7 @@ namespace NominaXpert.View.UsersControl
                     try
                     {
                         // Llamar controlador para eliminar la bonificación
-                        var rowsAffected = _bonificacionController.EliminarBonificacion(idBonificacion, IdNomina);
+                        var rowsAffected = _bonificacionController.EliminarBonificacion(idBonificacion, IdNomina, idUsuario);
                         if (rowsAffected > 0)
                         {
                             MessageBox.Show("Bonificación eliminada correctamente.", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -306,6 +313,10 @@ namespace NominaXpert.View.UsersControl
 
         private void btnModificar_Click(object sender, EventArgs e)
         {
+
+            // Obtener el idUsuario dinámicamente
+            int idUsuario = UsuarioSesion.ObtenerIdUsuarioActual();
+
             if (btnModificar.Text == "Modificar")
             {
                 // MODO: Seleccionar para editar
@@ -362,7 +373,7 @@ namespace NominaXpert.View.UsersControl
 
                 try
                 {
-                    var rowsAffected = _bonificacionController.ActualizarBonificacion(bonificacion);
+                    var rowsAffected = _bonificacionController.ActualizarBonificacion(bonificacion, idUsuario);
                     if (rowsAffected > 0)
                     {
                         MessageBox.Show("Bonificación actualizada correctamente.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using NominaXpert.Controller;
 using NominaXpert.Model;
+using NominaXpert.Utilities;
 
 namespace NominaXpert.View.UsersControl
 {
@@ -221,6 +222,10 @@ namespace NominaXpert.View.UsersControl
         /// <param name="e"></param>
         private void btnGuardar_Click(object sender, EventArgs e)
         {
+
+            // Obtener el idUsuario dinámicamente
+            int idUsuario = UsuarioSesion.ObtenerIdUsuarioActual();
+
             // Validación de campos
             if (string.IsNullOrWhiteSpace(txtMonto.Text))
             {
@@ -261,7 +266,7 @@ namespace NominaXpert.View.UsersControl
             try
             {
                 // Llamamos al controlador para registrar la deducción
-                _deduccionController.RegistrarDeduccion(deduccion);
+                _deduccionController.RegistrarDeduccion(deduccion, idUsuario);
 
                 // Guardamos el detalle de la nómina
                 var detalleNomina = new DetalleNomina
@@ -305,6 +310,9 @@ namespace NominaXpert.View.UsersControl
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
+            // Obtener el idUsuario dinámicamente
+            int idUsuario = UsuarioSesion.ObtenerIdUsuarioActual();
+
             // Verificar si se ha seleccionado una fila
             if (dataGridViewDeducciones.SelectedRows.Count > 0)
             {
@@ -318,7 +326,7 @@ namespace NominaXpert.View.UsersControl
                     try
                     {
                         // Llamar controlador para eliminar la deducción
-                        var rowsAffected = _deduccionController.EliminarDeduccion(idDeduccion, IdNomina);
+                        var rowsAffected = _deduccionController.EliminarDeduccion(idDeduccion, IdNomina, idUsuario);
                         if (rowsAffected > 0)
                         {
                             MessageBox.Show("Deducción eliminada correctamente.", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -343,6 +351,8 @@ namespace NominaXpert.View.UsersControl
 
         private void btnModificar_Click(object sender, EventArgs e)
         {
+            // Obtener el idUsuario dinámicamente
+            int idUsuario = UsuarioSesion.ObtenerIdUsuarioActual();
 
             // Si el texto del botón es "Modificar", quiere decir que es MODO SELECCIONAR
             if (btnModificar.Text == "Modificar")
@@ -404,7 +414,7 @@ namespace NominaXpert.View.UsersControl
                 try
                 {
                     // Llamar controlador para actualizar la deducción
-                    var rowsAffected = _deduccionController.ActualizarDeduccion(deduccion);
+                    var rowsAffected = _deduccionController.ActualizarDeduccion(deduccion, idUsuario);
                     if (rowsAffected > 0)
                     {
                         MessageBox.Show("Deducción actualizada correctamente.", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Information);
