@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             panel1 = new Panel();
             txtIdNomina = new TextBox();
             label4 = new Label();
@@ -277,10 +278,13 @@
             // 
             // DataGridViewPercepciones
             // 
+            DataGridViewPercepciones.AllowUserToAddRows = false;
+            DataGridViewPercepciones.AllowUserToDeleteRows = false;
             DataGridViewPercepciones.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             DataGridViewPercepciones.Columns.AddRange(new DataGridViewColumn[] { id, Id_nomina, Tipo, Monto });
             DataGridViewPercepciones.Location = new Point(32, 32);
             DataGridViewPercepciones.Name = "DataGridViewPercepciones";
+            DataGridViewPercepciones.ReadOnly = true;
             DataGridViewPercepciones.RowHeadersWidth = 51;
             DataGridViewPercepciones.Size = new Size(579, 345);
             DataGridViewPercepciones.TabIndex = 0;
@@ -323,6 +327,7 @@
             id.HeaderText = "Id";
             id.MinimumWidth = 6;
             id.Name = "id";
+            id.ReadOnly = true;
             id.Width = 125;
             // 
             // Id_nomina
@@ -343,6 +348,9 @@
             // 
             // Monto
             // 
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle1.Format = "#,##0.00";
+            Monto.DefaultCellStyle = dataGridViewCellStyle1;
             Monto.HeaderText = "Monto";
             Monto.MinimumWidth = 6;
             Monto.Name = "Monto";
