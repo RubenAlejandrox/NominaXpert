@@ -2,6 +2,7 @@
 using NominaXpert.Controller;
 using NominaXpert.Model;
 using NominaXpert.View.UsersControl;
+using NominaXpert.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace NominaXpert.View.Forms
 {
@@ -41,45 +43,9 @@ namespace NominaXpert.View.Forms
 
         private void btnPDFReciboNomina_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtMatricula.Text)) //si esto esta vacio, mandamos el sig msj
-            {
-                MessageBox.Show("El campo de matricula no puede estar vacío", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            
 
-            // Crear un formulario de notificación temporal
-            Form mensajeForm = new Form
-            {
-                FormBorderStyle = FormBorderStyle.FixedDialog,
-                StartPosition = FormStartPosition.CenterScreen,
-                Size = new System.Drawing.Size(350, 220),
-                Text = "Información del sistema",
-                ControlBox = false // Evita que se cierre manualmente
-            };
-
-            Label lblMensaje = new Label
-            {
-                Text = "Generando PDF de la Nómina del Empleado...",
-                AutoSize = false,
-                TextAlign = System.Drawing.ContentAlignment.MiddleCenter,
-                Dock = DockStyle.Fill
-            };
-
-            mensajeForm.Controls.Add(lblMensaje);
-            mensajeForm.Show();
-
-            // Configurar el temporizador para cerrar la ventana después de 2 segundos
-            System.Timers.Timer timer = new System.Timers.Timer(2000);
-            timer.Elapsed += (s, ev) =>
-            {
-                timer.Stop();
-                mensajeForm.Invoke((MethodInvoker)delegate
-                {
-                    mensajeForm.Close(); // Solo cierra el formulario de mensaje
-                });
-                timer.Dispose(); // Liberar recursos del Timer
-            };
-            timer.Start();
+            
 
         }
 
@@ -146,44 +112,33 @@ namespace NominaXpert.View.Forms
 
         private void iconVerNomina_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtMatricula.Text)) //si esto esta vacio, mandamos el sig msj
-            {
-                MessageBox.Show("El campo de matricula no puede estar vacío", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            // Crear un formulario de notificación temporal
-            Form mensajeForm = new Form
-            {
-                FormBorderStyle = FormBorderStyle.FixedDialog,
-                StartPosition = FormStartPosition.CenterScreen,
-                Size = new System.Drawing.Size(350, 220),
-                Text = "Información del sistema",
-                ControlBox = false // Evita que se cierre manualmente
-            };
 
-            Label lblMensaje = new Label
+            try
             {
-                Text = "Generando Excel de la Nómina...",
-                AutoSize = false,
-                TextAlign = System.Drawing.ContentAlignment.MiddleCenter,
-                Dock = DockStyle.Fill
-            };
-
-            mensajeForm.Controls.Add(lblMensaje);
-            mensajeForm.Show();
-
-            // Configurar el temporizador para cerrar la ventana después de 2 segundos
-            System.Timers.Timer timer = new System.Timers.Timer(2000);
-            timer.Elapsed += (s, ev) =>
-            {
-                timer.Stop();
-                mensajeForm.Invoke((MethodInvoker)delegate
+                if (dataGridView1.Rows.Count == 0)
                 {
-                    mensajeForm.Close(); // Solo cierra el formulario de mensaje
-                });
-                timer.Dispose(); // Liberar recursos del Timer
-            };
-            timer.Start();
+                    MessageBox.Show("No hay datos para exportar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+                {
+                    saveFileDialog.Filter = "Excel Files (*.xlsx)|*.xlsx";
+                    saveFileDialog.Title = "Guardar archivo Excel";
+                    saveFileDialog.FileName = "Reporte_Nominas_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx";
+                    saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        ExcelExporter.ExportToExcel(dataGridView1, saveFileDialog.FileName);
+                        MessageBox.Show("Archivo Excel exportado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al exportar a Excel: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void ConfigurarPermisos()
         {
@@ -275,7 +230,12 @@ namespace NominaXpert.View.Forms
                 MessageBox.Show($"Error al cargar las nóminas: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-       
-        
+
+        private void btnEsportarExcel_Click(object sender, EventArgs e)
+        {
+            //No poner nada
+        }
+
     }
+
 }

@@ -1,3 +1,5 @@
+using OfficeOpenXml;
+
 namespace NominaXpert
 {
     internal static class Program
@@ -8,6 +10,7 @@ namespace NominaXpert
         [STAThread]
         static void Main()
         {
+            ExcelPackage.License.SetNonCommercialOrganization("My Noncommercial organization");
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
