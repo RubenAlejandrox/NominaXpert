@@ -42,7 +42,7 @@ namespace NominaXpert.Data
         public decimal ObtenerTotalHorasTrabajadas(int idEmpleado, DateTime fechaInicio, DateTime fechaFin)
         {
             string query = @"
-        SELECT ROUND(SUM(horas)) AS totalHoras
+        SELECT COALESCE(ROUND(SUM(horas), 2), 0) AS totalHoras
         FROM nomina.registro_jornada
         WHERE id_empleado = @idEmpleado
         AND fecha BETWEEN @fechaInicio AND @fechaFin";
@@ -52,8 +52,8 @@ namespace NominaXpert.Data
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
                 {
             _dbAccess.CreateParameter("@idEmpleado", idEmpleado),
-            _dbAccess.CreateParameter("@fechaInicio", fechaInicio),
-            _dbAccess.CreateParameter("@fechaFin", fechaFin)
+            _dbAccess.CreateParameter("@fechaInicio", fechaInicio.Date),
+            _dbAccess.CreateParameter("@fechaFin", fechaFin.Date)
                 };
 
                 _dbAccess.Connect();
