@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             panel1 = new Panel();
             label4 = new Label();
             txtIdNomina = new TextBox();
@@ -45,12 +46,12 @@
             label2 = new Label();
             label1 = new Label();
             dataGridViewDeducciones = new DataGridView();
+            btnSiguiente = new FontAwesome.Sharp.IconButton();
+            btnRegresar = new FontAwesome.Sharp.IconButton();
             Id = new DataGridViewTextBoxColumn();
             Id_nomina = new DataGridViewTextBoxColumn();
             Tipo = new DataGridViewTextBoxColumn();
             Monto = new DataGridViewTextBoxColumn();
-            btnSiguiente = new FontAwesome.Sharp.IconButton();
-            btnRegresar = new FontAwesome.Sharp.IconButton();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             groupBox1.SuspendLayout();
@@ -276,44 +277,16 @@
             // 
             // dataGridViewDeducciones
             // 
+            dataGridViewDeducciones.AllowUserToAddRows = false;
+            dataGridViewDeducciones.AllowUserToDeleteRows = false;
             dataGridViewDeducciones.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewDeducciones.Columns.AddRange(new DataGridViewColumn[] { Id, Id_nomina, Tipo, Monto });
             dataGridViewDeducciones.Location = new Point(32, 32);
             dataGridViewDeducciones.Name = "dataGridViewDeducciones";
+            dataGridViewDeducciones.ReadOnly = true;
             dataGridViewDeducciones.RowHeadersWidth = 51;
             dataGridViewDeducciones.Size = new Size(579, 345);
             dataGridViewDeducciones.TabIndex = 0;
-            // 
-            // Id
-            // 
-            Id.HeaderText = "Id";
-            Id.MinimumWidth = 6;
-            Id.Name = "Id";
-            Id.Width = 125;
-            // 
-            // Id_nomina
-            // 
-            Id_nomina.HeaderText = "Id_nomina";
-            Id_nomina.MinimumWidth = 6;
-            Id_nomina.Name = "Id_nomina";
-            Id_nomina.ReadOnly = true;
-            Id_nomina.Width = 125;
-            // 
-            // Tipo
-            // 
-            Tipo.HeaderText = "Tipo";
-            Tipo.MinimumWidth = 6;
-            Tipo.Name = "Tipo";
-            Tipo.ReadOnly = true;
-            Tipo.Width = 220;
-            // 
-            // Monto
-            // 
-            Monto.HeaderText = "Monto";
-            Monto.MinimumWidth = 6;
-            Monto.Name = "Monto";
-            Monto.ReadOnly = true;
-            Monto.Width = 180;
             // 
             // btnSiguiente
             // 
@@ -362,6 +335,41 @@
             btnRegresar.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnRegresar.UseVisualStyleBackColor = false;
             btnRegresar.Click += btnRegresar_Click;
+            // 
+            // Id
+            // 
+            Id.HeaderText = "Id";
+            Id.MinimumWidth = 6;
+            Id.Name = "Id";
+            Id.ReadOnly = true;
+            Id.Width = 125;
+            // 
+            // Id_nomina
+            // 
+            Id_nomina.HeaderText = "Id_nomina";
+            Id_nomina.MinimumWidth = 6;
+            Id_nomina.Name = "Id_nomina";
+            Id_nomina.ReadOnly = true;
+            Id_nomina.Width = 125;
+            // 
+            // Tipo
+            // 
+            Tipo.HeaderText = "Tipo";
+            Tipo.MinimumWidth = 6;
+            Tipo.Name = "Tipo";
+            Tipo.ReadOnly = true;
+            Tipo.Width = 220;
+            // 
+            // Monto
+            // 
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle1.Format = "#,##0.00";
+            Monto.DefaultCellStyle = dataGridViewCellStyle1;
+            Monto.HeaderText = "Monto";
+            Monto.MinimumWidth = 6;
+            Monto.Name = "Monto";
+            Monto.ReadOnly = true;
+            Monto.Width = 180;
             // 
             // UC_NominaDeducciones
             // 
