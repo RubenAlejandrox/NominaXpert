@@ -30,7 +30,10 @@
         {
             components = new System.ComponentModel.Container();
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             panel1 = new Panel();
             label2 = new Label();
             label1 = new Label();
@@ -52,10 +55,12 @@
             btnDatalleNomina = new FontAwesome.Sharp.IconButton();
             label6 = new Label();
             label5 = new Label();
-            DTPFechaFinNomina = new Utilities.NominaDatePicker();
-            DTPFechaInicioNomina = new Utilities.NominaDatePicker();
+            DTPFechaFinNomina = new NominaXpert.Utilities.NominaDatePicker();
+            DTPFechaInicioNomina = new NominaXpert.Utilities.NominaDatePicker();
             gBoxHistorial = new GroupBox();
             dataGridView1 = new DataGridView();
+            toolTip1 = new ToolTip(components);
+            Selección = new DataGridViewCheckBoxColumn();
             Id_Nomina = new DataGridViewTextBoxColumn();
             Id_empleado = new DataGridViewTextBoxColumn();
             FechaInicio = new DataGridViewTextBoxColumn();
@@ -63,8 +68,6 @@
             Estado_Pago = new DataGridViewTextBoxColumn();
             MontoTotal = new DataGridViewTextBoxColumn();
             MontoLetra = new DataGridViewTextBoxColumn();
-            toolTip1 = new ToolTip(components);
-            Selección = new DataGridViewCheckBoxColumn();
             panel1.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             panel2.SuspendLayout();
@@ -393,6 +396,8 @@
             // 
             // dataGridView1
             // 
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.BorderStyle = BorderStyle.None;
@@ -406,14 +411,14 @@
             dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Id_Nomina, Id_empleado, FechaInicio, FechaFin, Estado_Pago, MontoTotal, MontoLetra });
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = Color.FromArgb(45, 45, 48);
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ButtonHighlight;
-            dataGridViewCellStyle2.SelectionBackColor = Color.Teal;
-            dataGridViewCellStyle2.SelectionForeColor = Color.White;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle5.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
+            dataGridViewCellStyle5.ForeColor = SystemColors.ButtonHighlight;
+            dataGridViewCellStyle5.SelectionBackColor = Color.Teal;
+            dataGridViewCellStyle5.SelectionForeColor = Color.White;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
+            dataGridView1.DefaultCellStyle = dataGridViewCellStyle5;
             dataGridView1.EnableHeadersVisualStyles = false;
             dataGridView1.GridColor = Color.DarkCyan;
             dataGridView1.Location = new Point(6, 26);
@@ -423,6 +428,13 @@
             dataGridView1.RowTemplate.Height = 30;
             dataGridView1.Size = new Size(1226, 420);
             dataGridView1.TabIndex = 0;
+            // 
+            // Selección
+            // 
+            Selección.HeaderText = "Selección";
+            Selección.MinimumWidth = 6;
+            Selección.Name = "Selección";
+            Selección.Width = 125;
             // 
             // Id_Nomina
             // 
@@ -454,6 +466,8 @@
             // 
             // Estado_Pago
             // 
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            Estado_Pago.DefaultCellStyle = dataGridViewCellStyle2;
             Estado_Pago.HeaderText = "Estado de Pago";
             Estado_Pago.MinimumWidth = 6;
             Estado_Pago.Name = "Estado_Pago";
@@ -461,6 +475,9 @@
             // 
             // MontoTotal
             // 
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Format = "#,##0.00";
+            MontoTotal.DefaultCellStyle = dataGridViewCellStyle3;
             MontoTotal.HeaderText = "Monto Total";
             MontoTotal.MinimumWidth = 6;
             MontoTotal.Name = "MontoTotal";
@@ -468,17 +485,12 @@
             // 
             // MontoLetra
             // 
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
+            MontoLetra.DefaultCellStyle = dataGridViewCellStyle4;
             MontoLetra.HeaderText = "Monto Letra";
             MontoLetra.MinimumWidth = 6;
             MontoLetra.Name = "MontoLetra";
             MontoLetra.ReadOnly = true;
-            // 
-            // Selección
-            // 
-            Selección.HeaderText = "Selección";
-            Selección.MinimumWidth = 6;
-            Selección.Name = "Selección";
-            Selección.Width = 125;
             // 
             // frmReportes
             // 
@@ -538,6 +550,7 @@
         private ToolTip toolTip1;
         private FontAwesome.Sharp.IconButton btnDatalleNomina;
         private DataGridViewCheckBoxColumn Selección;
+        private Label lblTotaldeRegistros;
         private DataGridViewTextBoxColumn Id_Nomina;
         private DataGridViewTextBoxColumn Id_empleado;
         private DataGridViewTextBoxColumn FechaInicio;
@@ -545,6 +558,5 @@
         private DataGridViewTextBoxColumn Estado_Pago;
         private DataGridViewTextBoxColumn MontoTotal;
         private DataGridViewTextBoxColumn MontoLetra;
-        private Label lblTotaldeRegistros;
     }
 }
