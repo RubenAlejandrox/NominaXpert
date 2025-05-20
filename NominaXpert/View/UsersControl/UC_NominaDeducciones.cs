@@ -82,6 +82,7 @@ namespace NominaXpert.View.UsersControl
 
             try
             {
+                ConfigurarDataGridView(); //evita que se edite
                 dataGridViewDeducciones.Rows.Clear();
                 var deducciones = _deduccionController.ObtenerDeduccionesPorNomina(this.IdNomina);
 
@@ -440,7 +441,11 @@ namespace NominaXpert.View.UsersControl
                 }
             }
         }
-
+        private void ConfigurarDataGridView()
+        {
+            dataGridViewDeducciones.AllowUserToDeleteRows = false;
+            dataGridViewDeducciones.ReadOnly = true;
+        }
         private void txtIdNomina_TextChanged(object sender, EventArgs e)
         {
 

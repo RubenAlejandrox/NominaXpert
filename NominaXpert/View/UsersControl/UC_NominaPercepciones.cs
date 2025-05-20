@@ -75,6 +75,11 @@ namespace NominaXpert.View.UsersControl
             }
         }
 
+        private void ConfigurarDataGridView()
+        {
+            DataGridViewPercepciones.AllowUserToDeleteRows = false;
+            DataGridViewPercepciones.ReadOnly = true;
+        }
 
         public void CargarBonificaciones()
         {
@@ -86,6 +91,7 @@ namespace NominaXpert.View.UsersControl
 
             try
             {
+                ConfigurarDataGridView();
                 DataGridViewPercepciones.Rows.Clear();
                 var bonificaciones = _bonificacionController.ObtenerBonificacionesPorNomina(this.IdNomina);
 

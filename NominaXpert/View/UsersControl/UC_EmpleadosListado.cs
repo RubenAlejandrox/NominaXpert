@@ -166,6 +166,7 @@ namespace NominaXpert.View.UsersControl
 
         private void MostrarEmpleados(List<Empleado> empleados)
         {
+            ConfigurarDataGridView(); //evita que se editen datos 
             // Limpiar el DataGridView
             dataGridView1.Rows.Clear();
 
@@ -204,7 +205,11 @@ namespace NominaXpert.View.UsersControl
             lblTotaldeRegistros.Text = $"Total de Registros: {dataGridView1.Rows.Count - 1}";
         }
 
-
+        private void ConfigurarDataGridView()
+        {
+            dataGridView1.AllowUserToDeleteRows = false;
+            dataGridView1.ReadOnly = true;
+        }
 
         private void CargarEmpleados()
         {
