@@ -48,7 +48,7 @@ namespace NominaXpert.View.ChildForms
             cboTipoAccion.Items.Add("baja deducción");
             cboTipoAccion.Items.Add("edición deducción");
 
-            cboTipoAccion.SelectedIndex = 0; // Por defecto seleccionar el primer item
+            cboTipoAccion.SelectedIndex = -1; // Por defecto seleccionar el primer item
         }
 
         private void CargarAuditorias(int idUsuario = 0, string accion = "")
@@ -121,17 +121,35 @@ namespace NominaXpert.View.ChildForms
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            // Obtener los valores de los filtros
-            int idUsuario = 0;
-            if (int.TryParse(txtSearchTable.Text, out idUsuario))
+            try
             {
-                // Realizar la búsqueda con el idUsuario
-                CargarAuditorias(idUsuario, cboTipoAccion.SelectedItem?.ToString());
+                // Inicializar variables
+                int idUsuario = 0;
+                string tipoAccion = cboTipoAccion.SelectedItem?.ToString() ?? "";
+
+                // Verificar explícitamente si el texto está completamente vacío después de eliminar espacios
+                string idText = txtSearchTable.Text.Trim();
+
+                // Enfoque diferente: si hay texto, intenta convertirlo. Si no hay texto, usa 0.
+                if (idText.Length > 0)
+                {
+                    if (!int.TryParse(idText, out idUsuario))
+                    {
+                        MessageBox.Show("El ID de usuario debe ser un número válido.", "Advertencia",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        txtSearchTable.Clear(); // Limpia el campo
+                        txtSearchTable.Focus();
+                        return;
+                    }
+                }
+
+                // Realizar la búsqueda con los valores actuales
+                CargarAuditorias(idUsuario, tipoAccion);
             }
-            else
+            catch (Exception ex)
             {
-                // Si el ID no es válido, solo buscar por el tipo de acción
-                CargarAuditorias(0, cboTipoAccion.SelectedItem?.ToString());
+                MessageBox.Show($"Error al realizar la búsqueda: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

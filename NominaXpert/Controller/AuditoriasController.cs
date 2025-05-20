@@ -51,15 +51,16 @@ namespace NominaXpert.Controller
         {
             try
             {
-                // Validar que los parámetros no sean inválidos
-                if (idUsuario <= 0 || string.IsNullOrWhiteSpace(accion))
+                // Validar que al menos uno de los parámetros sea válido
+                if (idUsuario <= 0 && string.IsNullOrWhiteSpace(accion))
                 {
-                    throw new ArgumentException("El idUsuario y la acción deben ser válidos.");
+                    throw new ArgumentException("Al menos uno de los criterios de búsqueda (idUsuario o acción) debe ser válido.");
                 }
 
                 // Obtener auditorías filtradas desde el acceso a datos
                 List<Auditoria> auditorias = _auditoriaDataAccess.ObtenerAuditoriasPorFiltro(idUsuario, accion);
-                _logger.Info($"Se obtuvieron {auditorias.Count} auditorías filtradas por idUsuario: {idUsuario} y acción: {accion}.");
+
+                _logger.Info($"Se obtuvieron {auditorias.Count} auditorías filtradas por idUsuario: {idUsuario} y/o acción: {accion}.");
                 return auditorias;
             }
             catch (Exception ex)

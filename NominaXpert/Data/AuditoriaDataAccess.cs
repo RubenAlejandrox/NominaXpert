@@ -161,66 +161,64 @@ namespace NominaXpert.Data
 
             return auditorias;
         }
-/// <summary>
-/// Método para obtener auditorías filtradas por idUsuario y acción
-/// </summary>
-/// <param name="idUsuario"></param>
-/// <param name="accion"></param>
-/// <returns></returns>
-public List<Auditoria> ObtenerAuditoriasPorFiltro(int idUsuario, string accion)
-{
-    List<Auditoria> auditorias = new List<Auditoria>();
+        /// <summary>
+        /// Método para obtener auditorías filtradas por idUsuario y acción
+        /// </summary>
+        /// <param name="idUsuario"></param>
+        /// <param name="accion"></param>
+        /// <returns></returns>
+        public List<Auditoria> ObtenerAuditoriasPorFiltro(int idUsuario, string accion)
+        {
+            List<Auditoria> auditorias = new List<Auditoria>();
 
-    string query = @"
+            // Modificamos la consulta para usar condiciones OR basadas en los parámetros
+            string query = @"
         SELECT id, id_usuario, accion, detalle_accion, fecha, ip_acceso, nombre_equipo, hora
         FROM seguridad.auditorias
-        WHERE id_usuario = @idUsuario
-        AND accion = @accion";
+        WHERE (id_usuario = @idUsuario OR @idUsuario = 0)
+        AND (accion = @accion OR @accion = '')";
 
-    try
-    {
-        NpgsqlParameter[] parameters = new NpgsqlParameter[] 
-        {
+            try
+            {
+                NpgsqlParameter[] parameters = new NpgsqlParameter[]
+                {
             _dbAccess.CreateParameter("@idUsuario", idUsuario),
             _dbAccess.CreateParameter("@accion", accion)
-        };
+                };
 
-        _dbAccess.Connect();
-        DataTable resultado = _dbAccess.ExecuteQuery_Reader(query, parameters);
+                _dbAccess.Connect();
+                DataTable resultado = _dbAccess.ExecuteQuery_Reader(query, parameters);
 
-        foreach (DataRow row in resultado.Rows)
-        {
-            // Modificado para convertir correctamente 'hora' a TimeSpan
-            TimeSpan hora = (TimeSpan)row["hora"]; // Convertir directamente a TimeSpan
+                foreach (DataRow row in resultado.Rows)
+                {
+                    // Modificado para convertir correctamente 'hora' a TimeSpan
+                    TimeSpan hora = (TimeSpan)row["hora"]; // Convertir directamente a TimeSpan
+                    Auditoria auditoria = new Auditoria
+                    {
+                        Id = Convert.ToInt32(row["id"]),
+                        IdUsuario = Convert.ToInt32(row["id_usuario"]),
+                        Accion = row["accion"].ToString(),
+                        DetalleAccion = row["detalle_accion"].ToString(),
+                        Fecha = Convert.ToDateTime(row["fecha"]),  // Aquí no hay problema porque 'fecha' es de tipo DateTime
+                        IpAcceso = row["ip_acceso"].ToString(),
+                        NombreEquipo = row["nombre_equipo"].ToString(),
+                        Hora = hora // Asignamos el TimeSpan correctamente
+                    };
+                    auditorias.Add(auditoria);
+                }
 
-            Auditoria auditoria = new Auditoria
+                _logger.Info($"Se obtuvieron {auditorias.Count} auditorías filtradas por usuario {idUsuario} y/o acción '{accion}'.");
+                return auditorias;
+            }
+            catch (Exception ex)
             {
-                Id = Convert.ToInt32(row["id"]),
-                IdUsuario = Convert.ToInt32(row["id_usuario"]),
-                Accion = row["accion"].ToString(),
-                DetalleAccion = row["detalle_accion"].ToString(),
-                Fecha = Convert.ToDateTime(row["fecha"]),  // Aquí no hay problema porque 'fecha' es de tipo DateTime
-                IpAcceso = row["ip_acceso"].ToString(),
-                NombreEquipo = row["nombre_equipo"].ToString(),
-                Hora = hora // Asignamos el TimeSpan correctamente
-            };
-            auditorias.Add(auditoria);
-        }
-
-        _logger.Info($"Se obtuvieron {auditorias.Count} auditorías filtradas por usuario {idUsuario} y acción '{accion}'.");
-        return auditorias;
-    }
-    catch (Exception ex)
-    {
-        _logger.Error(ex, "Error al obtener las auditorías filtradas.");
-        throw;
-    }
-    finally
-    {
-        _dbAccess.Disconnect();
-    }
-    
-        
+                _logger.Error(ex, "Error al obtener las auditorías filtradas.");
+                throw;
+            }
+            finally
+            {
+                _dbAccess.Disconnect();
+            }
         }
 
 
