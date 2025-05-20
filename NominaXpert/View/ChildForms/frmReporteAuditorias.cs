@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using NominaXpert.Model;
-
+using NominaXpert.Utilities;
 
 namespace NominaXpert.View.ChildForms
 {
@@ -174,7 +174,61 @@ namespace NominaXpert.View.ChildForms
 
         private void btnEsportarExcel_Click(object sender, EventArgs e)
         {
+            try
+            {
+                if (dataGridView1.Rows.Count == 0)
+                {
+                    MessageBox.Show("No hay datos para exportar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
+                using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+                {
+                    saveFileDialog.Filter = "Excel Files (*.xlsx)|*.xlsx";
+                    saveFileDialog.Title = "Guardar archivo Excel";
+                    saveFileDialog.FileName = "Reporte_Auditorias_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx";
+                    saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                    saveFileDialog.OverwritePrompt = true;
+                    saveFileDialog.ValidateNames = true;
+                    saveFileDialog.AddExtension = true;
+                    saveFileDialog.DefaultExt = "xlsx";
+
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        // Verificar si el directorio existe
+                        string directory = Path.GetDirectoryName(saveFileDialog.FileName);
+                        if (!Directory.Exists(directory))
+                        {
+                            Directory.CreateDirectory(directory);
+                        }
+
+                        // Verificar si el archivo está en uso
+                        if (File.Exists(saveFileDialog.FileName))
+                        {
+                            try
+                            {
+                                using (FileStream fs = File.Open(saveFileDialog.FileName, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+                                {
+                                    fs.Close();
+                                }
+                            }
+                            catch (IOException)
+                            {
+                                MessageBox.Show("El archivo está siendo utilizado por otro programa. Por favor, ciérrelo e intente nuevamente.", 
+                                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return;
+                            }
+                        }
+
+                        ExcelExporter.ExportToExcel(dataGridView1, saveFileDialog.FileName);
+                        MessageBox.Show("Archivo Excel exportado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al exportar a Excel: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnFiltrarFechas_Click(object sender, EventArgs e)
