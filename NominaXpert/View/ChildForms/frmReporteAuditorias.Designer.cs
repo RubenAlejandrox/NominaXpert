@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             panel1 = new Panel();
             label2 = new Label();
             label1 = new Label();
@@ -42,6 +42,7 @@
             txtSearchTable = new TextBox();
             iconPIcture = new FontAwesome.Sharp.IconPictureBox();
             gBoxMatricula = new GroupBox();
+            btnFiltrarFechas = new Button();
             panel6 = new Panel();
             btnEsportarExcel = new FontAwesome.Sharp.IconButton();
             label7 = new Label();
@@ -49,8 +50,8 @@
             panel3 = new Panel();
             label4 = new Label();
             label5 = new Label();
-            DTPFechaFin = new Utilities.NominaDatePicker();
-            DTPFechaInicio = new Utilities.NominaDatePicker();
+            DTPFechaFin = new NominaXpert.Utilities.NominaDatePicker();
+            DTPFechaInicio = new NominaXpert.Utilities.NominaDatePicker();
             gBoxHistorial = new GroupBox();
             dataGridView1 = new DataGridView();
             Id_Auditoria = new DataGridViewTextBoxColumn();
@@ -61,7 +62,6 @@
             DireccionIP = new DataGridViewTextBoxColumn();
             NombreEquipo = new DataGridViewTextBoxColumn();
             Hora = new DataGridViewTextBoxColumn();
-            btnFiltrarFechas = new Button();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)iconPIcture).BeginInit();
@@ -135,7 +135,7 @@
             btnLimpiarFiltros.FlatStyle = FlatStyle.Popup;
             btnLimpiarFiltros.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnLimpiarFiltros.ForeColor = Color.White;
-            btnLimpiarFiltros.Location = new Point(1037, 15);
+            btnLimpiarFiltros.Location = new Point(1030, 19);
             btnLimpiarFiltros.Name = "btnLimpiarFiltros";
             btnLimpiarFiltros.Size = new Size(133, 29);
             btnLimpiarFiltros.TabIndex = 7;
@@ -149,7 +149,7 @@
             btnSearch.FlatStyle = FlatStyle.Popup;
             btnSearch.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnSearch.ForeColor = Color.White;
-            btnSearch.Location = new Point(509, 16);
+            btnSearch.Location = new Point(899, 19);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(94, 29);
             btnSearch.TabIndex = 6;
@@ -162,7 +162,7 @@
             cboTipoAccion.BackColor = Color.FromArgb(37, 41, 47);
             cboTipoAccion.ForeColor = Color.White;
             cboTipoAccion.FormattingEnabled = true;
-            cboTipoAccion.Location = new Point(813, 16);
+            cboTipoAccion.Location = new Point(643, 17);
             cboTipoAccion.Name = "cboTipoAccion";
             cboTipoAccion.Size = new Size(188, 28);
             cboTipoAccion.TabIndex = 4;
@@ -172,7 +172,7 @@
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label3.ForeColor = Color.FromArgb(12, 215, 253);
-            label3.Location = new Point(655, 18);
+            label3.Location = new Point(497, 19);
             label3.Name = "label3";
             label3.Size = new Size(126, 23);
             label3.TabIndex = 2;
@@ -222,6 +222,20 @@
             gBoxMatricula.TabIndex = 19;
             gBoxMatricula.TabStop = false;
             gBoxMatricula.Text = "Acciones de Auditorías Recuperados";
+            // 
+            // btnFiltrarFechas
+            // 
+            btnFiltrarFechas.BackColor = Color.Black;
+            btnFiltrarFechas.FlatStyle = FlatStyle.Popup;
+            btnFiltrarFechas.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnFiltrarFechas.ForeColor = Color.White;
+            btnFiltrarFechas.Location = new Point(389, 52);
+            btnFiltrarFechas.Name = "btnFiltrarFechas";
+            btnFiltrarFechas.Size = new Size(133, 29);
+            btnFiltrarFechas.TabIndex = 17;
+            btnFiltrarFechas.Text = "Filtrar fechas";
+            btnFiltrarFechas.UseVisualStyleBackColor = false;
+            btnFiltrarFechas.Click += btnFiltrarFechas_Click;
             // 
             // panel6
             // 
@@ -349,27 +363,28 @@
             // 
             // dataGridView1
             // 
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.BorderStyle = BorderStyle.None;
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = Color.FromArgb(30, 30, 30);
-            dataGridViewCellStyle5.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            dataGridViewCellStyle5.ForeColor = Color.Cyan;
-            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
-            dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(30, 30, 30);
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = Color.Cyan;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Id_Auditoria, Id_usuario, Accion, detalle_accion, Fecha, DireccionIP, NombreEquipo, Hora });
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = Color.FromArgb(45, 45, 48);
-            dataGridViewCellStyle6.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            dataGridViewCellStyle6.ForeColor = SystemColors.ButtonHighlight;
-            dataGridViewCellStyle6.SelectionBackColor = Color.Teal;
-            dataGridViewCellStyle6.SelectionForeColor = Color.White;
-            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.False;
-            dataGridView1.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(45, 45, 48);
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
+            dataGridViewCellStyle2.ForeColor = SystemColors.ButtonHighlight;
+            dataGridViewCellStyle2.SelectionBackColor = Color.Teal;
+            dataGridViewCellStyle2.SelectionForeColor = Color.White;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
             dataGridView1.EnableHeadersVisualStyles = false;
             dataGridView1.GridColor = Color.DarkCyan;
             dataGridView1.Location = new Point(12, 29);
@@ -386,6 +401,7 @@
             Id_Auditoria.MinimumWidth = 6;
             Id_Auditoria.Name = "Id_Auditoria";
             Id_Auditoria.ReadOnly = true;
+            Id_Auditoria.Width = 147;
             // 
             // Id_usuario
             // 
@@ -393,6 +409,7 @@
             Id_usuario.MinimumWidth = 6;
             Id_usuario.Name = "Id_usuario";
             Id_usuario.ReadOnly = true;
+            Id_usuario.Width = 147;
             // 
             // Accion
             // 
@@ -400,6 +417,7 @@
             Accion.MinimumWidth = 6;
             Accion.Name = "Accion";
             Accion.ReadOnly = true;
+            Accion.Width = 147;
             // 
             // detalle_accion
             // 
@@ -407,6 +425,7 @@
             detalle_accion.MinimumWidth = 6;
             detalle_accion.Name = "detalle_accion";
             detalle_accion.ReadOnly = true;
+            detalle_accion.Width = 147;
             // 
             // Fecha
             // 
@@ -414,6 +433,7 @@
             Fecha.MinimumWidth = 6;
             Fecha.Name = "Fecha";
             Fecha.ReadOnly = true;
+            Fecha.Width = 146;
             // 
             // DireccionIP
             // 
@@ -421,6 +441,7 @@
             DireccionIP.MinimumWidth = 6;
             DireccionIP.Name = "DireccionIP";
             DireccionIP.ReadOnly = true;
+            DireccionIP.Width = 147;
             // 
             // NombreEquipo
             // 
@@ -428,6 +449,7 @@
             NombreEquipo.MinimumWidth = 6;
             NombreEquipo.Name = "NombreEquipo";
             NombreEquipo.ReadOnly = true;
+            NombreEquipo.Width = 147;
             // 
             // Hora
             // 
@@ -435,20 +457,7 @@
             Hora.MinimumWidth = 6;
             Hora.Name = "Hora";
             Hora.ReadOnly = true;
-            // 
-            // btnFiltrarFechas
-            // 
-            btnFiltrarFechas.BackColor = Color.Black;
-            btnFiltrarFechas.FlatStyle = FlatStyle.Popup;
-            btnFiltrarFechas.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnFiltrarFechas.ForeColor = Color.White;
-            btnFiltrarFechas.Location = new Point(389, 52);
-            btnFiltrarFechas.Name = "btnFiltrarFechas";
-            btnFiltrarFechas.Size = new Size(133, 29);
-            btnFiltrarFechas.TabIndex = 17;
-            btnFiltrarFechas.Text = "Filtrar fechas";
-            btnFiltrarFechas.UseVisualStyleBackColor = false;
-            btnFiltrarFechas.Click += btnFiltrarFechas_Click;
+            Hora.Width = 147;
             // 
             // frmReporteAuditorias
             // 
