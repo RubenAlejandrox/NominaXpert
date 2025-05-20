@@ -416,6 +416,40 @@ namespace NominaXpert.View.UsersControl
                 // Obtener la nómina completa
                 var nomina = _nominasController.BuscarNominaPorId(IdNomina);
 
+                // Verificar si el sueldo base es menor al mínimo
+                if (_nominasController.VerificarSueldoMenorMinimo(nomina.SueldoBase))
+                {
+                    decimal sueldoMinimo = _nominasController.ObtenerSueldoMinimo();
+                    MessageBox.Show(
+                        $"El sueldo base del empleado (${nomina.SueldoBase:N2}) es menor al sueldo mínimo establecido (${sueldoMinimo:N2}).\n\nNo es posible generar la nómina.",
+                        "Error - Sueldo por debajo del mínimo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+                    return; // No continuar con la generación de la nómina
+                }
+
+                // Verificar si el sueldo base es igual al mínimo (advertencia)
+                if (_nominasController.VerificarSueldoIgualMinimo(nomina.SueldoBase))
+                {
+                    decimal sueldoMinimo = _nominasController.ObtenerSueldoMinimo();
+                    DialogResult respuesta = MessageBox.Show(
+                        $"El sueldo base del empleado (${nomina.SueldoBase:N2}) es exactamente igual al sueldo mínimo establecido.\n\n¿Desea continuar con la generación de la nómina?",
+                        "Advertencia - Sueldo Mínimo",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Warning
+                    );
+
+                    if (respuesta == DialogResult.No)
+                    {
+                        return; // No continuar si el usuario elige no
+                    }
+                }
+
+
+
+
+
                 // Consultar horas trabajadas usando el ID de usuario correcto
                 int idUsuario = UsuarioSesion.UsuarioId;
 

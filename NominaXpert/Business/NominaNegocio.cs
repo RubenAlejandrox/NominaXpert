@@ -10,15 +10,53 @@ namespace NominaXpert.Business
 {
     class NominaNegocio
     {
+        private static readonly NLog.Logger _logger = ControlEscolar.Utilities.LoggingManager.GetLogger("NominaXpert.Business.NominaNegocio");
+
         public static bool EsMatriculaValido(string matricula)
         {
             return Validaciones.EsNoMatriculaValido(matricula);
         }
 
-        public static bool EsNumeroVakido(string salario)
+        public static bool EsNumeroValido(string salario)
         {
             return Validaciones.EsNumeroValido(salario);
         }
+
+        /// <summary>
+        /// Verifica si el sueldo base es igual o menor al sueldo mínimo
+        /// </summary>
+        /// <param name="sueldoBase">Sueldo base a verificar</param>
+        /// <returns>True si es igual al mínimo, False si no hay advertencia</returns>
+        public static bool VerificarSueldoMinimo(decimal sueldoBase)
+        {
+            decimal sueldoMinimo = ConfigHelp.ObtenerSueldoMinimo();
+
+            // Si el sueldo es exactamente igual al mínimo, mostrar advertencia
+            return sueldoBase == sueldoMinimo;
+        }
+
+        /// <summary>
+        /// Verifica si el sueldo base es menor al sueldo mínimo
+        /// </summary>
+        /// <param name="sueldoBase">Sueldo base a verificar</param>
+        /// <returns>True si es menor al mínimo, False si no hay error</returns>
+        public static bool VerificarSueldoMenorMinimo(decimal sueldoBase)
+        {
+            decimal sueldoMinimo = ConfigHelp.ObtenerSueldoMinimo();
+
+            // Si el sueldo es menor al mínimo, mostrar error
+            return sueldoBase < sueldoMinimo;
+        }
+
+        /// <summary>
+        /// Obtiene el valor del sueldo mínimo
+        /// </summary>
+        /// <returns>Sueldo mínimo configurado</returns>
+        public static decimal ObtenerSueldoMinimo()
+        {
+            return ConfigHelp.ObtenerSueldoMinimo();
+        }
+
 
         /// <summary>
         /// Convierte un número decimal a letras en formato para nómina

@@ -12,6 +12,7 @@ using Npgsql;
 using System.Data;
 using ControlEscolar.Data;
 using Org.BouncyCastle.Asn1.X509.SigI;
+using NominaXpert.Business;
 
 
 namespace NominaXpert.Controller
@@ -50,7 +51,7 @@ namespace NominaXpert.Controller
                 _logger.Error(ex, "Error al inicializar EmpleadosDataAccess");
                 throw;
             }
-            
+
         }
 
         // Método para obtener la última nómina generada para un empleado
@@ -308,8 +309,69 @@ namespace NominaXpert.Controller
                 return false;
             }
         }
+    
 
+    /// <summary>
+/// Verifica si el sueldo base es igual al sueldo mínimo configurado
+/// </summary>
+/// <param name="sueldoBase">Sueldo base a verificar</param>
+/// <returns>True si es igual al mínimo, False si no</returns>
+public bool VerificarSueldoIgualMinimo(decimal sueldoBase)
+        {
+            try
+            {
+                bool esIgualMinimo = NominaNegocio.VerificarSueldoMinimo(sueldoBase);
+                if (esIgualMinimo)
+                {
+                    _logger.Info($"El sueldo base {sueldoBase} es igual al sueldo mínimo configurado.");
+                }
+                return esIgualMinimo;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al verificar si el sueldo es igual al mínimo");
+                throw;
+            }
+        }
 
+        /// <summary>
+        /// Verifica si el sueldo base es menor al sueldo mínimo configurado
+        /// </summary>
+        /// <param name="sueldoBase">Sueldo base a verificar</param>
+        /// <returns>True si es menor al mínimo, False si no</returns>
+        public bool VerificarSueldoMenorMinimo(decimal sueldoBase)
+        {
+            try
+            {
+                bool esMenorMinimo = NominaNegocio.VerificarSueldoMenorMinimo(sueldoBase);
+                if (esMenorMinimo)
+                {
+                    _logger.Warn($"El sueldo base {sueldoBase} es menor al sueldo mínimo configurado.");
+                }
+                return esMenorMinimo;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al verificar si el sueldo es menor al mínimo");
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene el sueldo mínimo configurado
+        /// </summary>
+        /// <returns>Valor del sueldo mínimo</returns>
+        public decimal ObtenerSueldoMinimo()
+        {
+            try
+            {
+                return NominaNegocio.ObtenerSueldoMinimo();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al obtener el sueldo mínimo");
+                throw;
+            }
+        }
     }
-
 }
