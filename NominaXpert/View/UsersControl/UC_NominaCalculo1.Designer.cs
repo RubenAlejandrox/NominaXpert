@@ -52,8 +52,8 @@
             txtSueldoBase = new TextBox();
             lblSueldoBase = new Label();
             gBoxPrestacionesLey = new GroupBox();
-            dtpFechaFinNomina = new Utilities.NominaDatePicker();
-            dtpFechaInicioNomina = new Utilities.NominaDatePicker();
+            dtpFechaFinNomina = new NominaXpert.Utilities.NominaDatePicker();
+            dtpFechaInicioNomina = new NominaXpert.Utilities.NominaDatePicker();
             label1 = new Label();
             panel3 = new Panel();
             btnBuscar = new FontAwesome.Sharp.IconButton();

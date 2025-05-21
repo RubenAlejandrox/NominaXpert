@@ -121,22 +121,27 @@ namespace NominaXpert.View.UsersControl
                 txtEstadoDePago.Text = nomina.EstadoPago;
 
                 // Deshabilitar opciones si la nómina ya está pagada
-                if (nomina.EstadoPago == "Pagado")
+                bool esAuditor = UsuarioSesion.RolNombre == "Auditor";
+
+                if (nomina.EstadoPago == "Pagado" && !esAuditor)
                 {
+                    // Nómina pagada y NO es auditor => desactivar controles
                     btnActualizarCambios.Visible = false;
                     btnModificar.Visible = false;
                     cBoxEstatusNomina.Visible = false;
                     lblEstatusNomina.Visible = false;
-                    lblDatosObligatorios.Visible =false;
+                    lblDatosObligatorios.Visible = false;
                 }
                 else
                 {
+                    // Si es auditor o la nómina no está pagada => mostrar controles
                     btnActualizarCambios.Visible = true;
                     btnModificar.Visible = true;
                     cBoxEstatusNomina.Visible = true;
                     lblEstatusNomina.Visible = true;
                     lblDatosObligatorios.Visible = true;
                 }
+
 
                 // Asignar el ID de la nómina y el ID del empleado
                 this.IdNomina = nomina.IdNomina;
@@ -351,7 +356,7 @@ namespace NominaXpert.View.UsersControl
                     }
                 });
             };
-
+            
             timer.Start();
         }
     }
