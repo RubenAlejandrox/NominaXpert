@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using NominaXpert.Controller;
-using NominaXpert.Model;
-using NominaXpert.Utilities;
+using NominaXpertCore.Controller;
+using NominaXpertCore.Model;
+using NominaXpertCore.Utilities;
 
-namespace NominaXpert.View.UsersControl
+namespace NominaXpertCore.View.UsersControl
 {
     public partial class UC_NominaDeducciones : UserControl
     {

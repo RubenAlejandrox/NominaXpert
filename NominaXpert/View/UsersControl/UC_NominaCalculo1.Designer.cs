@@ -1,4 +1,4 @@
-﻿namespace NominaXpert.View.UsersControl
+﻿namespace NominaXpertCore.View.UsersControl
 {
     partial class UC_NominaCalculo1
     {
@@ -52,8 +52,8 @@
             txtSueldoBase = new TextBox();
             lblSueldoBase = new Label();
             gBoxPrestacionesLey = new GroupBox();
-            dtpFechaFinNomina = new NominaXpert.Utilities.NominaDatePicker();
-            dtpFechaInicioNomina = new NominaXpert.Utilities.NominaDatePicker();
+            dtpFechaFinNomina = new NominaXpertCore.Utilities.NominaDatePicker();
+            dtpFechaInicioNomina = new NominaXpertCore.Utilities.NominaDatePicker();
             label1 = new Label();
             panel3 = new Panel();
             btnBuscar = new FontAwesome.Sharp.IconButton();
@@ -339,31 +339,31 @@
             // 
             dtpFechaFinNomina.BorderColor = Color.FromArgb(12, 215, 253);
             dtpFechaFinNomina.BorderSize = 2;
-            dtpFechaFinNomina.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            dtpFechaFinNomina.Font = new Font("Segoe UI", 9.5F);
             dtpFechaFinNomina.Format = DateTimePickerFormat.Short;
-            dtpFechaFinNomina.Location = new Point(512, 143);
+            dtpFechaFinNomina.Location = new Point(512, 151);
             dtpFechaFinNomina.MinimumSize = new Size(0, 35);
             dtpFechaFinNomina.Name = "dtpFechaFinNomina";
-            dtpFechaFinNomina.Size = new Size(305, 35);
+            dtpFechaFinNomina.Size = new Size(318, 35);
             dtpFechaFinNomina.SkinColor = Color.FromArgb(48, 51, 59);
             dtpFechaFinNomina.TabIndex = 19;
             dtpFechaFinNomina.TextColor = Color.FromArgb(12, 215, 253);
-            dtpFechaFinNomina.ValueChanged += dtpFechaFinNomina_ValueChanged_1;
+            dtpFechaFinNomina.ValueChanged += dtpFechaFinNomina_ValueChanged_2;
             // 
             // dtpFechaInicioNomina
             // 
             dtpFechaInicioNomina.BorderColor = Color.FromArgb(12, 215, 253);
             dtpFechaInicioNomina.BorderSize = 2;
-            dtpFechaInicioNomina.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            dtpFechaInicioNomina.Font = new Font("Segoe UI", 9.5F);
             dtpFechaInicioNomina.Format = DateTimePickerFormat.Short;
-            dtpFechaInicioNomina.Location = new Point(33, 143);
+            dtpFechaInicioNomina.Location = new Point(27, 151);
             dtpFechaInicioNomina.MinimumSize = new Size(0, 35);
             dtpFechaInicioNomina.Name = "dtpFechaInicioNomina";
-            dtpFechaInicioNomina.Size = new Size(312, 35);
+            dtpFechaInicioNomina.Size = new Size(318, 35);
             dtpFechaInicioNomina.SkinColor = Color.FromArgb(48, 51, 59);
             dtpFechaInicioNomina.TabIndex = 18;
             dtpFechaInicioNomina.TextColor = Color.FromArgb(12, 215, 253);
-            dtpFechaInicioNomina.ValueChanged += dtpFechaInicioNomina_ValueChanged_1;
+            dtpFechaInicioNomina.ValueChanged += dtpFechaInicioNomina_ValueChanged_2;
             // 
             // label1
             // 
@@ -547,6 +547,5 @@
         private Panel panel5;
         private TextBox txtEstatusEmpleado;
         private Label label2;
-       
     }
 }

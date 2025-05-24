@@ -8,9 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
-using NominaXpert.Controller;
-using NominaXpert.Business;
-using NominaXpert.Model;
+using NominaXpertCore.Controller;
+using NominaXpertCore.Business;
+using NominaXpertCore.Model;
 using ControlEscolar.Utilities;
 using NLog;
 
@@ -21,9 +21,9 @@ using iText.Kernel.Font;
 using iText.Layout.Properties;
 using iText.Kernel.Exceptions;
 using iText.IO.Font.Constants;
-using NominaXpert.Utilities;
+using NominaXpertCore.Utilities;
 
-namespace NominaXpert.View.UsersControl
+namespace NominaXpertCore.View.UsersControl
 {
     public partial class UC_NominaRecibo : UserControl
     {

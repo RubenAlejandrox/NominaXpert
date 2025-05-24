@@ -1,10 +1,10 @@
 ﻿using System.Data;
 using System.Numerics;
-using NominaXpert.Business;
-using NominaXpert.Controller;
-using NominaXpert.Model;
+using NominaXpertCore.Business;
+using NominaXpertCore.Controller;
+using NominaXpertCore.Model;
 
-namespace NominaXpert.View.UsersControl
+namespace NominaXpertCore.View.UsersControl
 {
     public partial class UC_UsuariosAlta : UserControl
     {

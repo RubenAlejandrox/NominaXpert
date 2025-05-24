@@ -1,8 +1,8 @@
-﻿using NominaXpert.Business;
-using NominaXpert.Controller;
-using NominaXpert.Model;
-using NominaXpert.View.UsersControl;
-using NominaXpert.Utilities;
+﻿using NominaXpertCore.Business;
+using NominaXpertCore.Controller;
+using NominaXpertCore.Model;
+using NominaXpertCore.View.UsersControl;
+using NominaXpertCore.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
-namespace NominaXpert.View.Forms
+namespace NominaXpertCore.View.Forms
 {
     public partial class frmReportes : Form
     {

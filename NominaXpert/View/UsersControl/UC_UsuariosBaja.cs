@@ -1,7 +1,7 @@
 ﻿
-using NominaXpert.Controller;
+using NominaXpertCore.Controller;
 
-namespace NominaXpert.View.UsersControl
+namespace NominaXpertCore.View.UsersControl
 {
     public partial class UC_UsuariosBaja : UserControl
     {

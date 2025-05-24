@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using Excel = Microsoft.Office.Interop.Excel;
 using Range = Microsoft.Office.Interop.Excel.Range;
 
-namespace NominaXpert.Utilities
+namespace NominaXpertCore.Utilities
 {
     public static class ExcelExporter
     {

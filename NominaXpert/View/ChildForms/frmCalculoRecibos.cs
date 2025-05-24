@@ -1,7 +1,7 @@
 ﻿using FontAwesome.Sharp;
-using NominaXpert.Controller;
-using NominaXpert.Utilities;
-using NominaXpert.View.UsersControl;
+using NominaXpertCore.Controller;
+using NominaXpertCore.Utilities;
+using NominaXpertCore.View.UsersControl;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace NominaXpert.View.Forms
+namespace NominaXpertCore.View.Forms
 {
     public partial class frmCalculoRecibos : Form
     {

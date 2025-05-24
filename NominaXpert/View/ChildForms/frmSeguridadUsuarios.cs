@@ -1,12 +1,12 @@
 ﻿using FontAwesome.Sharp;
-using NominaXpert.Controller;
-using NominaXpert.Utilities;
-using NominaXpert.View.UsersControl;
+using NominaXpertCore.Controller;
+using NominaXpertCore.Utilities;
+using NominaXpertCore.View.UsersControl;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace NominaXpert.View.Forms
+namespace NominaXpertCore.View.Forms
 {
     public partial class frmSeguridadUsuarios : Form
     {

@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using NominaXpert.Properties;
+using NominaXpertCore.Properties;
 using System.ComponentModel;
 using System.Windows.Forms.Design;
 
-namespace NominaXpert.Utilities
+namespace NominaXpertCore.Utilities
 {
     public class NominaDatePicker : DateTimePicker
     {

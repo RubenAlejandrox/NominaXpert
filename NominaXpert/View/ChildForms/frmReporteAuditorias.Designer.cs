@@ -1,4 +1,4 @@
-﻿namespace NominaXpert.View.ChildForms
+﻿namespace NominaXpertCore.View.ChildForms
 {
     partial class frmReporteAuditorias
     {
@@ -50,8 +50,8 @@
             panel3 = new Panel();
             label4 = new Label();
             label5 = new Label();
-            DTPFechaFin = new NominaXpert.Utilities.NominaDatePicker();
-            DTPFechaInicio = new NominaXpert.Utilities.NominaDatePicker();
+            DTPFechaFin = new NominaXpertCore.Utilities.NominaDatePicker();
+            DTPFechaInicio = new NominaXpertCore.Utilities.NominaDatePicker();
             gBoxHistorial = new GroupBox();
             dataGridView1 = new DataGridView();
             Id_Auditoria = new DataGridViewTextBoxColumn();

@@ -1,4 +1,4 @@
-﻿namespace NominaXpert.View.UsersControl
+﻿namespace NominaXpertCore.View.UsersControl
 {
     partial class UC_EmpleadosBaja
     {
@@ -35,7 +35,6 @@
             label5 = new Label();
             panel3 = new Panel();
             panel4 = new Panel();
-            DTPFechaBaja = new NominaXpert.Utilities.NominaDatePicker();
             label4 = new Label();
             panel7 = new Panel();
             cboBaja = new ComboBox();
@@ -140,28 +139,12 @@
             // panel4
             // 
             panel4.BackColor = Color.FromArgb(48, 51, 59);
-            panel4.Controls.Add(DTPFechaBaja);
             panel4.Controls.Add(label4);
             panel4.Location = new Point(5, 69);
             panel4.Margin = new Padding(5, 3, 3, 3);
             panel4.Name = "panel4";
             panel4.Size = new Size(500, 60);
             panel4.TabIndex = 6;
-            // 
-            // DTPFechaBaja
-            // 
-            DTPFechaBaja.BorderColor = Color.FromArgb(12, 215, 253);
-            DTPFechaBaja.BorderSize = 2;
-            DTPFechaBaja.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            DTPFechaBaja.Format = DateTimePickerFormat.Short;
-            DTPFechaBaja.Location = new Point(0, 25);
-            DTPFechaBaja.MinimumSize = new Size(0, 35);
-            DTPFechaBaja.Name = "DTPFechaBaja";
-            DTPFechaBaja.Size = new Size(147, 35);
-            DTPFechaBaja.SkinColor = Color.FromArgb(48, 51, 59);
-            DTPFechaBaja.TabIndex = 3;
-            DTPFechaBaja.TextColor = Color.FromArgb(12, 215, 253);
-            DTPFechaBaja.Value = new DateTime(2025, 3, 12, 1, 10, 15, 0);
             // 
             // label4
             // 

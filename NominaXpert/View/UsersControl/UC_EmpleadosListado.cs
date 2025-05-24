@@ -1,5 +1,5 @@
-﻿using NominaXpert.Data;
-using NominaXpert.Model;
+﻿using NominaXpertCore.Data;
+using NominaXpertCore.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace NominaXpert.View.UsersControl
+namespace NominaXpertCore.View.UsersControl
 {
     public partial class UC_EmpleadosListado : UserControl
     {

@@ -1,9 +1,9 @@
 ﻿using System.Data;
 using System.Windows.Forms;
-using NominaXpert.Controller;
-using NominaXpert.Data;
-using NominaXpert.Model;
-namespace NominaXpert.View.UsersControl
+using NominaXpertCore.Controller;
+using NominaXpertCore.Data;
+using NominaXpertCore.Model;
+namespace NominaXpertCore.View.UsersControl
 {
     public partial class UC_UsuariosListado : UserControl
     {

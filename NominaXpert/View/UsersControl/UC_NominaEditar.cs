@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using NominaXpert.Business;
-using NominaXpert.Controller;
-using NominaXpert.Utilities;
+using NominaXpertCore.Business;
+using NominaXpertCore.Controller;
+using NominaXpertCore.Utilities;
 
-namespace NominaXpert.View.UsersControl
+namespace NominaXpertCore.View.UsersControl
 {
 
     public partial class UC_NominaEditar : UserControl

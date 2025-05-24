@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace NominaXpert.View.Forms
+namespace NominaXpertCore.View.Forms
 {
     public partial class frmConfiguracion : Form
     {

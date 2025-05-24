@@ -1,7 +1,7 @@
-﻿using NominaXpert.Business;
-using NominaXpert.Controller;
+﻿using NominaXpertCore.Business;
+using NominaXpertCore.Controller;
 
-namespace NominaXpert.View.Forms
+namespace NominaXpertCore.View.Forms
 {
     public partial class Login : Form
     {

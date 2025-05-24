@@ -8,11 +8,11 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using NominaXpert.Business;
-using NominaXpert.Controller;
-using NominaXpert.Utilities;
+using NominaXpertCore.Business;
+using NominaXpertCore.Controller;
+using NominaXpertCore.Utilities;
 
-namespace NominaXpert.View.UsersControl
+namespace NominaXpertCore.View.UsersControl
 {
     public partial class UC_NominaCalculo1 : UserControl
     {
@@ -240,12 +240,12 @@ namespace NominaXpert.View.UsersControl
             btnCalculoNomina1.Enabled = controller.TienePermiso("NOM_ADD");
         }
 
-        private void dtpFechaInicioNomina_ValueChanged_1(object sender, EventArgs e)
+        private void dtpFechaInicioNomina_ValueChanged_2(object sender, EventArgs e)
         {
             ActualizarHorasLaboradas();
         }
 
-        private void dtpFechaFinNomina_ValueChanged_1(object sender, EventArgs e)
+        private void dtpFechaFinNomina_ValueChanged_2(object sender, EventArgs e)
         {
             ActualizarHorasLaboradas();
         }

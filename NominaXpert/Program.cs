@@ -1,6 +1,6 @@
 using OfficeOpenXml;
 
-namespace NominaXpert
+namespace NominaXpertCore
 {
     internal static class Program
     {

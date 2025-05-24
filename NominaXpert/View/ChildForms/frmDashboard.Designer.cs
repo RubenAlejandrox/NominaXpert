@@ -1,4 +1,4 @@
-﻿namespace NominaXpert.View.Forms
+﻿namespace NominaXpertCore.View.Forms
 {
     partial class frmDashboard
     {

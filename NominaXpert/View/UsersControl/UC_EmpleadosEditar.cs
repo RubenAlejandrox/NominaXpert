@@ -1,4 +1,4 @@
-﻿using NominaXpert.Business;
+﻿using NominaXpertCore.Business;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace NominaXpert.View.UsersControl
+namespace NominaXpertCore.View.UsersControl
 {
     public partial class UC_EmpleadosEditar : UserControl
     {

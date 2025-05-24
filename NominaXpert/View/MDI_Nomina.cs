@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using FontAwesome.Sharp; // Librería para los iconos
-using NominaXpert.Business;
-using NominaXpert.Controller;
+using NominaXpertCore.Business;
+using NominaXpertCore.Controller;
 
-namespace NominaXpert.View
+namespace NominaXpertCore.View
 {
     public partial class MDI_Nomina : Form
     {

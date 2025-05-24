@@ -1,4 +1,4 @@
-﻿namespace NominaXpert.View.UsersControl
+﻿namespace NominaXpertCore.View.UsersControl
 {
     partial class UC_UsuariosRolPermiso
     {
