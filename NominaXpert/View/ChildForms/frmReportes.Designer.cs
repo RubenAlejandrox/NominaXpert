@@ -52,15 +52,15 @@
             panel3 = new Panel();
             lblTotaldeRegistros = new Label();
             gBoxMatricula = new GroupBox();
+            bntLimpiarfiltrosfechas = new Button();
+            btnFiltrarFechas = new Button();
             btnDatalleNomina = new FontAwesome.Sharp.IconButton();
             label6 = new Label();
             label5 = new Label();
-            DTPFechaFinNomina = new NominaXpertCore.Utilities.NominaDatePicker();
-            DTPFechaInicioNomina = new NominaXpertCore.Utilities.NominaDatePicker();
+            DTPFechaFinNomina = new Utilities.NominaDatePicker();
+            DTPFechaInicioNomina = new Utilities.NominaDatePicker();
             gBoxHistorial = new GroupBox();
             dataGridView1 = new DataGridView();
-            toolTip1 = new ToolTip(components);
-            Selección = new DataGridViewCheckBoxColumn();
             Id_Nomina = new DataGridViewTextBoxColumn();
             Id_empleado = new DataGridViewTextBoxColumn();
             FechaInicio = new DataGridViewTextBoxColumn();
@@ -68,6 +68,8 @@
             Estado_Pago = new DataGridViewTextBoxColumn();
             MontoTotal = new DataGridViewTextBoxColumn();
             MontoLetra = new DataGridViewTextBoxColumn();
+            toolTip1 = new ToolTip(components);
+            Selección = new DataGridViewCheckBoxColumn();
             panel1.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             panel2.SuspendLayout();
@@ -277,7 +279,7 @@
             // panel3
             // 
             panel3.Controls.Add(lblTotaldeRegistros);
-            panel3.Location = new Point(394, 13);
+            panel3.Location = new Point(707, 13);
             panel3.Name = "panel3";
             panel3.Size = new Size(244, 73);
             panel3.TabIndex = 1;
@@ -295,6 +297,8 @@
             // 
             // gBoxMatricula
             // 
+            gBoxMatricula.Controls.Add(bntLimpiarfiltrosfechas);
+            gBoxMatricula.Controls.Add(btnFiltrarFechas);
             gBoxMatricula.Controls.Add(btnDatalleNomina);
             gBoxMatricula.Controls.Add(label6);
             gBoxMatricula.Controls.Add(panel3);
@@ -311,6 +315,34 @@
             gBoxMatricula.TabStop = false;
             gBoxMatricula.Text = "Recibos de Nómina Recuperados";
             // 
+            // bntLimpiarfiltrosfechas
+            // 
+            bntLimpiarfiltrosfechas.BackColor = Color.Black;
+            bntLimpiarfiltrosfechas.FlatStyle = FlatStyle.Popup;
+            bntLimpiarfiltrosfechas.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            bntLimpiarfiltrosfechas.ForeColor = Color.White;
+            bntLimpiarfiltrosfechas.Location = new Point(535, 24);
+            bntLimpiarfiltrosfechas.Name = "bntLimpiarfiltrosfechas";
+            bntLimpiarfiltrosfechas.Size = new Size(130, 29);
+            bntLimpiarfiltrosfechas.TabIndex = 19;
+            bntLimpiarfiltrosfechas.Text = "Limpiar filtros";
+            bntLimpiarfiltrosfechas.UseVisualStyleBackColor = false;
+            bntLimpiarfiltrosfechas.Click += bntLimpiarfiltrosfechas_Click;
+            // 
+            // btnFiltrarFechas
+            // 
+            btnFiltrarFechas.BackColor = Color.Black;
+            btnFiltrarFechas.FlatStyle = FlatStyle.Popup;
+            btnFiltrarFechas.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnFiltrarFechas.ForeColor = Color.White;
+            btnFiltrarFechas.Location = new Point(379, 24);
+            btnFiltrarFechas.Name = "btnFiltrarFechas";
+            btnFiltrarFechas.Size = new Size(133, 29);
+            btnFiltrarFechas.TabIndex = 18;
+            btnFiltrarFechas.Text = "Filtrar fechas";
+            btnFiltrarFechas.UseVisualStyleBackColor = false;
+            btnFiltrarFechas.Click += btnFiltrarFechas_Click;
+            // 
             // btnDatalleNomina
             // 
             btnDatalleNomina.BackColor = Color.Black;
@@ -324,7 +356,7 @@
             btnDatalleNomina.IconColor = Color.Cyan;
             btnDatalleNomina.IconFont = FontAwesome.Sharp.IconFont.Auto;
             btnDatalleNomina.IconSize = 32;
-            btnDatalleNomina.Location = new Point(876, 29);
+            btnDatalleNomina.Location = new Point(997, 38);
             btnDatalleNomina.Name = "btnDatalleNomina";
             btnDatalleNomina.Size = new Size(215, 40);
             btnDatalleNomina.TabIndex = 16;
@@ -429,13 +461,6 @@
             dataGridView1.Size = new Size(1226, 420);
             dataGridView1.TabIndex = 0;
             // 
-            // Selección
-            // 
-            Selección.HeaderText = "Selección";
-            Selección.MinimumWidth = 6;
-            Selección.Name = "Selección";
-            Selección.Width = 125;
-            // 
             // Id_Nomina
             // 
             Id_Nomina.HeaderText = "No. de Nómina";
@@ -491,6 +516,13 @@
             MontoLetra.MinimumWidth = 6;
             MontoLetra.Name = "MontoLetra";
             MontoLetra.ReadOnly = true;
+            // 
+            // Selección
+            // 
+            Selección.HeaderText = "Selección";
+            Selección.MinimumWidth = 6;
+            Selección.Name = "Selección";
+            Selección.Width = 125;
             // 
             // frmReportes
             // 
@@ -558,5 +590,7 @@
         private DataGridViewTextBoxColumn Estado_Pago;
         private DataGridViewTextBoxColumn MontoTotal;
         private DataGridViewTextBoxColumn MontoLetra;
+        private Button btnFiltrarFechas;
+        private Button bntLimpiarfiltrosfechas;
     }
 }

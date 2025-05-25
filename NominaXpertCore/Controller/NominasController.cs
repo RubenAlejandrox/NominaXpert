@@ -372,5 +372,25 @@ public bool VerificarSueldoIgualMinimo(decimal sueldoBase)
                 throw;
             }
         }
+
+        public List<NominaConsulta> BuscarNominasPorFechas(DateTime fechaInicio, DateTime fechaFin)
+        {
+            try
+            {
+                // Validar que la fecha de fin no sea anterior a la fecha de inicio
+                if (fechaFin < fechaInicio)
+                {
+                    throw new ArgumentException("La fecha de fin no puede ser anterior a la fecha de inicio.");
+                }
+
+                // Llamar al DataAccess para obtener las nóminas filtradas
+                return _nominaDataAccess.BuscarNominasPorFechas(fechaInicio, fechaFin);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al buscar nóminas por rango de fechas.");
+                throw;
+            }
+        }
     }
 }

@@ -43,70 +43,63 @@ namespace NominaXpertCore.View.Forms
 
         private void btnPDFReciboNomina_Click(object sender, EventArgs e)
         {
-            
 
-            
+
+
 
         }
 
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
-            // 1. Validar si el campo de matrícula está vacío
-            if (string.IsNullOrWhiteSpace(txtMatricula.Text)) // Si está vacío, mostramos el siguiente mensaje
+            try
             {
-                MessageBox.Show("El campo de matrícula no puede estar vacío", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                string matricula = txtMatricula.Text.Trim();
 
-            // 2. Validar si la matrícula tiene el formato correcto
-            if (!EmpleadosNegocio.EsMatriculaValido(txtMatricula.Text.Trim()))
-            {
-                MessageBox.Show("Matrícula inválida. Verifique el formato.", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // 3. Obtener las fechas de inicio y fin seleccionadas
-            DateTime fechaInicio = DTPFechaInicioNomina.Value;
-            DateTime fechaFin = DTPFechaFinNomina.Value;
-
-            // Validar que la fecha de fin no sea anterior a la fecha de inicio
-            if (fechaFin < fechaInicio)
-            {
-                MessageBox.Show("La fecha de fin no puede ser anterior a la fecha de inicio.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            // 4. Llamar al controlador para obtener las nóminas filtradas por matrícula y fechas
-            NominasController nominaController = new NominasController();
-            List<NominaConsulta> nominas = nominaController.BuscarNominasPorMatriculaYFechas(txtMatricula.Text.Trim(), fechaInicio, fechaFin);
-
-            // 5. Llenar el DataGridView con las nóminas obtenidas
-            if (nominas.Count > 0)
-            {
-                // Limpiar cualquier dato previo en el DataGridView
-                dataGridView1.Rows.Clear();
-
-                // Llenar el DataGridView con los datos de las nóminas
-                foreach (var nomina in nominas)
+                // Validar si la matrícula tiene el formato correcto solo si se proporcionó una
+                if (!string.IsNullOrWhiteSpace(matricula) && !EmpleadosNegocio.EsMatriculaValido(matricula))
                 {
-                    dataGridView1.Rows.Add(
-                        nomina.IdNomina,
-                        nomina.IdEmpleado,
-                        nomina.FechaInicio.ToShortDateString(),
-                        nomina.FechaFin.ToShortDateString(),
-                        nomina.EstadoPago,
-                        nomina.MontoTotal,
-                        nomina.MontoLetras
-                    );
+                    MessageBox.Show("Matrícula inválida. Verifique el formato.", "Información del sistema", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
 
-                // Actualizar el total de registros
-                lblTotaldeRegistros.Text = $"Total de Registros: {dataGridView1.Rows.Count - 1}";
+                // Obtener las nóminas filtradas por matrícula
+                List<NominaConsulta> nominas = _nominasController.BuscarNominasPorMatriculaYFechas(
+                    matricula,
+                    DateTime.MinValue, // No filtrar por fecha de inicio
+                    DateTime.MinValue  // No filtrar por fecha de fin
+                );
+
+                // Limpiar el DataGridView
+                dataGridView1.Rows.Clear();
+
+                // Llenar el DataGridView con los resultados
+                if (nominas.Count > 0)
+                {
+                    foreach (var nomina in nominas)
+                    {
+                        dataGridView1.Rows.Add(
+                            nomina.IdNomina,
+                            nomina.IdEmpleado,
+                            nomina.FechaInicio.ToShortDateString(),
+                            nomina.FechaFin.ToShortDateString(),
+                            nomina.EstadoPago,
+                            nomina.MontoTotal,
+                            nomina.MontoLetras
+                        );
+                    }
+
+                    // Actualizar el total de registros
+                    lblTotaldeRegistros.Text = $"Total de Registros: {dataGridView1.Rows.Count}";
+                }
+                else
+                {
+                    MessageBox.Show("No se encontraron nóminas para la matrícula especificada.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("No se encontraron nóminas para los filtros aplicados.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show($"Error al buscar nóminas: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -236,6 +229,81 @@ namespace NominaXpertCore.View.Forms
             //No poner nada
         }
 
+        private void btnFiltrarFechas_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Obtener las fechas seleccionadas
+                DateTime fechaInicio = DTPFechaInicioNomina.Value;
+                DateTime fechaFin = DTPFechaFinNomina.Value;
+
+                // Validar que la fecha de fin no sea anterior a la fecha de inicio
+                if (fechaFin < fechaInicio)
+                {
+                    MessageBox.Show("La fecha de fin no puede ser anterior a la fecha de inicio.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Obtener las nóminas filtradas por fechas
+                List<NominaConsulta> nominas = _nominasController.BuscarNominasPorFechas(fechaInicio, fechaFin);
+
+                // Limpiar el DataGridView
+                dataGridView1.Rows.Clear();
+
+                // Llenar el DataGridView con los resultados
+                if (nominas.Count > 0)
+                {
+                    foreach (var nomina in nominas)
+                    {
+                        dataGridView1.Rows.Add(
+                            nomina.IdNomina,
+                            nomina.IdEmpleado,
+                            nomina.FechaInicio.ToShortDateString(),
+                            nomina.FechaFin.ToShortDateString(),
+                            nomina.EstadoPago,
+                            nomina.MontoTotal,
+                            nomina.MontoLetras
+                        );
+                    }
+
+                    // Actualizar el total de registros
+                    lblTotaldeRegistros.Text = $"Total de Registros: {dataGridView1.Rows.Count}";
+                }
+                else
+                {
+                    MessageBox.Show("No se encontraron nóminas en el rango de fechas especificado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al filtrar nóminas por fechas: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void bntLimpiarfiltrosfechas_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Limpiar el campo de matrícula
+                txtMatricula.Clear();
+
+                // Establecer las fechas a valores por defecto (por ejemplo, el mes actual)
+                DTPFechaInicioNomina.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                DTPFechaFinNomina.Value = DateTime.Now;
+
+                // Limpiar el DataGridView
+                dataGridView1.Rows.Clear();
+
+                // Recargar todas las nóminas (consulta general)
+                CargarNominasPorDefecto();
+
+                MessageBox.Show("Filtros limpiados correctamente.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al limpiar los filtros: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 
 }

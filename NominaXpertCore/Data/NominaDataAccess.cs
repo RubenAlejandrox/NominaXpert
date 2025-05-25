@@ -442,8 +442,86 @@ namespace NominaXpertCore.Data
         public List<NominaConsulta> BuscarNominasPorMatriculaYFechas(string matricula, DateTime fechaInicio, DateTime fechaFin)
         {
             List<NominaConsulta> nominas = new List<NominaConsulta>();
+            List<NpgsqlParameter> parameters = new List<NpgsqlParameter>();
 
-            // Consulta SQL para obtener las nóminas filtradas por matrícula y fechas
+            // Consulta SQL base
+            string query = @"
+            SELECT 
+                n.id AS IdNomina,
+                n.id_empleado AS IdEmpleado,
+                n.fecha_inicio AS FechaInicio,
+                n.fecha_fin AS FechaFin,
+                n.estado_pago AS EstadoPago,
+                pay.monto_total AS MontoTotal,
+                pay.monto_letras AS MontoLetras
+            FROM 
+                nomina.nomina n
+            JOIN 
+                nomina.empleados e ON e.id = n.id_empleado
+            JOIN 
+                nomina.pagos pay ON pay.id_nomina = n.id
+            WHERE 1=1";
+
+            // Agregar condiciones solo si se proporcionan los parámetros
+            if (!string.IsNullOrWhiteSpace(matricula))
+            {
+                query += " AND e.matricula = @matricula";
+                parameters.Add(_dbAccess.CreateParameter("@matricula", matricula));
+            }
+
+            if (fechaInicio != DateTime.MinValue)
+            {
+                query += " AND n.fecha_inicio >= @fechaInicio";
+                parameters.Add(_dbAccess.CreateParameter("@fechaInicio", fechaInicio));
+            }
+
+            if (fechaFin != DateTime.MinValue)
+            {
+                query += " AND n.fecha_fin <= @fechaFin";
+                parameters.Add(_dbAccess.CreateParameter("@fechaFin", fechaFin));
+            }
+
+            query += " ORDER BY n.id DESC";
+
+            try
+            {
+                _dbAccess.Connect();
+                DataTable resultado = _dbAccess.ExecuteQuery_Reader(query, parameters.ToArray());
+
+                foreach (DataRow row in resultado.Rows)
+                {
+                    NominaConsulta nomina = new NominaConsulta
+                    {
+                        IdNomina = Convert.ToInt32(row["IdNomina"]),
+                        IdEmpleado = Convert.ToInt32(row["IdEmpleado"]),
+                        FechaInicio = Convert.ToDateTime(row["FechaInicio"]),
+                        FechaFin = Convert.ToDateTime(row["FechaFin"]),
+                        EstadoPago = row["EstadoPago"].ToString(),
+                        MontoTotal = Convert.ToDecimal(row["MontoTotal"]),
+                        MontoLetras = row["MontoLetras"].ToString()
+                    };
+
+                    nominas.Add(nomina);
+                }
+
+                _logger.Info($"Se encontraron {nominas.Count} nóminas con los filtros aplicados.");
+                return nominas;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error al buscar nóminas por filtros.");
+                throw;
+            }
+            finally
+            {
+                _dbAccess.Disconnect();
+            }
+        }
+
+        public List<NominaConsulta> BuscarNominasPorFechas(DateTime fechaInicio, DateTime fechaFin)
+        {
+            List<NominaConsulta> nominas = new List<NominaConsulta>();
+
             string query = @"
             SELECT 
                 n.id AS IdNomina,
@@ -460,17 +538,17 @@ namespace NominaXpertCore.Data
             JOIN 
                 nomina.pagos pay ON pay.id_nomina = n.id
             WHERE 
-                e.matricula = @matricula
-                AND n.fecha_inicio >= @fechaInicio
-                AND n.fecha_fin <= @fechaFin";
+                n.fecha_inicio >= @fechaInicio
+                AND n.fecha_fin <= @fechaFin
+            ORDER BY 
+                n.id DESC";
 
             try
             {
                 NpgsqlParameter[] parameters = new NpgsqlParameter[]
                 {
-            _dbAccess.CreateParameter("@matricula", matricula),
-            _dbAccess.CreateParameter("@fechaInicio", fechaInicio),
-            _dbAccess.CreateParameter("@fechaFin", fechaFin)
+                    _dbAccess.CreateParameter("@fechaInicio", fechaInicio),
+                    _dbAccess.CreateParameter("@fechaFin", fechaFin)
                 };
 
                 _dbAccess.Connect();
@@ -478,7 +556,6 @@ namespace NominaXpertCore.Data
 
                 foreach (DataRow row in resultado.Rows)
                 {
-                    // Crear un objeto NominaConsulta para almacenar la información
                     NominaConsulta nomina = new NominaConsulta
                     {
                         IdNomina = Convert.ToInt32(row["IdNomina"]),
@@ -487,17 +564,18 @@ namespace NominaXpertCore.Data
                         FechaFin = Convert.ToDateTime(row["FechaFin"]),
                         EstadoPago = row["EstadoPago"].ToString(),
                         MontoTotal = Convert.ToDecimal(row["MontoTotal"]),
-                        MontoLetras = row["MontoLetras"].ToString(),
+                        MontoLetras = row["MontoLetras"].ToString()
                     };
 
                     nominas.Add(nomina);
                 }
 
+                _logger.Info($"Se encontraron {nominas.Count} nóminas en el rango de fechas especificado.");
                 return nominas;
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Error al obtener las nóminas por matrícula y fechas.");
+                _logger.Error(ex, "Error al buscar nóminas por rango de fechas.");
                 throw;
             }
             finally
@@ -505,8 +583,6 @@ namespace NominaXpertCore.Data
                 _dbAccess.Disconnect();
             }
         }
-
-
 
     }
 }
