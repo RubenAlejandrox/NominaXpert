@@ -13,6 +13,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Kernel.Font;
+using iText.IO.Font.Constants;
+using iText.Layout.Properties;
 
 namespace NominaXpertCore.View.Forms
 {
@@ -43,12 +49,171 @@ namespace NominaXpertCore.View.Forms
 
         private void btnPDFReciboNomina_Click(object sender, EventArgs e)
         {
+            try
+            {
+                // Verificar si se ha seleccionado alguna fila en el DataGridView
+                if (dataGridView1.SelectedRows.Count == 0)
+                {
+                    MessageBox.Show("Por favor, seleccione una nómina para generar el recibo.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
+                // Obtener el IdNomina de la fila seleccionada
+                int idNomina = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["Id_Nomina"].Value);
 
+                // Obtener la nómina seleccionada
+                var nomina = _nominasController.BuscarNominaPorId(idNomina);
+                if (nomina == null)
+                {
+                    MessageBox.Show("No se encontró la información de la nómina seleccionada.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
+                SaveFileDialog saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "PDF Files (*.pdf)|*.pdf",
+                    Title = "Guardar Recibo de Nómina",
+                    FileName = $"ReciboNomina_{idNomina}_{DateTime.Now:yyyyMMdd}.pdf"
+                };
 
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string path = saveFileDialog.FileName;
+
+                    // Validar que el directorio exista
+                    string directory = Path.GetDirectoryName(path);
+                    if (!Directory.Exists(directory))
+                    {
+                        MessageBox.Show("El directorio seleccionado no existe.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    // Validar que tengamos permisos de escritura
+                    try
+                    {
+                        using (FileStream fs = File.Create(path, 1, FileOptions.DeleteOnClose))
+                        {
+                            // Si llegamos aquí, tenemos permisos de escritura
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"No se tiene permiso para escribir en la ubicación seleccionada: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    using (PdfWriter writer = new PdfWriter(path))
+                    using (PdfDocument pdf = new PdfDocument(writer))
+                    using (Document document = new Document(pdf))
+                    {
+                        // Configurar fuentes
+                        PdfFont boldFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
+                        PdfFont regularFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+
+                        // Encabezado
+                        Paragraph header = new Paragraph("NominaXpert")
+                            .SetTextAlignment(TextAlignment.CENTER)
+                            .SetFont(boldFont)
+                            .SetFontSize(24)
+                            .SetMarginTop(20);
+
+                        Paragraph subHeader = new Paragraph("Recibo de Nómina")
+                            .SetTextAlignment(TextAlignment.CENTER)
+                            .SetFont(boldFont)
+                            .SetFontSize(18)
+                            .SetMarginBottom(20);
+
+                        document.Add(header);
+                        document.Add(subHeader);
+
+                        // Tabla principal
+                        Table mainTable = new Table(2).UseAllAvailableWidth();
+                        mainTable.SetMarginTop(20);
+                        mainTable.SetMarginBottom(20);
+
+                        // Información del empleado
+                        AddTableHeader(mainTable, "Datos del Empleado", boldFont);
+                        AddTableRow(mainTable, "Nombre:", nomina.NombreEmpleado ?? "", regularFont);
+                        AddTableRow(mainTable, "Departamento:", nomina.DepartamentoEmpleado ?? "", regularFont);
+                        AddTableRow(mainTable, "RFC:", nomina.RfcEmpleado ?? "", regularFont);
+                        AddTableRow(mainTable, "ID Empleado:", nomina.IdEmpleado.ToString(), regularFont);
+
+                        // Información de la nómina
+                        AddTableHeader(mainTable, "Datos de la Nómina", boldFont);
+                        AddTableRow(mainTable, "Fecha Inicio:", nomina.FechaInicio.ToShortDateString(), regularFont);
+                        AddTableRow(mainTable, "Fecha Fin:", nomina.FechaFin.ToShortDateString(), regularFont);
+                        AddTableRow(mainTable, "Estado:", nomina.EstadoPago ?? "", regularFont);
+
+                        // Información de percepciones y deducciones
+                        var bonificacionController = new BonificacionController();
+                        var deduccionController = new DeduccionController();
+                        var percepciones = bonificacionController.ObtenerBonificacionesPorNomina(idNomina);
+                        var deducciones = deduccionController.ObtenerDeduccionesPorNomina(idNomina);
+                        decimal totalPercepciones = percepciones.Sum(p => p.Monto);
+                        decimal totalDeducciones = deducciones.Sum(d => d.Monto);
+
+                        // Información de percepciones
+                        AddTableHeader(mainTable, "Percepciones", boldFont);
+                        AddTableRow(mainTable, "Sueldo Base:", nomina.SueldoBase.ToString("C"), regularFont);
+                        AddTableRow(mainTable, "Total Percepciones:", totalPercepciones.ToString("C"), regularFont);
+
+                        // Información de deducciones
+                        AddTableHeader(mainTable, "Deducciones", boldFont);
+                        AddTableRow(mainTable, "Total Deducciones:", totalDeducciones.ToString("C"), regularFont);
+
+                        // Información del total
+                        AddTableHeader(mainTable, "Total Neto", boldFont);
+                        AddTableRow(mainTable, "Monto Total:", nomina.MontoTotal.ToString("C"), regularFont);
+                        AddTableRow(mainTable, "Monto en Letras:", nomina.MontoLetras ?? "", regularFont);
+
+                        // Agregar la tabla al documento
+                        document.Add(mainTable);
+
+                        // Pie de página
+                        Paragraph footer = new Paragraph($"Generado el {DateTime.Now:dd/MM/yyyy HH:mm:ss}")
+                            .SetTextAlignment(TextAlignment.CENTER)
+                            .SetFont(regularFont)
+                            .SetFontSize(10)
+                            .SetMarginTop(20);
+
+                        document.Add(footer);
+                    }
+
+                    MessageBox.Show("El recibo de nómina ha sido generado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al generar el PDF: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
+        private void AddTableHeader(Table table, string text, PdfFont font)
+        {
+            Cell cell = new Cell(1, 2)
+                .SetBackgroundColor(iText.Kernel.Colors.ColorConstants.LIGHT_GRAY)
+                .SetFont(font)
+                .SetPadding(5)
+                .SetTextAlignment(TextAlignment.CENTER)
+                .Add(new Paragraph(text ?? ""));
+            table.AddCell(cell);
+        }
+
+        private void AddTableRow(Table table, string label, string value, PdfFont font)
+        {
+            Cell labelCell = new Cell()
+                .SetFont(font)
+                .SetPadding(5)
+                .Add(new Paragraph(label ?? ""));
+            
+            Cell valueCell = new Cell()
+                .SetFont(font)
+                .SetPadding(5)
+                .Add(new Paragraph(value ?? ""));
+            
+            table.AddCell(labelCell);
+            table.AddCell(valueCell);
+        }
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {

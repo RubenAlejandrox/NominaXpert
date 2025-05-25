@@ -12,6 +12,7 @@
     <PackageReference Include="EPPlus" Version="8.0.5" />
     <PackageReference Include="FontAwesome.Sharp" Version="6.6.0" />
     <PackageReference Include="itext7" Version="9.1.0" />
+    <PackageReference Include="itext7.bouncy-castle-adapter" Version="9.1.0" />
     <PackageReference Include="iTextSharp" Version="5.5.13.4" />
     <PackageReference Include="itextsharp.xmlworker" Version="5.5.13.4" />
     <PackageReference Include="NLog" Version="5.4.0" />
