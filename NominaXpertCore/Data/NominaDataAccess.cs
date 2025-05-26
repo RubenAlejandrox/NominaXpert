@@ -384,7 +384,7 @@ namespace NominaXpertCore.Data
         {
             List<NominaConsulta> nominas = new List<NominaConsulta>();
 
-            // Consulta SQL modificada para no incluir el nombre del empleado
+            // Consulta SQL modificada para usar LEFT JOIN y mostrar todas las nóminas
             string query = @"
                             SELECT 
                                 n.id AS IdNomina,
@@ -396,12 +396,12 @@ namespace NominaXpertCore.Data
                                 pay.monto_letras AS MontoLetras
                             FROM 
                                 nomina.nomina n
-                            JOIN 
+                            LEFT JOIN 
                                 nomina.empleados e ON e.id = n.id_empleado
-                            JOIN 
+                            LEFT JOIN 
                                 nomina.pagos pay ON pay.id_nomina = n.id
                             ORDER BY 
-                                n.id DESC";  // Ordenamos por ID de la nómina
+                                n.id DESC";
 
             try
             {
@@ -410,7 +410,6 @@ namespace NominaXpertCore.Data
 
                 foreach (DataRow row in resultado.Rows)
                 {
-                    // Ahora no asignamos el nombre del empleado, simplemente creamos el objeto NominaConsulta
                     NominaConsulta nomina = new NominaConsulta
                     {
                         IdNomina = Convert.ToInt32(row["IdNomina"]),
@@ -418,8 +417,8 @@ namespace NominaXpertCore.Data
                         FechaInicio = Convert.ToDateTime(row["FechaInicio"]),
                         FechaFin = Convert.ToDateTime(row["FechaFin"]),
                         EstadoPago = row["EstadoPago"].ToString(),
-                        MontoTotal = Convert.ToDecimal(row["MontoTotal"]),
-                        MontoLetras = row["MontoLetras"].ToString()
+                        MontoTotal = row["MontoTotal"] == DBNull.Value ? 0 : Convert.ToDecimal(row["MontoTotal"]),
+                        MontoLetras = row["MontoLetras"] == DBNull.Value ? null : row["MontoLetras"].ToString()
                     };
 
                     nominas.Add(nomina);

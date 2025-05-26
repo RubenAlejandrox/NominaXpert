@@ -41,11 +41,21 @@ namespace NominaXpertCore.View.Forms
             InicializaVentanaCalculoRecibos();
             // Cargar las nóminas automáticamente al abrir el formulario
             CargarNominasPorDefecto();
+            // Inicializar el ComboBox de estados de pago
+            InicializarComboEstadosPago();
         }
         public void InicializaVentanaCalculoRecibos()
         {
         }
 
+        private void InicializarComboEstadosPago()
+        {
+            cboEstadoDePago.Items.Clear();
+            cboEstadoDePago.Items.Add("Todos");
+            cboEstadoDePago.Items.Add("Pendiente");
+            cboEstadoDePago.Items.Add("Pagado");
+            cboEstadoDePago.SelectedIndex = 0;
+        }
 
         private void btnPDFReciboNomina_Click(object sender, EventArgs e)
         {
@@ -205,12 +215,12 @@ namespace NominaXpertCore.View.Forms
                 .SetFont(font)
                 .SetPadding(5)
                 .Add(new Paragraph(label ?? ""));
-            
+
             Cell valueCell = new Cell()
                 .SetFont(font)
                 .SetPadding(5)
                 .Add(new Paragraph(value ?? ""));
-            
+
             table.AddCell(labelCell);
             table.AddCell(valueCell);
         }
@@ -348,7 +358,7 @@ namespace NominaXpertCore.View.Forms
             {
                 // Llamar al controlador para obtener las nóminas
                 NominasController nominaController = new NominasController();
-                List<NominaConsulta> nominas = nominaController.DesplegarNominas(); // Obtener las nóminas sin filtros
+                List<NominaConsulta> nominas = nominaController.DesplegarNominas();
 
                 // Llenar el DataGridView con las nóminas
                 if (nominas.Count > 0)
@@ -369,14 +379,13 @@ namespace NominaXpertCore.View.Forms
                             nomina.FechaInicio.ToShortDateString(),
                             nomina.FechaFin.ToShortDateString(),
                             nomina.EstadoPago,
-                            nomina.MontoTotal,
-                            nomina.MontoLetras
+                            nomina.EstadoPago == "Pendiente" ? "Nulo" : (object)nomina.MontoTotal,
+                            nomina.EstadoPago == "Pendiente" ? "Nulo" : (object)nomina.MontoLetras
                         );
                     }
 
                     // Actualizar el texto del total de registros
-                    lblTotaldeRegistros.Text = $"Total de Registros: {dataGridView1.Rows.Count - 1}";  // Actualizamos el total de registros
-
+                    lblTotaldeRegistros.Text = $"Total de Registros: {dataGridView1.Rows.Count}";
                 }
                 else
                 {
@@ -467,6 +476,64 @@ namespace NominaXpertCore.View.Forms
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al limpiar los filtros: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnBuscarEstado_Click(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void btnBuscarEstado_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                string estadoSeleccionado = cboEstadoDePago.SelectedItem?.ToString();
+                if (string.IsNullOrEmpty(estadoSeleccionado))
+                {
+                    MessageBox.Show("Por favor, seleccione un estado de pago.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Obtener todas las nóminas
+                List<NominaConsulta> nominas = _nominasController.DesplegarNominas();
+
+                // Filtrar por estado si no es "Todos"
+                if (estadoSeleccionado != "Todos")
+                {
+                    nominas = nominas.Where(n => n.EstadoPago == estadoSeleccionado).ToList();
+                }
+
+                // Limpiar el DataGridView
+                dataGridView1.Rows.Clear();
+
+                // Llenar el DataGridView con los resultados
+                if (nominas.Count > 0)
+                {
+                    foreach (var nomina in nominas)
+                    {
+                        dataGridView1.Rows.Add(
+                            nomina.IdNomina,
+                            nomina.IdEmpleado,
+                            nomina.FechaInicio.ToShortDateString(),
+                            nomina.FechaFin.ToShortDateString(),
+                            nomina.EstadoPago,
+                            nomina.EstadoPago == "Pendiente" ? "Nulo" : (object)nomina.MontoTotal,
+                            nomina.EstadoPago == "Pendiente" ? "Nulo" : (object)nomina.MontoLetras
+                        );
+                    }
+
+                    // Actualizar el total de registros
+                    lblTotaldeRegistros.Text = $"Total de Registros: {dataGridView1.Rows.Count}";
+                }
+                else
+                {
+                    MessageBox.Show("No se encontraron nóminas con el estado seleccionado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al filtrar nóminas por estado: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
