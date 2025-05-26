@@ -122,10 +122,11 @@ namespace NominaXpertCore.View.UsersControl
 
                 // Deshabilitar opciones si la nómina ya está pagada
                 bool esAuditor = UsuarioSesion.RolNombre == "Auditor";
+                bool esAdministrador = UsuarioSesion.RolNombre == "Administrador";
 
-                if (nomina.EstadoPago == "Pagado" && !esAuditor)
+                if (nomina.EstadoPago == "Pagado" && !esAuditor && !esAdministrador)
                 {
-                    // Nómina pagada y NO es auditor => desactivar controles
+                    // Nómina pagada y NO es auditor o NO es admin => desactivar controles
                     btnActualizarCambios.Visible = false;
                     btnModificar.Visible = false;
                     cBoxEstatusNomina.Visible = false;
