@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using NominaXpertCore.Business;
 using NominaXpertCore.Controller;
 using NominaXpertCore.Utilities;
+using System.Configuration;
 
 namespace NominaXpertCore.View.UsersControl
 {
@@ -18,12 +19,16 @@ namespace NominaXpertCore.View.UsersControl
     {
         private readonly NominasController _nominasController; // Controlador de nómina
         private readonly RegistroJornadaController _jornadaController; // Controlador de empleados
+        private readonly decimal _sueldoMinimo; // Variable para almacenar el sueldo mínimo
+
 
         public UC_NominaCalculo1()
         {
             InitializeComponent();
             _nominasController = new NominasController();
             _jornadaController = new RegistroJornadaController();
+            // Obtener el sueldo mínimo desde la configuración
+            _sueldoMinimo = decimal.Parse(ConfigurationManager.AppSettings["SueldoMinimo"]);
         }
 
         private void UC_NominaAlta_Load(object sender, EventArgs e)
@@ -71,6 +76,26 @@ namespace NominaXpertCore.View.UsersControl
                 txtSueldoBase.Text = sueldo.ToString("C");
                 txtIdEmpleado.Text = idEmpleado.ToString();
                 txtEstatusEmpleado.Text = estatus.ToString();
+
+                // Verificar si el sueldo es inferior al mínimo
+                if (sueldo < _sueldoMinimo)
+                {
+                    var result = MessageBox.Show(
+                        "Este usuario cuenta con sueldo inferior al mínimo. ¿Desea continuar?",
+                        "Advertencia",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Warning);
+
+                    if (result == DialogResult.No)
+                    {
+                        // Limpiar los campos si el usuario decide no continuar
+                        txtNombreEmpleado.Text = string.Empty;
+                        txtSueldoBase.Text = string.Empty;
+                        txtIdEmpleado.Text = string.Empty;
+                        txtEstatusEmpleado.Text = string.Empty;
+                        return;
+                    }
+                }
             }
             catch (Exception ex)
             {
