@@ -47,6 +47,9 @@ namespace NominaXpertCore.View.ChildForms
             cboTipoAccion.Items.Add("alta deducción");
             cboTipoAccion.Items.Add("baja deducción");
             cboTipoAccion.Items.Add("edición deducción");
+            // Agregar los nuevos tipos de acción para usuarios
+            cboTipoAccion.Items.Add("alta usuario");
+            cboTipoAccion.Items.Add("edición usuario");
 
             cboTipoAccion.SelectedIndex = -1; // Por defecto seleccionar el primer item
         }

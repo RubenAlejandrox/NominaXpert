@@ -11,6 +11,7 @@ namespace NominaXpertCore.Controller
         private static readonly Logger _logger = LoggingManager.GetLogger("NominaXpert.Controller.UsuariosController");
         private readonly UsuariosDataAccess _usuariosData;
         private readonly PersonasDataAccess _personasData;
+        private readonly AuditoriaDataAccess _auditoriaDataAccess;
 
         public UsuariosController()
         {
@@ -18,6 +19,7 @@ namespace NominaXpertCore.Controller
             {
                 _usuariosData = new UsuariosDataAccess();
                 _personasData = new PersonasDataAccess();
+                _auditoriaDataAccess = new AuditoriaDataAccess();
             }
             catch (Exception ex)
             {
@@ -59,6 +61,12 @@ namespace NominaXpertCore.Controller
                 {
                     return (-4, "Error al registrar el usuario en la base de datos");
                 }
+
+                // Registrar la auditoría de la acción de alta de usuario
+                string detalleAccion = $"Se registró un nuevo usuario: {usuario.DatosPersonales.NombreCompleto} " +
+                                     $"(Usuario: {usuario.Nombre_Usuario}, Rol: {usuario.IdRol}, " +
+                                     $"RFC: {usuario.DatosPersonales.Rfc}, CURP: {usuario.DatosPersonales.Curp})";
+                _auditoriaDataAccess.RegistrarAuditoria(idUsuario, "alta usuario", detalleAccion);
 
                 _logger.Info($"Usuario registrado exitosamente con ID: {idUsuario}");
                 return (idUsuario, "Usuario registrado exitosamente");
@@ -140,8 +148,20 @@ namespace NominaXpertCore.Controller
                     }
                 }
                 _logger.Info($"Actualizando usuario con ID: {usuario.Id}, Nombre: {usuario.DatosPersonales.NombreCompleto}, Persona ID: {usuario.DatosPersonales.Id}");
+                
                 //Actualizamos 
                 bool actualizado = _usuariosData.ActualizarUsuario(usuario);
+
+                if (actualizado)
+                {
+                    // Registrar la auditoría de la acción de actualización de usuario
+                    string detalleAccion = $"Se actualizó el usuario: {usuario.DatosPersonales.NombreCompleto} " +
+                                         $"(ID: {usuario.Id}, Usuario: {usuario.Nombre_Usuario}, " +
+                                         $"Rol: {usuario.IdRol}, RFC: {usuario.DatosPersonales.Rfc}, " +
+                                         $"CURP: {usuario.DatosPersonales.Curp})";
+                    _auditoriaDataAccess.RegistrarAuditoria(usuario.Id, "edición usuario", detalleAccion);
+                }
+
                 return actualizado
                     ? (true, "Usuario actualizado correctamente.")
                     : (false, "Error al actualizar usuario.");
