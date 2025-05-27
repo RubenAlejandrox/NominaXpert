@@ -20,7 +20,7 @@ namespace NominaXpertCore.Utilities
                 if (string.IsNullOrEmpty(sueldoMinimoStr))
                 {
                     _logger.Warn("La configuración del sueldo mínimo no está definida en App.config. Se usará el valor predeterminado.");
-                    return 8480.17m; // Valor predeterminado
+                    return 0; // Valor predeterminado
                 }
 
                 if (decimal.TryParse(sueldoMinimoStr, out decimal sueldoMinimo))
@@ -30,13 +30,13 @@ namespace NominaXpertCore.Utilities
                 else
                 {
                     _logger.Error($"El valor de sueldo mínimo en App.config no es un número válido: {sueldoMinimoStr}");
-                    return 8480.17m; // Valor predeterminado
+                    return 0; // Valor predeterminado
                 }
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Error al obtener el sueldo mínimo desde App.config");
-                return 8480.17m; // Valor predeterminado en caso de error
+                return 0; // Valor predeterminado en caso de error
             }
         }
     }

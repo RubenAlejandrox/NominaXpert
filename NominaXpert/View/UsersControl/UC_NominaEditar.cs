@@ -121,7 +121,7 @@ namespace NominaXpertCore.View.UsersControl
                 txtEstadoDePago.Text = nomina.EstadoPago;
 
                 // Deshabilitar opciones si la nómina ya está pagada
-                bool esAuditor = UsuarioSesion.RolNombre == "Auditor";
+                bool esAuditor = UsuarioSesion.RolNombre == "Autorizador";
                 bool esAdministrador = UsuarioSesion.RolNombre == "Administrador";
 
                 if (nomina.EstadoPago == "Pagado" && !esAuditor && !esAdministrador)
