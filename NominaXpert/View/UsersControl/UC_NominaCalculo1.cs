@@ -28,7 +28,15 @@ namespace NominaXpertCore.View.UsersControl
             _nominasController = new NominasController();
             _jornadaController = new RegistroJornadaController();
             // Obtener el sueldo mínimo usando ConfigHelp
-            _sueldoMinimo = ConfigHelp.ObtenerSueldoMinimo();
+            try
+            {
+                _sueldoMinimo = ConfigHelp.ObtenerSueldoMinimo();
+            }
+            catch (ConfigurationErrorsException ex)
+            {
+                // Mostrar mensaje al usuario o manejar el error
+                MessageBox.Show(ex.Message);
+            }
         }
 
 
