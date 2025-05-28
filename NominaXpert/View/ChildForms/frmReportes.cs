@@ -481,7 +481,7 @@ namespace NominaXpertCore.View.Forms
 
         private void btnBuscarEstado_Click(object sender, EventArgs e)
         {
-           
+
         }
 
         private void btnBuscarEstado_Click_1(object sender, EventArgs e)
@@ -535,6 +535,11 @@ namespace NominaXpertCore.View.Forms
             {
                 MessageBox.Show($"Error al filtrar nóminas por estado: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void txtMatricula_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 

@@ -60,8 +60,8 @@
             btnDatalleNomina = new FontAwesome.Sharp.IconButton();
             label6 = new Label();
             label5 = new Label();
-            DTPFechaFinNomina = new Utilities.NominaDatePicker();
-            DTPFechaInicioNomina = new Utilities.NominaDatePicker();
+            DTPFechaFinNomina = new NominaXpertCore.Utilities.NominaDatePicker();
+            DTPFechaInicioNomina = new NominaXpertCore.Utilities.NominaDatePicker();
             gBoxHistorial = new GroupBox();
             dataGridView1 = new DataGridView();
             Id_Nomina = new DataGridViewTextBoxColumn();
@@ -211,6 +211,7 @@
             txtMatricula.Name = "txtMatricula";
             txtMatricula.Size = new Size(263, 27);
             txtMatricula.TabIndex = 4;
+            txtMatricula.TextChanged += txtMatricula_TextChanged;
             // 
             // panel4
             // 
